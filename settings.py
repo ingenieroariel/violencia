@@ -3,6 +3,9 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+import os
+PROJECT_DIR = os.path.dirname(__file__).replace('\\','/')
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -77,6 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'django_extensions',
     'fichas',
 )
 
