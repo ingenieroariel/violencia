@@ -1,0 +1,6 @@
+To install prerequisites do:
+
+# Add sudo before the commands if you are not the root user
+easy_install pip
+pip install -r requirements.txt
+
