@@ -12,27 +12,28 @@ from django.db.models.fields import SmallIntegerField
 from django.db.models.fields.related import ForeignKey
 from django.contrib.auth.models import User
 
+
 class Departamento(models.Model):
     codigo = SmallIntegerField()
     nombre = CharField(max_length=100)
-    latitud = CharField(max_length=10)
-    longitud = CharField(max_length=10)
+    latitud = CharField(max_length=50)
+    longitud = CharField(max_length=50)
 
     def __unicode__(self):
-        return '%s ( %i )' % (self.nombre, self.codigo)
+        return '%s ( %i )' % (self.nombre, int(self.codigo))
 
 class Municipio(models.Model):
     codigo = IntegerField()
     nombre = CharField(max_length=100)
     departamento = ForeignKey(Departamento)
-    latitud = CharField(max_length=10)
-    longitud = CharField(max_length=10)
+    latitud = CharField(max_length=50)
+    longitud = CharField(max_length=50)
 
     def __unicode__(self):
-        return '%s ( %i ) / %s' % (self.nombre, self.codigo, self.departamento)
+        return '%s ( %i ) / %s' % (self.nombre, int(self.codigo), self.departamento)
 
-    
-class Localizacion(models.Model):
+#un mockup de como quieren q sea este formulario para ajustar relaciones
+class Relato(models.Model):
     departamento = ForeignKey(Departamento)
     municipio = ForeignKey(Municipio)
     corregimiento = CharField(max_length=100)
@@ -67,7 +68,7 @@ class Localizacion(models.Model):
         return 'Localización Fisica: #%i' % self.id
 
 class Fuente(models.Model):
-    localizacion = ForeignKey(Localizacion, related_name='fuentes')
+    localizacion = ForeignKey(Relato, related_name='fuentes')
     nombre = CharField(max_length=255)
     tipo = CharField(verbose_name='Tipo de fuente', max_length=1, choices=(('d','Directa'),('i','Indirecta (Medios de Información)')), default='d')
     ubicacion = CharField(max_length=200 ,default='Fuente directa', null=True, blank=True)
@@ -76,7 +77,7 @@ class Fuente(models.Model):
         return 'Fuente: #%s' % self.nombre
     
 class Victima(models.Model):
-    localizacion = ForeignKey(Localizacion, related_name='victimas')
+    localizacion = ForeignKey(Relato, related_name='victimas')
     nombre = CharField(max_length=255)
     por_cantidad = CharField(verbose_name='Victimas por cantidad', max_length=1, choices=(('i','Individual'),('c','Colectiva')), default='i')
 
@@ -96,3 +97,27 @@ class RelacionVictima(models.Model):
 
     def __unicode__(self):
         return 'Relacion con victima: %s' % self.victima.nombre
+
+
+#TO-DO: nos hace falta relacionar la violencia con el reporte del Relato.
+class TipoViolencia(models.Model):
+    nombre = CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.nombre
+
+class GrupoViolencia(models.Model):
+    tipo = ForeignKey(TipoViolencia, related_name='grupos')
+    nombre = CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.nombre
+
+class ItemGrupoViolencia(models.Model):
+    grupo = ForeignKey(GrupoViolencia, related_name='grupo_items')
+    codigo = CharField(max_length=255)
+    nombre_tipo = CharField(verbose_name='Nombre de tipo de violencia', max_length=255)
+
+    def __unicode__(self):
+        return '[ %s ] %s' % (self.codigo, self.nombre_tipo)
+    
