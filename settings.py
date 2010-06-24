@@ -10,6 +10,19 @@ ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', 
+        'NAME': os.path.abspath(PROJECT_DIR + 'violencia.db'), 
+    }
+}
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+MEDIA_URL = '/static/'
+
+
 MANAGERS = ADMINS
 
 # Local time zone for this installation. Choices can be found here:
