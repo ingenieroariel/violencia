@@ -96,7 +96,9 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django_extensions',
     'fichas',
+    'territorios',
 )
+
 try:
     from local_settings import *
 except ImportError:
