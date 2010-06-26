@@ -61,14 +61,14 @@ class Relato(models.Model):
     #Audit fields
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
-    created_by = ForeignKey(User, related_name='localizaciones_creadas')
-    modified_by = ForeignKey(User, related_name='localizaciones_modificadas')
+    created_by = ForeignKey(User, related_name='relatos_creados')
+    modified_by = ForeignKey(User, related_name='relatos_modificados')
 
     def __unicode__(self):
-        return 'Localización Fisica: #%i' % self.id
+        return 'Relato: #%i' % self.id
 
 class Fuente(models.Model):
-    localizacion = ForeignKey(Relato, related_name='fuentes')
+    relato = ForeignKey(Relato, related_name='fuentes')
     nombre = CharField(max_length=255)
     tipo = CharField(verbose_name='Tipo de fuente', max_length=1, choices=(('d','Directa'),('i','Indirecta (Medios de Información)')), default='d')
     ubicacion = CharField(max_length=200 ,default='Fuente directa', null=True, blank=True)
@@ -77,27 +77,12 @@ class Fuente(models.Model):
         return 'Fuente: #%s' % self.nombre
     
 class Victima(models.Model):
-    localizacion = ForeignKey(Relato, related_name='victimas')
+    relato = ForeignKey(Relato, related_name='victimas')
     nombre = CharField(max_length=255)
     por_cantidad = CharField(verbose_name='Victimas por cantidad', max_length=1, choices=(('i','Individual'),('c','Colectiva')), default='i')
 
     def __unicode__(self):
         return 'Victima: %s' % self.nombre
-    
-class TipoVictimizacion(models.Model):
-    codigo = CharField(max_length=5)
-    tipo = CharField(max_length=255)
-
-    def __unicode__(self):
-        return '[ %s ] %s' % (self.codigo, self.nombre)
-
-class RelacionVictima(models.Model):
-    victima = ForeignKey(Victima, related_name='tipos_victimizacion')
-    tipo_victimizacion = ManyToManyField(TipoVictimizacion)
-
-    def __unicode__(self):
-        return 'Relacion con victima: %s' % self.victima.nombre
-
 
 #TO-DO: nos hace falta relacionar la violencia con el reporte del Relato.
 class TipoViolencia(models.Model):
@@ -111,7 +96,7 @@ class GrupoViolencia(models.Model):
     nombre = CharField(max_length=255)
 
     def __unicode__(self):
-        return self.nombre
+        return '%s / %s' % (self.tipo.nombre, self.nombre)
 
 class ItemGrupoViolencia(models.Model):
     grupo = ForeignKey(GrupoViolencia, related_name='grupo_items')
@@ -120,4 +105,12 @@ class ItemGrupoViolencia(models.Model):
 
     def __unicode__(self):
         return '[ %s ] %s' % (self.codigo, self.nombre_tipo)
+    
+class RelacionVictima(models.Model):
+    victima = ForeignKey(Victima, related_name='tipos_violencia')
+    tipo_violencia = ManyToManyField(TipoViolencia)
+
+    def __unicode__(self):
+        return 'Relacion con victima: %s' % self.victima.nombre
+
     

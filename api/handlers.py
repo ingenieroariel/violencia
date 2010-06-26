@@ -1,5 +1,5 @@
 from piston.handler import AnonymousBaseHandler, BaseHandler
-from fichas.models import Departamento, Municipio, Relato, Fuente, Victima, TipoVictimizacion, RelacionVictima, TipoViolencia, GrupoViolencia, ItemGrupoViolencia
+from fichas.models import Departamento, Municipio, Relato, Fuente, Victima, RelacionVictima, TipoViolencia, GrupoViolencia, ItemGrupoViolencia
 
 ALL = ('GET', 'POST', 'PUT', 'DELETE')
  
