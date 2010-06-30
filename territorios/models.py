@@ -96,6 +96,9 @@ class Desplazados(models.Model):
     cantidad_cabecera = IntegerField(verbose_name='Cabecera (No.)')
     cantidad_rural = IntegerField()
 
+    class Meta:
+        abstract = True
+
 class RecepcionDesplazados(Desplazados):
     pass
 
@@ -108,58 +111,57 @@ class PlanDesarrollo(models.Model):
 
     
 class IngresoDepartamental(models.Model):
-    pass
-#   """Ingresos totales"""
-#   """ Ingresos Corrientes"""
-#   """  Tributarios"""
-#    cerveza
-#    licores
-#    cigarillos_Tabaco
-#    registro_anotacion
-#    vehiculos_automotores
-#    otros
-#    """  No Tributarios"""
-#    """  Transferencias Corrientes"""
-#    del_nivel_nacional
-#    otras
-#
-#    """Gastos totales"""
-#    """ Gastos corrientes"""
-#    """   Funcionamiento"""
-#    servicios_personales
-#    gastos_generales
-#    transferencias (Nomina y a Entidades)
-#    """   Intereses de Deuda Pública"""
-#    externa
-#    interna
-#
-#    #(Deficit)/Ahorro Corriente ?? """
-#    """Ingresos de Capital"""
-#    """ Transferencias"""
-#    del_nivel_nacional
-#    otras
-#
-#    cofinanciacion
-#    regalias
-#    otros
-#
-#    """Gastos de Capital"""
-#    formacion_bruta_capital_fijo
-#    inversion_social
-#    transferencias_capital
-#    otros
-#
-#    #(Deficit)/Superavit total ??
-#
-#    """Financiamiento"""
-#    """ Credito externo neto"""
-#    desembolsos (+)
-#    amortizaciones (-)
-#    """Credito interno neto"""
-#    desembolsos (+)
-#    amortizaciones (-)
-#
-#    variacion_depositos_y_otros
+    """Ingresos totales"""
+    """ Ingresos Corrientes"""
+    """  Tributarios"""
+    ingreso_tributario_cerveza = IntegerField()
+    ingreso_tributario_licores = IntegerField()
+    ingreso_tributario_cigarillos_Tabaco = IntegerField()
+    ingreso_tributario_registro_anotacion = IntegerField()
+    ingreso_tributario_vehiculos_automotores = IntegerField()
+    ingreso_tributario_otros = IntegerField()
+    """  No Tributarios"""
+    """  Transferencias Corrientes"""
+    ingreso_no_tributario_nivel_nacional = IntegerField()
+    ingreso_no_tributario_otras = IntegerField()
+
+    """Gastos totales"""
+    """ Gastos corrientes"""
+    """   Funcionamiento"""
+    gastos_servicios_personales = IntegerField()
+    gastos_generales = IntegerField()
+    gastos_transferencias = IntegerField(verbose_name='Gastos Transferencias (Nomina y a Entidades)')
+    """   Intereses de Deuda Pública"""
+    intereses_deuda_externa = IntegerField()
+    intereses_deuda_interna = IntegerField()
+
+    #(Deficit)/Ahorro Corriente ?? """
+    """Ingresos de Capital"""
+    """ Transferencias"""
+    transferencias_nivel_nacional = IntegerField()
+    transferencias_otras = IntegerField()
+
+    ingresos_capital_cofinanciacion = IntegerField()
+    ingresos_capital_regalias = IntegerField()
+    ingresos_capital_otros = IntegerField()
+
+    """Gastos de Capital"""
+    gastos_capital_formacion_bruta_capital_fijo = IntegerField()
+    gastos_capital_inversion_social = IntegerField()
+    gastos_capital_transferencias_capital = IntegerField()
+    gastos_capital_otros = IntegerField()
+
+    #(Deficit)/Superavit total ??
+
+    """Financiamiento"""
+    """ Credito externo neto"""
+    credito_externo_desembolsos = IntegerField(verbose_name='Credito externo desembolsos (+)')
+    credito_externo_amortizaciones = IntegerField(verbose_name='Credito externo amortizaciones (-)')
+    """Credito interno neto"""
+    credito_interno_desembolsos = IntegerField(verbose_name='Credito interno desembolsos (+)')
+    credito_interno_amortizaciones = IntegerField(verbose_name='Credito interno amortizaciones (-)')
+
+    variacion_depositos_y_otros = IntegerField()
 
 
 class Departamento(TerritorioPolitico):
