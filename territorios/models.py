@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth.models import User
+from django.db import models
 from django.db.models.fields import BooleanField
-from django.db.models.fields import TextField
-from django.db.models.fields.files import FileField
+from django.db.models.fields import CharField
 from django.db.models.fields import DateField
 from django.db.models.fields import IntegerField
-from django.db.models.fields.related import ForeignKey
 from django.db.models.fields import SmallIntegerField
+from django.db.models.fields import TextField
+from django.db.models.fields.files import FileField
+from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.related import ManyToManyField
-from django.db.models.fields import CharField
 from violencia.territorios.utils import gen_rangos_cantidad
-from django.db import models
+from django_extensions.db.fields import ModificationDateTimeField
+from django_extensions.db.fields import CreationDateTimeField
 
 """
 MODULO 1. LINEA BASE ORDENAMIENTO DEL TERRITORIO Y POBLACION
@@ -27,6 +30,13 @@ ESTADOS_TRAMITES_JURIDICOS = (('S','Solicitud'),('A','Aprovación'),('N','Negació
 TIPOS_MUNICIPIO = ((0,'Fronterizo'),(1,u'Costero'),(2,'Rivereño'),(3,'Del Interior'))
 TIPOS_LIMITE = ((0,'Departamento'),(1,'Pais'),(2,'Municipios'),(3,'Comunidades'))
 GRUPOS_POBLACIONAL = (('I','Indigena'),('A',u'Afro'), ('O','Otros'))
+TIPOS_ETNICOS = (('INTRA','Intraétnico'),('INTER','Interétnico'))
+TIPOS_CONFICTO = ( (0,'Cultural'), (1,'Político'), (2,'Económico'), (3,'Recursos Naturales'), (4,'Territorial'), (5,'Otros') )
+TIPOS_SERVICIOS_PUBLICOS = ( (0, 'Acueducto'), (1, 'Alcantarillado'), (2, 'Energia') )
+TIPOS_INSTITUCION = ((0,'Publica'),(1,'Privada'))
+TIPOS_CONTRATO = ((0,'Temporal'),(1,'Fijo'))
+TIPOS_INSTALACIONES_SALUD = ((0,'Centro de salud'),(1,'Puesto de salud'),(2,'Hospital') )
+TIPOS_REGIMEN = ((0,'Subsidiario'),(1,'Contributivo'))
 
 # Create your models here.
 class Territorio(models.Model):
@@ -104,12 +114,12 @@ class RecepcionDesplazados(Desplazados):
 
 class ExpulsionDesplazados(Desplazados):
     pass
-    
+
 class PlanDesarrollo(models.Model):
     existe_plan_desarrollo = BooleanField(default=False)
     periodo = CharField(null=True, blank=True, max_length=255)
 
-    
+
 class IngresoDepartamental(models.Model):
     """Ingresos totales"""
     """ Ingresos Corrientes"""
@@ -187,8 +197,6 @@ class Departamento(TerritorioPolitico):
     rural_area = CharField(max_length=255)
 
     plan_desarrollo = ForeignKey(PlanDesarrollo)
-
-
 
 
 #TO-DO relacionar prueblos
@@ -317,7 +325,7 @@ class Asentamiento(models.Model):
 
     def __unicode__(self):
         return self.nombre
-    
+
 
 class Municipio(TerritorioPolitico):
     departamento = models.ForeignKey(Departamento)
@@ -356,11 +364,11 @@ class Limite(models.Model):
 
 class LimiteMunicipio(Limite):
     municipio = ForeignKey(Municipio, related_name='limites')
-    
+
 class LimiteDepartamento(Limite):
     departamento = ForeignKey(Departamento, related_name='limites')
 
-class TerritorioComunidad(Territorio): 
+class TerritorioComunidad(Territorio):
     departamento = models.ForeignKey(Departamento)
     asentamientos = ManyToManyField(Asentamiento)
     poblacion_total = ForeignKey(PoblacionPequena)
@@ -415,3 +423,308 @@ class TerritorioNegroNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='negro_not_municipio')
     area_solicitada = CharField(max_length=255) #gis?
     situacion_juridica = ForeignKey(SituacionJuridicaTitulacion)
+
+
+"""CATEGORÍA: CONFLICTOS"""
+"""(Información solo accesible para las organizaciones que la cargan y para el Observatorio. NO pública)"""
+
+""" Maybe a new app? """
+
+class Conflicto(models.Model):
+    tipo_etnico = CharField(max_length=100, choices=TIPOS_ETNICOS )
+    tipo_conflicto = IntegerField(choices=TIPOS_CONFICTO)
+    """Descripción"""
+    ubicacion = CharField(max_length=200)
+    actores = CharField(max_length=200)
+    hechos = CharField(max_length=200)
+    estado = CharField(max_length=200)
+    fecha = DateField()
+    fuente = CharField(max_length=200)
+
+    #Audit fields
+    created = CreationDateTimeField()
+    modified = ModificationDateTimeField()
+    created_by = ForeignKey(User, related_name='conflictos_creados')
+    modified_by = ForeignKey(User, related_name='conflictos_modificados')
+
+
+class PoblacionDesc(models.Model):
+    porcentaje = CharField(max_length=255)
+    rango = CharField(max_length=255)
+    hombres = CharField(max_length=255)
+    mujeres = CharField(max_length=255)
+    indigena = CharField(max_length=255)
+    afro = CharField(max_length=255)
+    otros = CharField(max_length=255)
+    class Meta:
+        abstract = True
+
+class EsperanzaVida(PoblacionDesc):
+    total = IntegerField()
+
+class MortalidadTotal(PoblacionDesc):
+    total = IntegerField()
+
+class MortalidadInfantil(PoblacionDesc):
+    total = IntegerField()
+
+class MortalidadMaternoInfantil(PoblacionDesc):
+    total = IntegerField()
+
+class TasaAnalfabetizacion(PoblacionDesc):
+    todos_total  = CharField(max_length=255)
+    todos_porcentaje = CharField(max_length=255)
+    todos_rango = CharField(max_length=255)
+    rural_porcentaje = CharField(max_length=255)
+    rural_rango = CharField(max_length=255)
+    urbano_porcentaje = CharField(max_length=255)
+    urbano_rango = CharField(max_length=255)
+
+class Matriculas(PoblacionDesc):
+    total = IntegerField()
+
+
+class EducacionPreescolar(PoblacionDesc):
+    total = IntegerField()
+
+class EducacionPrimaria(PoblacionDesc):
+    total = IntegerField()
+
+class EducacionSecundaria(PoblacionDesc):
+    total = IntegerField()
+
+class EducacionVocacional(PoblacionDesc):
+    total = IntegerField()
+
+class EducacionTecnica(PoblacionDesc):
+    total = IntegerField()
+
+class EducacionNormalista(PoblacionDesc):
+    total = IntegerField()
+
+class EducacionTecnicaTecnologica(PoblacionDesc):
+    total = IntegerField()
+
+class EducacionSuperior(PoblacionDesc):
+    total = IntegerField()
+
+class PoblacionEstudiantilPreescolar(PoblacionDesc):
+    total = IntegerField()
+
+class PoblacionEstudiantilBasicaPrimaria(PoblacionDesc):
+    total = IntegerField()
+
+class PoblacionEstudiantilBasicaSecundaria(PoblacionDesc):
+    total = IntegerField()
+
+class PoblacionEstudiantilMediaVocacional(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaEstudiantilPreescolar(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaEstudiantilBasicaPrimaria(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaEstudiantilBasicaSecundaria(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaEstudiantilMediaVocacional(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaDesplazadosEstudiantilPreescolar(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaDesplazadosEstudiantilBasicaPrimaria(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaDesplazadosEstudiantilBasicaSecundaria(PoblacionDesc):
+    total = IntegerField()
+
+class CoberturaDesplazadosEstudiantilMediaVocacional(PoblacionDesc):
+    total = IntegerField()
+
+class EstudiantesDesercion(PoblacionDesc):
+    total = IntegerField()
+
+class EstudiantesPromocion(PoblacionDesc):
+    total = IntegerField()
+
+class EstudiantesRepitencia(PoblacionDesc):
+    total = IntegerField()
+
+class EstudiantesAnalfabetismo(PoblacionDesc):
+    total = IntegerField()
+
+class InstitucionEducativa(models.Model):
+    nombre = CharField(max_length=255)
+    institucion = IntegerField(choices=TIPOS_INSTITUCION)
+    fecha_constitucion = DateField()
+    enfasis = CharField(max_length=255)
+    etnoeducacion_en_pei = BooleanField()
+    educacion_especial = BooleanField()
+    educacion_especial_porcentaje = IntegerField()
+    educacion_adultos = BooleanField()
+    educacion_adultos_porcentaje = IntegerField()
+
+    maestros_nombrados_total = IntegerField()
+    maestros_nombrados_indigenas = IntegerField()
+    maestros_nombrados_afro = IntegerField()
+    maestros_nombrados_otros = IntegerField()
+    maestros_nombrados_en_ejercicio = IntegerField()
+    maestros_temporales_total = IntegerField()
+    maestros_temporales_indigena = IntegerField()
+    maestros_temporales_afro = IntegerField()
+    maestros_temporales_otros = IntegerField()
+    maestros_temporales_en_ejercicio = IntegerField()
+    poblacion_preescolar = ForeignKey(PoblacionEstudiantilPreescolar)
+    poblacion_basica_primaria = ForeignKey(PoblacionEstudiantilBasicaPrimaria)
+    poblacion_basica_secundaria = ForeignKey(PoblacionEstudiantilBasicaSecundaria)
+    poblacion_media_vocacional = ForeignKey(PoblacionEstudiantilMediaVocacional)
+    cobertura_preescolar = ForeignKey(CoberturaEstudiantilPreescolar)
+    cobertura_basica_primaria = ForeignKey(CoberturaEstudiantilBasicaPrimaria)
+    cobertura_basica_secundaria = ForeignKey(CoberturaEstudiantilBasicaSecundaria)
+    cobertura_media_vocacional = ForeignKey(CoberturaEstudiantilMediaVocacional)
+    cobertura_desplazados_preescolar = ForeignKey(CoberturaDesplazadosEstudiantilPreescolar)
+    cobertura_desplazados_basica_primaria = ForeignKey(CoberturaDesplazadosEstudiantilBasicaPrimaria)
+    cobertura_desplazados_basica_secundaria = ForeignKey(CoberturaDesplazadosEstudiantilBasicaSecundaria)
+    cobertura_desplazados_media_vocacional = ForeignKey(CoberturaDesplazadosEstudiantilMediaVocacional)
+    promocion = ForeignKey(EstudiantesPromocion)
+    desercion = ForeignKey(EstudiantesDesercion)
+    repitencia = ForeignKey(EstudiantesRepitencia)
+    analfabetismo = ForeignKey(EstudiantesAnalfabetismo)
+
+class EntidadContratante(models.Model):
+    nombre = CharField(max_length=255)
+
+
+class Promotores(models.Model):
+    entidades = ManyToManyField(EntidadContratante)
+    tipo_contrato = IntegerField(choices=TIPOS_CONTRATO)
+
+class Instalaciones(models.Model):
+    tipo = IntegerField()
+    ubicacion = CharField(max_length=255)
+    nivel_de_atencion = CharField(max_length=255)
+
+class EmpresaPrestadoraRegimenSubsidiario(models.Model):
+    nombre = CharField(max_length=255)
+
+class Regimen(models.Model):
+    tipo = IntegerField(choices=TIPOS_REGIMEN)
+    tipo_poblacion = IntegerField(choices=GRUPOS_POBLACIONAL)
+    porcentaje = IntegerField()
+    empresas = ManyToManyField(EmpresaPrestadoraRegimenSubsidiario)
+    
+class SistemaSalud(models.Model):
+    promotores = ManyToManyField(Promotores)
+    instalaciones = ManyToManyField(Instalaciones)
+    regimenes = ManyToManyField(Regimen)
+
+class ICBF(models.Model):
+    poblacion_indigena_infantil_cobertura = IntegerField()
+    poblacion_indigena_infantil_monto = IntegerField()
+    poblacion_indigena_infantil_duracion = IntegerField()
+
+    poblacion_indigena_escolar_duracion = IntegerField()
+    poblacion_indigena_escolar_cobertura = IntegerField()
+    poblacion_indigena_escolar_monto = IntegerField()
+
+    poblacion_indigena_madres_duracion = IntegerField()
+    poblacion_indigena_madres_cobertura = IntegerField()
+    poblacion_indigena_madres_monto = IntegerField()
+
+    poblacion_indigena_discapacitada_monto = IntegerField()
+    poblacion_indigena_discapacitada_cobertura = IntegerField()
+    poblacion_indigena_discapacitada_duracion = IntegerField()
+
+    poblacion_indigena_abandono_duracion = IntegerField()
+    poblacion_indigena_abandono_monto = IntegerField()
+    poblacion_indigena_abandono_cobertura = IntegerField()
+
+    poblacion_indigena_otro_cobertura = IntegerField()
+    poblacion_indigena_otro_monto = IntegerField()
+    poblacion_indigena_otro_duracion = IntegerField()
+
+    poblacion_afro_infantil_cobertura = IntegerField()
+    poblacion_afro_madres_cobertura = IntegerField()
+    poblacion_afro_otros_cobertura = IntegerField()
+    poblacion_afro_escolar_cobertura = IntegerField()
+
+    poblacion_otro_infantil_cobertura = IntegerField()
+    poblacion_otro_madres_cobertura = IntegerField()
+    poblacion_otro_otros_cobertura = IntegerField()
+    poblacion_otro_escolar_cobertura = IntegerField()
+
+class Economia(models.Model):
+    desempleo_informal  = IntegerField()
+    desempleo_formal = IntegerField()
+    empleo_publico = IntegerField()
+    empleo_privado = IntegerField()
+    contrato_fijo = IntegerField()
+    contrato_temporal = IntegerField()
+
+class Cultura(models.Model):
+    existe_promocion_y_proteccion_lengua_indigena = BooleanField()
+    descripcion = promocion_y_proteccion_lengua_indigena = TextField()
+
+class Desc(models.Model):
+    ingresos_publicos_valor = CharField(max_length=100)
+    ingresos_publicos_rango = CharField(max_length=100)
+
+    indice_desarrollo_porcentaje  = CharField(max_length=100)
+    indice_desarrollo_rango  = CharField(max_length=100)
+
+    necesidades_insatisfechas_total = CharField(max_length=100)
+    necesidades_insatisfechas_porcentaje = CharField(max_length=100)
+    necesidades_insatisfechas_rango = CharField(max_length=100)
+    necesidades_insatisfechas_total_rural = CharField(max_length=100)
+    necesidades_insatisfechas_porcentaje_rural = CharField(max_length=100)
+    necesidades_insatisfechas_rango_rutal = CharField(max_length=100)
+    necesidades_insatisfechas_total_urbano = CharField(max_length=100)
+    necesidades_insatisfechas_porcentaje_urbano = CharField(max_length=100)
+    necesidades_insatisfechas_rango_urbano = CharField(max_length=100)
+
+    indice_condiciones_vida_porcentaje = CharField(max_length=100)
+    indice_condiciones_vida_rango = CharField(max_length=100)
+
+    esperanza_de_vida = ForeignKey(EsperanzaVida)
+    mortalidad_total = ForeignKey(MortalidadTotal)
+    mortalidad_infantil = ForeignKey(MortalidadInfantil)
+    mortalidad_materno_infantil = ForeignKey(MortalidadMaternoInfantil)
+    morbilidad_descripcion  = CharField(max_length=255)
+    morbilidad_porcentaje = CharField(max_length=255)
+    morbi_mortalidad_descripcion = CharField(max_length=255)
+    morbi_mortalidad_porcentaje = CharField(max_length=255)
+    tasa_analfabetizacion = ForeignKey(TasaAnalfabetizacion)
+    matricula = ForeignKey(Matriculas)
+
+    educacion_preescolar = ForeignKey(EducacionPreescolar)
+    educacion_basica_primaria = ForeignKey(EducacionPrimaria)
+    educacion_basica_secundaria = ForeignKey(EducacionSecundaria)
+    educacion_media_vocacional = ForeignKey(EducacionVocacional)
+    educacion_media_tecnica = ForeignKey(EducacionTecnica)
+    educacion_normalista = ForeignKey(EducacionNormalista)
+    educacion_tecnica_tecnologica = ForeignKey(EducacionTecnicaTecnologica)
+    educacion_superior = ForeignKey(EducacionSuperior)
+
+    instituciones_educativas_cabecera = ManyToManyField(InstitucionEducativa, related_name='descs_cabecera')
+    instituciones_educativas_rural = ManyToManyField(InstitucionEducativa, related_name='descs_rural')
+
+    sistema_salud = ForeignKey(SistemaSalud)
+    icbf = ForeignKey(ICBF)
+    economia = ForeignKey(Economia)
+    cultura = ForeignKey(Cultura)
+    
+class ServicioPublico(models.Model):
+    desc = ForeignKey(Desc, related_name='servicios_publicos')
+    nombre = CharField(max_length=200, choices=TIPOS_SERVICIOS_PUBLICOS)
+    cobertura_total = IntegerField()
+
+class CoberturaServicioPublico(models.Model):
+    servicio_publico = ForeignKey(ServicioPublico, related_name='cobertura')
+    lugar = CharField(max_length=100, choices=(('r','Rural'),('u','Urbano')) )
+    porcentaje = IntegerField()
+    rango = CharField(max_length=100)
+
+
