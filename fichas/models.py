@@ -11,13 +11,12 @@ from django.db.models.fields import IntegerField
 from django.db.models.fields import SmallIntegerField
 from django.db.models.fields.related import ForeignKey
 from django.contrib.auth.models import User
-
+from django.contrib.gis.db.models import PolygonField, PointField
 
 class Departamento(models.Model):
     codigo = SmallIntegerField()
     nombre = CharField(max_length=100)
-    latitud = CharField(max_length=50)
-    longitud = CharField(max_length=50)
+    geom = PolygonField()
 
     def __unicode__(self):
         return '%s ( %i )' % (self.nombre, int(self.codigo))
@@ -26,8 +25,7 @@ class Municipio(models.Model):
     codigo = IntegerField()
     nombre = CharField(max_length=100)
     departamento = ForeignKey(Departamento)
-    latitud = CharField(max_length=50)
-    longitud = CharField(max_length=50)
+    geom = PolygonField()
 
     def __unicode__(self):
         return '%s ( %i ) / %s' % (self.nombre, int(self.codigo), self.departamento)
@@ -46,8 +44,7 @@ class Relato(models.Model):
     sitio = CharField(max_length=255, null=True, blank=True)
     barrio = CharField(max_length=255, null=True, blank=True)
     direccion = CharField(max_length=255, null=True, blank=True)
-    coordenadas = CharField(max_length=255, null=True, blank=True)
-
+#    coordenadas = CharField(max_length=255, null=True, blank=True)
     tipo = CharField(verbose_name='Tipo geografico', max_length=20, choices=(('urbano','Urbano'),('rural','Rural'),('ambos','Ambos'),('sininfo','Sin Inf.')) )
     antecedentes = TextField(null=True, blank=True)
     contexto = TextField(null=True, blank=True)
@@ -63,6 +60,8 @@ class Relato(models.Model):
     modified = ModificationDateTimeField()
     created_by = ForeignKey(User, related_name='relatos_creados')
     modified_by = ForeignKey(User, related_name='relatos_modificados')
+
+    geom = PointField()
 
     def __unicode__(self):
         return 'Relato: #%i' % self.id

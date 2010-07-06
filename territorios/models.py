@@ -376,13 +376,13 @@ class TerritorioComunidad(Territorio):
     class Meta:
         abstract = True
 
-class SituacionJuridicaTitulacion(models.Model):
+class Titulacion(models.Model):
     resolucion_fecha = DateField()
     resolucion_codigo = CharField(max_length=50)
     limites = CharField(max_length=255) #gis?
     estado_tramite = CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
 
-class SituacionJuridicaAmpliacionSanamiento(models.Model):
+class Saneamiento(models.Model):
     ampliacion_resolucion_fecha = DateField()
     ampliacion_resolucion_codigo = CharField(max_length=50)
     ampliacion_limites = CharField(max_length=255) #gis?
@@ -404,13 +404,13 @@ class TerritorioIndio(TerritorioComunidad):
     area = CharField(max_length=255) #gis?
     limites = CharField(max_length=255) #gis?
 
-    situacion_juridica = ForeignKey(SituacionJuridicaAmpliacionSanamiento)
+    situacion_juridica = ForeignKey(Saneamiento)
 
 class TerritorioIndioNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='indio_not_municipio')
     pueblos = ManyToManyField(Pueblo)
     area_solicitada = CharField(max_length=255) #gis?
-    situacion_juridica = ForeignKey(SituacionJuridicaTitulacion)
+    situacion_juridica = ForeignKey(Titulacion)
 
 
 class TerritorioNegro(TerritorioComunidad):
@@ -422,7 +422,7 @@ class TerritorioNegro(TerritorioComunidad):
 class TerritorioNegroNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='negro_not_municipio')
     area_solicitada = CharField(max_length=255) #gis?
-    situacion_juridica = ForeignKey(SituacionJuridicaTitulacion)
+    situacion_juridica = ForeignKey(Titulacion)
 
 
 """CATEGORÍA: CONFLICTOS"""
@@ -532,16 +532,16 @@ class CoberturaEstudiantilBasicaSecundaria(PoblacionDesc):
 class CoberturaEstudiantilMediaVocacional(PoblacionDesc):
     total = IntegerField()
 
-class CoberturaDesplazadosEstudiantilPreescolar(PoblacionDesc):
+class CoberturaDesplazadosPreescolar(PoblacionDesc):
     total = IntegerField()
 
-class CoberturaDesplazadosEstudiantilBasicaPrimaria(PoblacionDesc):
+class CoberturaDesplazadosPrimaria(PoblacionDesc):
     total = IntegerField()
 
-class CoberturaDesplazadosEstudiantilBasicaSecundaria(PoblacionDesc):
+class CoberturaDesplazadosSecundaria(PoblacionDesc):
     total = IntegerField()
 
-class CoberturaDesplazadosEstudiantilMediaVocacional(PoblacionDesc):
+class CoberturaDesplazadosMedia(PoblacionDesc):
     total = IntegerField()
 
 class EstudiantesDesercion(PoblacionDesc):
@@ -585,10 +585,10 @@ class InstitucionEducativa(models.Model):
     cobertura_basica_primaria = ForeignKey(CoberturaEstudiantilBasicaPrimaria)
     cobertura_basica_secundaria = ForeignKey(CoberturaEstudiantilBasicaSecundaria)
     cobertura_media_vocacional = ForeignKey(CoberturaEstudiantilMediaVocacional)
-    cobertura_desplazados_preescolar = ForeignKey(CoberturaDesplazadosEstudiantilPreescolar)
-    cobertura_desplazados_basica_primaria = ForeignKey(CoberturaDesplazadosEstudiantilBasicaPrimaria)
-    cobertura_desplazados_basica_secundaria = ForeignKey(CoberturaDesplazadosEstudiantilBasicaSecundaria)
-    cobertura_desplazados_media_vocacional = ForeignKey(CoberturaDesplazadosEstudiantilMediaVocacional)
+    cobertura_desplazados_preescolar = ForeignKey(CoberturaDesplazadosPreescolar)
+    cobertura_desplazados_basica_primaria = ForeignKey(CoberturaDesplazadosPrimaria)
+    cobertura_desplazados_basica_secundaria = ForeignKey(CoberturaDesplazadosSecundaria)
+    cobertura_desplazados_media_vocacional = ForeignKey(CoberturaDesplazadosMedia)
     promocion = ForeignKey(EstudiantesPromocion)
     desercion = ForeignKey(EstudiantesDesercion)
     repitencia = ForeignKey(EstudiantesRepitencia)
@@ -666,7 +666,7 @@ class Economia(models.Model):
 
 class Cultura(models.Model):
     existe_promocion_y_proteccion_lengua_indigena = BooleanField()
-    descripcion = promocion_y_proteccion_lengua_indigena = TextField()
+    descripcion_promocion_y_proteccion_lengua_indigena = TextField()
 
 class Desc(models.Model):
     ingresos_publicos_valor = CharField(max_length=100)

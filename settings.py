@@ -13,7 +13,7 @@ ADMINS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': os.path.abspath(PROJECT_DIR + 'violencia.db'), 
+        'NAME': os.path.abspath(PROJECT_DIR + '/violencia.db'), 
     }
 }
 
@@ -32,10 +32,11 @@ MANAGERS = ADMINS
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/Bogota'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'es-co'
 LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
@@ -83,8 +84,8 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.abspath(os.path.join(PROJECT_DIR, 'templates')),
 )
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -94,7 +95,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'django.contrib.gis',
     'django_extensions',
+    'gunicorn',
     'fichas',
     'territorios',
 )
