@@ -13,6 +13,7 @@ from django.db.models.fields.related import ManyToManyField
 from violencia.territorios.utils import gen_rangos_cantidad
 from django_extensions.db.fields import ModificationDateTimeField
 from django_extensions.db.fields import CreationDateTimeField
+from django.contrib.gis.db.models import MultiPolygonField
 
 """
 MODULO 1. LINEA BASE ORDENAMIENTO DEL TERRITORIO Y POBLACION
@@ -41,7 +42,7 @@ TIPOS_REGIMEN = ((0,'Subsidiario'),(1,'Contributivo'))
 # Create your models here.
 class Territorio(models.Model):
     nombre = models.CharField(max_length=100)
-    geom = models.TextField() #models.MultiPolygonField()
+    geom = MultiPolygonField(srid=4326)
 
     class Meta:
         abstract = True

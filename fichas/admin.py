@@ -10,10 +10,10 @@ class GoogleAdmin(admin.OSMGeoAdmin):
 
 admin.site.register(Departamento, GoogleAdmin)
 admin.site.register(Municipio, GoogleAdmin)
-
+admin.site.register(Relato, GoogleAdmin)
 
 admin.site.register([
-    Relato, Fuente,
+    Fuente,
     Victima, RelacionVictima,
     TipoViolencia, GrupoViolencia, ItemGrupoViolencia
 ])

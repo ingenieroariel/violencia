@@ -1,34 +1,15 @@
 # -*- coding: utf-8 -*-
-from django.db.models.fields.related import ManyToManyField
 from django.db.models.fields import DateTimeField
 from django_extensions.db.fields import ModificationDateTimeField
 from django_extensions.db.fields import CreationDateTimeField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields import TextField
 from django.db import models
-from django.db.models.fields import CharField
-from django.db.models.fields import IntegerField
-from django.db.models.fields import SmallIntegerField
-from django.db.models.fields.related import ForeignKey
+from django.db.models.fields import CharField, IntegerField, SmallIntegerField
+from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.contrib.auth.models import User
 from django.contrib.gis.db.models import PolygonField, PointField
-
-class Departamento(models.Model):
-    codigo = SmallIntegerField()
-    nombre = CharField(max_length=100)
-    geom = PolygonField()
-
-    def __unicode__(self):
-        return '%s ( %i )' % (self.nombre, int(self.codigo))
-
-class Municipio(models.Model):
-    codigo = IntegerField()
-    nombre = CharField(max_length=100)
-    departamento = ForeignKey(Departamento)
-    geom = PolygonField()
-
-    def __unicode__(self):
-        return '%s ( %i ) / %s' % (self.nombre, int(self.codigo), self.departamento)
+from territorios.models import Departamento, Municipio
 
 #un mockup de como quieren q sea este formulario para ajustar relaciones
 class Relato(models.Model):
@@ -49,17 +30,12 @@ class Relato(models.Model):
     antecedentes = TextField(null=True, blank=True)
     contexto = TextField(null=True, blank=True)
 
-    #fuentes = ManyToManyField(Fuente) ?
-    #victimas = ManyToManyField(Victimas) ?
-
     ocurrido_en = DateTimeField(verbose_name='Fecha y Hora del hecho')
     duracion_hecho = IntegerField(verbose_name='Duracion del hecho en minutos', default=1)
     
     #Audit fields
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
-    created_by = ForeignKey(User, related_name='relatos_creados')
-    modified_by = ForeignKey(User, related_name='relatos_modificados')
 
     geom = PointField()
 
@@ -75,15 +51,6 @@ class Fuente(models.Model):
     def __unicode__(self):
         return 'Fuente: #%s' % self.nombre
     
-class Victima(models.Model):
-    relato = ForeignKey(Relato, related_name='victimas')
-    nombre = CharField(max_length=255)
-    por_cantidad = CharField(verbose_name='Victimas por cantidad', max_length=1, choices=(('i','Individual'),('c','Colectiva')), default='i')
-
-    def __unicode__(self):
-        return 'Victima: %s' % self.nombre
-
-#TO-DO: nos hace falta relacionar la violencia con el reporte del Relato.
 class TipoViolencia(models.Model):
     nombre = CharField(max_length=255)
 
@@ -104,10 +71,18 @@ class ItemGrupoViolencia(models.Model):
 
     def __unicode__(self):
         return '[ %s ] %s' % (self.codigo, self.nombre_tipo)
+
+class Victima(models.Model):
+    relato = ForeignKey(Relato, related_name='victimas')
+    nombre = CharField(max_length=255)
+    por_cantidad = CharField(verbose_name='Victimas por cantidad', max_length=1, choices=(('i','Individual'),('c','Colectiva')), default='i')
+    tipo_violencia = ManyToManyField(TipoViolencia, through='RelacionVictima')
+    def __unicode__(self):
+        return 'Victima: %s' % self.nombre
     
 class RelacionVictima(models.Model):
     victima = ForeignKey(Victima, related_name='tipos_violencia')
-    tipo_violencia = ManyToManyField(TipoViolencia)
+    tipo_violencia = ForeignKey(TipoViolencia)
 
     def __unicode__(self):
         return 'Relacion con victima: %s' % self.victima.nombre
