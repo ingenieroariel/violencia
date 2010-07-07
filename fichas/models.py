@@ -62,7 +62,7 @@ class GrupoViolencia(models.Model):
     nombre = CharField(max_length=255)
 
     def __unicode__(self):
-        return '%s / %s' % (self.tipo.nombre, self.nombre)
+        return '%s - %s' % (self.tipo.nombre, self.nombre)
 
 class ItemGrupoViolencia(models.Model):
     grupo = ForeignKey(GrupoViolencia, related_name='grupo_items')
@@ -70,19 +70,19 @@ class ItemGrupoViolencia(models.Model):
     nombre_tipo = CharField(verbose_name='Nombre de tipo de violencia', max_length=255)
 
     def __unicode__(self):
-        return '[ %s ] %s' % (self.codigo, self.nombre_tipo)
+        return '%s: %s - %s' % (self.codigo, self.grupo, self.nombre_tipo)
 
 class Victima(models.Model):
     relato = ForeignKey(Relato, related_name='victimas')
     nombre = CharField(max_length=255)
     por_cantidad = CharField(verbose_name='Victimas por cantidad', max_length=1, choices=(('i','Individual'),('c','Colectiva')), default='i')
-    tipo_violencia = ManyToManyField(TipoViolencia, through='RelacionVictima')
+    tipo_violencia = ManyToManyField(ItemGrupoViolencia, through='RelacionVictima')
     def __unicode__(self):
         return 'Victima: %s' % self.nombre
     
 class RelacionVictima(models.Model):
     victima = ForeignKey(Victima, related_name='tipos_violencia')
-    tipo_violencia = ForeignKey(TipoViolencia)
+    tipo_violencia = ForeignKey(ItemGrupoViolencia)
 
     def __unicode__(self):
         return 'Relacion con victima: %s' % self.victima.nombre

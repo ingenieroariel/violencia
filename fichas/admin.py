@@ -8,12 +8,20 @@ class GoogleAdmin(admin.OSMGeoAdmin):
     extra_js = [GMAP.api_url + GMAP.key]
     map_template = 'gis/admin/google.html'
 
+class RelacionVictimaInline(admin.TabularInline):
+    model = RelacionVictima
+
+class RelatoAdmin(GoogleAdmin):
+    pass
+
+class VictimaAdmin(admin.ModelAdmin):
+    inlines = [RelacionVictimaInline,]
+
+class FuenteAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Departamento, GoogleAdmin)
 admin.site.register(Municipio, GoogleAdmin)
-admin.site.register(Relato, GoogleAdmin)
-
-admin.site.register([
-    Fuente,
-    Victima, RelacionVictima,
-    TipoViolencia, GrupoViolencia, ItemGrupoViolencia
-])
+admin.site.register(Relato, RelatoAdmin)
+admin.site.register(Victima, VictimaAdmin)
+admin.site.register(Fuente, FuenteAdmin)
