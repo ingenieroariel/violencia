@@ -2,3 +2,5 @@ django>=1.2
 django-extensions
 django-piston
 gunicorn
+South
+-e svn+http://django-grappelli.googlecode.com/svn/trunk#egg=grappelli

@@ -2,6 +2,7 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+SERVE_MEDIA = DEBUG
 
 import os
 PROJECT_DIR = os.path.dirname(__file__).replace('\\','/')
@@ -20,7 +21,7 @@ DATABASES = {
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/static/'
+MEDIA_URL = '/site_media/'
 
 
 MANAGERS = ADMINS
@@ -51,14 +52,14 @@ USE_L10N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'site_media')
 
 
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/site_media/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '7=c!cr@av5(wx7dv+zihvnw5!=rv2pb^$iog8=#1q#_6)8h$=t'
@@ -78,6 +79,16 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+    "django.contrib.messages.context_processors.messages",
+    "grappelli.context_processors.admin_template_path",
+)
+
 ROOT_URLCONF = 'violencia.urls'
 
 TEMPLATE_DIRS = (
@@ -92,11 +103,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.gis',
     'django_extensions',
+    'south',
     'gunicorn',
     'fichas',
     'territorios',
