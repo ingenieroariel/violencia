@@ -43,9 +43,9 @@ class Relato(models.Model):
         return 'Relato: #%i' % self.id
 
 class Fuente(models.Model):
-    relato = ForeignKey(Relato, related_name='fuentes')
+    relato = ForeignKey(Relato, help_text="Llenar este campo sólo para fuentes directas",related_name='fuentes', null=True, blank=True)
     nombre = CharField(max_length=255)
-    tipo = CharField(verbose_name='Tipo de fuente', max_length=1, choices=(('d','Directa'),('i','Indirecta (Medios de Informaci�n)')), default='d')
+    tipo = CharField(verbose_name='Tipo de fuente', max_length=1, choices=(('d','Directa'),('i','Indirecta (Medios de Información)')), default='d')
     ubicacion = CharField(max_length=200 ,default='Fuente directa', null=True, blank=True)
 
     def __unicode__(self):

@@ -1,58 +1,20 @@
-from territorios.models import TerritorioNegroNoTitulado
-from territorios.models import TerritorioNegro
-from territorios.models import TerritorioIndioNoTitulado
-from territorios.models import TerritorioIndio
-from territorios.models import ServicioPublico
-from territorios.models import Cultura
-from territorios.models import Economia
-from territorios.models import ICBF
+from territorios.models import *
 from django.contrib.gis import admin
 from django.contrib.gis.maps.google import GoogleMap
-from territorios.models import CoberturaDesplazadosMedia
-from territorios.models import CoberturaDesplazadosPreescolar
-from territorios.models import CoberturaDesplazadosPrimaria
-from territorios.models import CoberturaDesplazadosSecundaria
-from territorios.models import CoberturaEstudiantilBasicaPrimaria
-from territorios.models import CoberturaEstudiantilBasicaSecundaria
-from territorios.models import CoberturaEstudiantilMediaVocacional
-from territorios.models import CoberturaEstudiantilPreescolar
-from territorios.models import Desc
-from territorios.models import EducacionNormalista
-from territorios.models import EducacionPreescolar
-from territorios.models import EducacionPrimaria
-from territorios.models import EducacionSecundaria
-from territorios.models import EducacionSuperior
-from territorios.models import EducacionTecnica
-from territorios.models import EducacionTecnicaTecnologica
-from territorios.models import EducacionVocacional
-from territorios.models import EsperanzaVida
-from territorios.models import EstudiantesAnalfabetismo
-from territorios.models import EstudiantesDesercion
-from territorios.models import EstudiantesPromocion
-from territorios.models import EstudiantesRepitencia
-from territorios.models import InstitucionEducativa
-from territorios.models import Matriculas
-from territorios.models import MortalidadInfantil
-from territorios.models import MortalidadMaternoInfantil
-from territorios.models import MortalidadTotal
-from territorios.models import PoblacionEstudiantilBasicaPrimaria
-from territorios.models import PoblacionEstudiantilBasicaSecundaria
-from territorios.models import PoblacionEstudiantilMediaVocacional
-from territorios.models import PoblacionEstudiantilPreescolar
-from territorios.models import TasaAnalfabetizacion
-
 
 GMAP = GoogleMap()
 
 class GoogleAdmin(admin.OSMGeoAdmin):
     extra_js = [GMAP.api_url + GMAP.key]
     map_template = 'gis/admin/google.html'
-
-
-admin.site.register(TerritorioIndio)
-admin.site.register(TerritorioIndioNoTitulado)
-admin.site.register(TerritorioNegro)
-admin.site.register(TerritorioNegroNoTitulado)
+    default_lon = -8228293
+    default_lat = 508764
+    default_zoom = 5
+    
+admin.site.register(TerritorioIndio, GoogleAdmin)
+admin.site.register(TerritorioIndioNoTitulado, GoogleAdmin)
+admin.site.register(TerritorioNegro, GoogleAdmin)
+admin.site.register(TerritorioNegroNoTitulado, GoogleAdmin)
 
 
 """ BEGIN InstitucionEducativa """

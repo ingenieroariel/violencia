@@ -18,9 +18,9 @@ from django.contrib.gis.db.models import MultiPolygonField
 """
 MODULO 1. LINEA BASE ORDENAMIENTO DEL TERRITORIO Y POBLACION
 
-1.  Territorio Colectivo Indigena titulado
+1.  Territorio Colectivo Indigena: Resguardo
 2.  Territorio Colectivo Indigena no titulado
-3.  Territorio Colectivo Comunidades Negras titulado
+3.  Territorio Colectivo Comunidades Negras: Título Colectivo
 4.  Territorio Colectivo Comunidades Negras no titulado
 5.  Municipio
 6.  Departamento
@@ -180,6 +180,7 @@ class Departamento(TerritorioPolitico):
     """�rea total"""
     area_total_urbana = TextField()
     area_total_rural = TextField()
+    area_total = TextField()
 
     capital = CharField(max_length=255)
     cantidad_municipios_total = IntegerField()
@@ -200,7 +201,7 @@ class Departamento(TerritorioPolitico):
     plan_desarrollo = ForeignKey(PlanDesarrollo)
 
 
-#TO-DO relacionar prueblos
+#TO-DO relacionar pueblos
 class Pueblo(models.Model):
     nombre = CharField(max_length=100)
 
@@ -343,7 +344,7 @@ class Municipio(TerritorioPolitico):
     """Cabecera municipal"""
     """ T�tulos individuales"""
     cabecera_individuales_cantidad = IntegerField()
-    cabecera_area = CharField(max_length=255)
+    cabecera_area_total_titulos = CharField(max_length=255, default=None)
     cabecera_grupo_poblacional = CharField(max_length=2, choices=GRUPOS_POBLACIONAL)
 
     """Rural"""
@@ -354,6 +355,8 @@ class Municipio(TerritorioPolitico):
 
     plan_ordenamiento = ForeignKey(PlanOrdenamiento)
     plan_desarrollo = ForeignKey(PlanDesarrollo)
+
+    masivo = TextField('Masivo (sobre desplazados)')
 
 
 class Limite(models.Model):
@@ -404,15 +407,21 @@ class TerritorioIndio(TerritorioComunidad):
     resolucion_constitucion = models.IntegerField()
     area = CharField(max_length=255) #gis?
     limites = CharField(max_length=255) #gis?
-
+    familias = IntegerField("Número de familias", default=0)
     situacion_juridica = ForeignKey(Saneamiento)
 
+    class Meta:
+        verbose_name="Territorio Colectivo Indígena: Resguardo"
+        
 class TerritorioIndioNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='indio_not_municipio')
     pueblos = ManyToManyField(Pueblo)
     area_solicitada = CharField(max_length=255) #gis?
+    familias = IntegerField("Número de familias", default=0)
     situacion_juridica = ForeignKey(Titulacion)
 
+    class Meta:
+        verbose_name="Territorio Colectivo Indígena: No titulado"
 
 class TerritorioNegro(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='negro_municipio')
@@ -420,11 +429,16 @@ class TerritorioNegro(TerritorioComunidad):
     area = CharField(max_length=255) #gis?
     limites = CharField(max_length=255) #gis?
 
+    class Meta:
+        verbose_name="Territorio Colectivo Comunidades Negras: Título Colectivo"
+
 class TerritorioNegroNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='negro_not_municipio')
     area_solicitada = CharField(max_length=255) #gis?
     situacion_juridica = ForeignKey(Titulacion)
 
+    class Meta:
+        verbose_name="Territorio Colectivo Comunidades Negras: No titulado"
 
 """CATEGOR�A: CONFLICTOS"""
 """(Informaci�n solo accesible para las organizaciones que la cargan y para el Observatorio. NO p�blica)"""
@@ -699,8 +713,9 @@ class ICBF(models.Model):
 
 class Economia(models.Model):
     desc = ForeignKey(Desc)
-    desempleo_informal  = IntegerField()
-    desempleo_formal = IntegerField()
+    desempleo = IntegerField()
+    trabajo_informal  = IntegerField()
+    trabajo_formal = IntegerField()
     empleo_publico = IntegerField()
     empleo_privado = IntegerField()
     contrato_fijo = IntegerField()
