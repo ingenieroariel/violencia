@@ -36,7 +36,7 @@ class Migration(SchemaMigration):
         # Adding model 'Fuente'
         db.create_table('fichas_fuente', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('relato', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fuentes', to=orm['fichas.Relato'])),
+            ('relato', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='fuentes', null=True, to=orm['fichas.Relato'])),
             ('nombre', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('tipo', self.gf('django.db.models.fields.CharField')(default='d', max_length=1)),
             ('ubicacion', self.gf('django.db.models.fields.CharField')(default='Fuente directa', max_length=200, null=True, blank=True)),
@@ -114,7 +114,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Fuente'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'nombre': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'relato': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fuentes'", 'to': "orm['fichas.Relato']"}),
+            'relato': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'fuentes'", 'null': 'True', 'to': "orm['fichas.Relato']"}),
             'tipo': ('django.db.models.fields.CharField', [], {'default': "'d'", 'max_length': '1'}),
             'ubicacion': ('django.db.models.fields.CharField', [], {'default': "'Fuente directa'", 'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
@@ -175,6 +175,7 @@ class Migration(SchemaMigration):
         },
         'territorios.departamento': {
             'Meta': {'object_name': 'Departamento'},
+            'area_total': ('django.db.models.fields.TextField', [], {}),
             'area_total_rural': ('django.db.models.fields.TextField', [], {}),
             'area_total_urbana': ('django.db.models.fields.TextField', [], {}),
             'cantidad_municipios_pacifico': ('django.db.models.fields.IntegerField', [], {}),
@@ -287,7 +288,7 @@ class Migration(SchemaMigration):
         'territorios.municipio': {
             'Meta': {'object_name': 'Municipio'},
             'area': ('django.db.models.fields.IntegerField', [], {}),
-            'cabecera_area': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'cabecera_area_total_titulos': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '255'}),
             'cabecera_grupo_poblacional': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'cabecera_individuales_cantidad': ('django.db.models.fields.IntegerField', [], {}),
             'departamento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Departamento']"}),
@@ -296,6 +297,7 @@ class Migration(SchemaMigration):
             'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ingresos': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.IngresoMunicipal']"}),
+            'masivo': ('django.db.models.fields.TextField', [], {}),
             'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'plan_desarrollo': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PlanDesarrollo']"}),
             'plan_ordenamiento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PlanOrdenamiento']"}),

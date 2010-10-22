@@ -151,6 +151,7 @@ class Migration(SchemaMigration):
             ('tipo', self.gf('django.db.models.fields.SmallIntegerField')(default=0)),
             ('area_total_urbana', self.gf('django.db.models.fields.TextField')()),
             ('area_total_rural', self.gf('django.db.models.fields.TextField')()),
+            ('area_total', self.gf('django.db.models.fields.TextField')()),
             ('capital', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('cantidad_municipios_total', self.gf('django.db.models.fields.IntegerField')()),
             ('cantidad_municipios_pacifico', self.gf('django.db.models.fields.IntegerField')()),
@@ -283,13 +284,14 @@ class Migration(SchemaMigration):
             ('expulsion_desplazados', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.ExpulsionDesplazados'])),
             ('area', self.gf('django.db.models.fields.IntegerField')()),
             ('cabecera_individuales_cantidad', self.gf('django.db.models.fields.IntegerField')()),
-            ('cabecera_area', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('cabecera_area_total_titulos', self.gf('django.db.models.fields.CharField')(default=None, max_length=255)),
             ('cabecera_grupo_poblacional', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('rural_individuales_cantidad', self.gf('django.db.models.fields.IntegerField')()),
             ('rural_area', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('rural_grupo_poblacional', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('plan_ordenamiento', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.PlanOrdenamiento'])),
             ('plan_desarrollo', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.PlanDesarrollo'])),
+            ('masivo', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal('territorios', ['Municipio'])
 
@@ -308,6 +310,24 @@ class Migration(SchemaMigration):
             ('departamento', self.gf('django.db.models.fields.related.ForeignKey')(related_name='limites', to=orm['territorios.Departamento'])),
         ))
         db.send_create_signal('territorios', ['LimiteDepartamento'])
+
+        # Adding model 'TerritorioComunidad'
+        db.create_table('territorios_territoriocomunidad', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('geom', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')()),
+            ('departamento', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Departamento'])),
+            ('poblacion_total', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.PoblacionPequena'])),
+        ))
+        db.send_create_signal('territorios', ['TerritorioComunidad'])
+
+        # Adding M2M table for field asentamientos on 'TerritorioComunidad'
+        db.create_table('territorios_territoriocomunidad_asentamientos', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('territoriocomunidad', models.ForeignKey(orm['territorios.territoriocomunidad'], null=False)),
+            ('asentamiento', models.ForeignKey(orm['territorios.asentamiento'], null=False))
+        ))
+        db.create_unique('territorios_territoriocomunidad_asentamientos', ['territoriocomunidad_id', 'asentamiento_id'])
 
         # Adding model 'Titulacion'
         db.create_table('territorios_titulacion', (
@@ -339,25 +359,14 @@ class Migration(SchemaMigration):
 
         # Adding model 'TerritorioIndio'
         db.create_table('territorios_territorioindio', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('geom', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')()),
-            ('departamento', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Departamento'])),
-            ('poblacion_total', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.PoblacionPequena'])),
+            ('territoriocomunidad_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['territorios.TerritorioComunidad'], unique=True, primary_key=True)),
             ('resolucion_constitucion', self.gf('django.db.models.fields.IntegerField')()),
             ('area', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('limites', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('familias', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('situacion_juridica', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Saneamiento'])),
         ))
         db.send_create_signal('territorios', ['TerritorioIndio'])
-
-        # Adding M2M table for field asentamientos on 'TerritorioIndio'
-        db.create_table('territorios_territorioindio_asentamientos', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('territorioindio', models.ForeignKey(orm['territorios.territorioindio'], null=False)),
-            ('asentamiento', models.ForeignKey(orm['territorios.asentamiento'], null=False))
-        ))
-        db.create_unique('territorios_territorioindio_asentamientos', ['territorioindio_id', 'asentamiento_id'])
 
         # Adding M2M table for field municipios on 'TerritorioIndio'
         db.create_table('territorios_territorioindio_municipios', (
@@ -377,23 +386,12 @@ class Migration(SchemaMigration):
 
         # Adding model 'TerritorioIndioNoTitulado'
         db.create_table('territorios_territorioindionotitulado', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('geom', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')()),
-            ('departamento', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Departamento'])),
-            ('poblacion_total', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.PoblacionPequena'])),
+            ('territoriocomunidad_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['territorios.TerritorioComunidad'], unique=True, primary_key=True)),
             ('area_solicitada', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('familias', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('situacion_juridica', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Titulacion'])),
         ))
         db.send_create_signal('territorios', ['TerritorioIndioNoTitulado'])
-
-        # Adding M2M table for field asentamientos on 'TerritorioIndioNoTitulado'
-        db.create_table('territorios_territorioindionotitulado_asentamientos', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('territorioindionotitulado', models.ForeignKey(orm['territorios.territorioindionotitulado'], null=False)),
-            ('asentamiento', models.ForeignKey(orm['territorios.asentamiento'], null=False))
-        ))
-        db.create_unique('territorios_territorioindionotitulado_asentamientos', ['territorioindionotitulado_id', 'asentamiento_id'])
 
         # Adding M2M table for field municipios on 'TerritorioIndioNoTitulado'
         db.create_table('territorios_territorioindionotitulado_municipios', (
@@ -413,24 +411,12 @@ class Migration(SchemaMigration):
 
         # Adding model 'TerritorioNegro'
         db.create_table('territorios_territorionegro', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('geom', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')()),
-            ('departamento', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Departamento'])),
-            ('poblacion_total', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.PoblacionPequena'])),
+            ('territoriocomunidad_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['territorios.TerritorioComunidad'], unique=True, primary_key=True)),
             ('resolucion_constitucion', self.gf('django.db.models.fields.IntegerField')()),
             ('area', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('limites', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
         db.send_create_signal('territorios', ['TerritorioNegro'])
-
-        # Adding M2M table for field asentamientos on 'TerritorioNegro'
-        db.create_table('territorios_territorionegro_asentamientos', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('territorionegro', models.ForeignKey(orm['territorios.territorionegro'], null=False)),
-            ('asentamiento', models.ForeignKey(orm['territorios.asentamiento'], null=False))
-        ))
-        db.create_unique('territorios_territorionegro_asentamientos', ['territorionegro_id', 'asentamiento_id'])
 
         # Adding M2M table for field municipios on 'TerritorioNegro'
         db.create_table('territorios_territorionegro_municipios', (
@@ -442,23 +428,11 @@ class Migration(SchemaMigration):
 
         # Adding model 'TerritorioNegroNoTitulado'
         db.create_table('territorios_territorionegronotitulado', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nombre', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('geom', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')()),
-            ('departamento', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Departamento'])),
-            ('poblacion_total', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.PoblacionPequena'])),
+            ('territoriocomunidad_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['territorios.TerritorioComunidad'], unique=True, primary_key=True)),
             ('area_solicitada', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('situacion_juridica', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Titulacion'])),
         ))
         db.send_create_signal('territorios', ['TerritorioNegroNoTitulado'])
-
-        # Adding M2M table for field asentamientos on 'TerritorioNegroNoTitulado'
-        db.create_table('territorios_territorionegronotitulado_asentamientos', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('territorionegronotitulado', models.ForeignKey(orm['territorios.territorionegronotitulado'], null=False)),
-            ('asentamiento', models.ForeignKey(orm['territorios.asentamiento'], null=False))
-        ))
-        db.create_unique('territorios_territorionegronotitulado_asentamientos', ['territorionegronotitulado_id', 'asentamiento_id'])
 
         # Adding M2M table for field municipios on 'TerritorioNegroNoTitulado'
         db.create_table('territorios_territorionegronotitulado_municipios', (
@@ -1131,8 +1105,9 @@ class Migration(SchemaMigration):
         db.create_table('territorios_economia', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('desc', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['territorios.Desc'])),
-            ('desempleo_informal', self.gf('django.db.models.fields.IntegerField')()),
-            ('desempleo_formal', self.gf('django.db.models.fields.IntegerField')()),
+            ('desempleo', self.gf('django.db.models.fields.IntegerField')()),
+            ('trabajo_informal', self.gf('django.db.models.fields.IntegerField')()),
+            ('trabajo_formal', self.gf('django.db.models.fields.IntegerField')()),
             ('empleo_publico', self.gf('django.db.models.fields.IntegerField')()),
             ('empleo_privado', self.gf('django.db.models.fields.IntegerField')()),
             ('contrato_fijo', self.gf('django.db.models.fields.IntegerField')()),
@@ -1206,6 +1181,12 @@ class Migration(SchemaMigration):
         # Deleting model 'LimiteDepartamento'
         db.delete_table('territorios_limitedepartamento')
 
+        # Deleting model 'TerritorioComunidad'
+        db.delete_table('territorios_territoriocomunidad')
+
+        # Removing M2M table for field asentamientos on 'TerritorioComunidad'
+        db.delete_table('territorios_territoriocomunidad_asentamientos')
+
         # Deleting model 'Titulacion'
         db.delete_table('territorios_titulacion')
 
@@ -1214,9 +1195,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'TerritorioIndio'
         db.delete_table('territorios_territorioindio')
-
-        # Removing M2M table for field asentamientos on 'TerritorioIndio'
-        db.delete_table('territorios_territorioindio_asentamientos')
 
         # Removing M2M table for field municipios on 'TerritorioIndio'
         db.delete_table('territorios_territorioindio_municipios')
@@ -1227,9 +1205,6 @@ class Migration(SchemaMigration):
         # Deleting model 'TerritorioIndioNoTitulado'
         db.delete_table('territorios_territorioindionotitulado')
 
-        # Removing M2M table for field asentamientos on 'TerritorioIndioNoTitulado'
-        db.delete_table('territorios_territorioindionotitulado_asentamientos')
-
         # Removing M2M table for field municipios on 'TerritorioIndioNoTitulado'
         db.delete_table('territorios_territorioindionotitulado_municipios')
 
@@ -1239,17 +1214,11 @@ class Migration(SchemaMigration):
         # Deleting model 'TerritorioNegro'
         db.delete_table('territorios_territorionegro')
 
-        # Removing M2M table for field asentamientos on 'TerritorioNegro'
-        db.delete_table('territorios_territorionegro_asentamientos')
-
         # Removing M2M table for field municipios on 'TerritorioNegro'
         db.delete_table('territorios_territorionegro_municipios')
 
         # Deleting model 'TerritorioNegroNoTitulado'
         db.delete_table('territorios_territorionegronotitulado')
-
-        # Removing M2M table for field asentamientos on 'TerritorioNegroNoTitulado'
-        db.delete_table('territorios_territorionegronotitulado_asentamientos')
 
         # Removing M2M table for field municipios on 'TerritorioNegroNoTitulado'
         db.delete_table('territorios_territorionegronotitulado_municipios')
@@ -1578,6 +1547,7 @@ class Migration(SchemaMigration):
         },
         'territorios.departamento': {
             'Meta': {'object_name': 'Departamento'},
+            'area_total': ('django.db.models.fields.TextField', [], {}),
             'area_total_rural': ('django.db.models.fields.TextField', [], {}),
             'area_total_urbana': ('django.db.models.fields.TextField', [], {}),
             'cantidad_municipios_pacifico': ('django.db.models.fields.IntegerField', [], {}),
@@ -1628,11 +1598,12 @@ class Migration(SchemaMigration):
             'contrato_fijo': ('django.db.models.fields.IntegerField', [], {}),
             'contrato_temporal': ('django.db.models.fields.IntegerField', [], {}),
             'desc': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Desc']"}),
-            'desempleo_formal': ('django.db.models.fields.IntegerField', [], {}),
-            'desempleo_informal': ('django.db.models.fields.IntegerField', [], {}),
+            'desempleo': ('django.db.models.fields.IntegerField', [], {}),
             'empleo_privado': ('django.db.models.fields.IntegerField', [], {}),
             'empleo_publico': ('django.db.models.fields.IntegerField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'trabajo_formal': ('django.db.models.fields.IntegerField', [], {}),
+            'trabajo_informal': ('django.db.models.fields.IntegerField', [], {})
         },
         'territorios.educacionnormalista': {
             'Meta': {'object_name': 'EducacionNormalista'},
@@ -2031,7 +2002,7 @@ class Migration(SchemaMigration):
         'territorios.municipio': {
             'Meta': {'object_name': 'Municipio'},
             'area': ('django.db.models.fields.IntegerField', [], {}),
-            'cabecera_area': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'cabecera_area_total_titulos': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '255'}),
             'cabecera_grupo_poblacional': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'cabecera_individuales_cantidad': ('django.db.models.fields.IntegerField', [], {}),
             'departamento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Departamento']"}),
@@ -2040,6 +2011,7 @@ class Migration(SchemaMigration):
             'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ingresos': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.IngresoMunicipal']"}),
+            'masivo': ('django.db.models.fields.TextField', [], {}),
             'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'plan_desarrollo': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PlanDesarrollo']"}),
             'plan_ordenamiento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PlanOrdenamiento']"}),
@@ -2289,58 +2261,49 @@ class Migration(SchemaMigration):
             'urbano_porcentaje': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'urbano_rango': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        'territorios.territorioindio': {
-            'Meta': {'object_name': 'TerritorioIndio'},
-            'area': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+        'territorios.territoriocomunidad': {
+            'Meta': {'object_name': 'TerritorioComunidad'},
             'asentamientos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['territorios.Asentamiento']", 'symmetrical': 'False'}),
             'departamento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Departamento']"}),
             'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'poblacion_total': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PoblacionPequena']"})
+        },
+        'territorios.territorioindio': {
+            'Meta': {'object_name': 'TerritorioIndio', '_ormbases': ['territorios.TerritorioComunidad']},
+            'area': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'familias': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'limites': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'municipios': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'indio_municipio'", 'symmetrical': 'False', 'to': "orm['territorios.Municipio']"}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'poblacion_total': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PoblacionPequena']"}),
             'pueblos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['territorios.Pueblo']", 'symmetrical': 'False'}),
             'resolucion_constitucion': ('django.db.models.fields.IntegerField', [], {}),
-            'situacion_juridica': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Saneamiento']"})
+            'situacion_juridica': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Saneamiento']"}),
+            'territoriocomunidad_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['territorios.TerritorioComunidad']", 'unique': 'True', 'primary_key': 'True'})
         },
         'territorios.territorioindionotitulado': {
-            'Meta': {'object_name': 'TerritorioIndioNoTitulado'},
+            'Meta': {'object_name': 'TerritorioIndioNoTitulado', '_ormbases': ['territorios.TerritorioComunidad']},
             'area_solicitada': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'asentamientos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['territorios.Asentamiento']", 'symmetrical': 'False'}),
-            'departamento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Departamento']"}),
-            'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'familias': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'municipios': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'indio_not_municipio'", 'symmetrical': 'False', 'to': "orm['territorios.Municipio']"}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'poblacion_total': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PoblacionPequena']"}),
             'pueblos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['territorios.Pueblo']", 'symmetrical': 'False'}),
-            'situacion_juridica': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Titulacion']"})
+            'situacion_juridica': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Titulacion']"}),
+            'territoriocomunidad_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['territorios.TerritorioComunidad']", 'unique': 'True', 'primary_key': 'True'})
         },
         'territorios.territorionegro': {
-            'Meta': {'object_name': 'TerritorioNegro'},
+            'Meta': {'object_name': 'TerritorioNegro', '_ormbases': ['territorios.TerritorioComunidad']},
             'area': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'asentamientos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['territorios.Asentamiento']", 'symmetrical': 'False'}),
-            'departamento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Departamento']"}),
-            'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'limites': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'municipios': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'negro_municipio'", 'symmetrical': 'False', 'to': "orm['territorios.Municipio']"}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'poblacion_total': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PoblacionPequena']"}),
-            'resolucion_constitucion': ('django.db.models.fields.IntegerField', [], {})
+            'resolucion_constitucion': ('django.db.models.fields.IntegerField', [], {}),
+            'territoriocomunidad_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['territorios.TerritorioComunidad']", 'unique': 'True', 'primary_key': 'True'})
         },
         'territorios.territorionegronotitulado': {
-            'Meta': {'object_name': 'TerritorioNegroNoTitulado'},
+            'Meta': {'object_name': 'TerritorioNegroNoTitulado', '_ormbases': ['territorios.TerritorioComunidad']},
             'area_solicitada': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'asentamientos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['territorios.Asentamiento']", 'symmetrical': 'False'}),
-            'departamento': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Departamento']"}),
-            'geom': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'municipios': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'negro_not_municipio'", 'symmetrical': 'False', 'to': "orm['territorios.Municipio']"}),
-            'nombre': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'poblacion_total': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.PoblacionPequena']"}),
-            'situacion_juridica': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Titulacion']"})
+            'situacion_juridica': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['territorios.Titulacion']"}),
+            'territoriocomunidad_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['territorios.TerritorioComunidad']", 'unique': 'True', 'primary_key': 'True'})
         },
         'territorios.titulacion': {
             'Meta': {'object_name': 'Titulacion'},
