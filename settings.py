@@ -38,7 +38,6 @@ TIME_ZONE = 'America/Bogota'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'es-co'
-LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
@@ -77,6 +76,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -104,6 +104,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'grappelli',
+    'django.contrib.flatpages',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.gis',
