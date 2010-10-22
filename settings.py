@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'fichas',
     'territorios',
+    'proyectos',
 )
 
 try:

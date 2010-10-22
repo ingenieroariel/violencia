@@ -377,9 +377,6 @@ class TerritorioComunidad(Territorio):
     asentamientos = ManyToManyField(Asentamiento)
     poblacion_total = ForeignKey(PoblacionPequena)
 
-    class Meta:
-        abstract = True
-
 class Titulacion(models.Model):
     resolucion_fecha = DateField()
     resolucion_codigo = CharField(max_length=50)
@@ -411,8 +408,9 @@ class TerritorioIndio(TerritorioComunidad):
     situacion_juridica = ForeignKey(Saneamiento)
 
     class Meta:
-        verbose_name="Territorio Colectivo Indígena: Resguardo"
-        
+        verbose_name="Territorio Indígena: Resguardo"
+        verbose_name_plural="Territorios Indígenas: Resguardo"
+
 class TerritorioIndioNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='indio_not_municipio')
     pueblos = ManyToManyField(Pueblo)
@@ -421,7 +419,8 @@ class TerritorioIndioNoTitulado(TerritorioComunidad):
     situacion_juridica = ForeignKey(Titulacion)
 
     class Meta:
-        verbose_name="Territorio Colectivo Indígena: No titulado"
+        verbose_name="Territorio Indígena: NT"
+        verbose_name_plural="Territorios Indígenas: NT"
 
 class TerritorioNegro(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='negro_municipio')
@@ -430,7 +429,9 @@ class TerritorioNegro(TerritorioComunidad):
     limites = CharField(max_length=255) #gis?
 
     class Meta:
-        verbose_name="Territorio Colectivo Comunidades Negras: Título Colectivo"
+        verbose_name="Territorio Comunidades Negras"
+        verbose_name_plural="Territorios Comunidades Negras"
+
 
 class TerritorioNegroNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='negro_not_municipio')
@@ -438,7 +439,8 @@ class TerritorioNegroNoTitulado(TerritorioComunidad):
     situacion_juridica = ForeignKey(Titulacion)
 
     class Meta:
-        verbose_name="Territorio Colectivo Comunidades Negras: No titulado"
+        verbose_name="Territorio Comunidades Negras NT"
+        verbose_name_plural="Territorios Comunidades Negras NT"
 
 """CATEGOR�A: CONFLICTOS"""
 """(Informaci�n solo accesible para las organizaciones que la cargan y para el Observatorio. NO p�blica)"""
