@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     'fichas',
     'territorios',
     'proyectos',
+    'gestion',
 )
 
 try:
