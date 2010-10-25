@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
-from django.db import models
+from django.contrib.gis.db import models
 from django.db.models.fields import BooleanField
 from django.db.models.fields import CharField
 from django.db.models.fields import DateField
@@ -43,6 +43,7 @@ TIPOS_REGIMEN = ((0,'Subsidiario'),(1,'Contributivo'))
 class Territorio(models.Model):
     nombre = models.CharField(max_length=100)
     geom = MultiPolygonField(srid=4326)
+    objects = models.GeoManager()
 
     class Meta:
         abstract = True
@@ -51,6 +52,7 @@ class Territorio(models.Model):
         return nombre
 
 class TerritorioPolitico(Territorio):
+    objects = models.GeoManager()
 
     class Meta:
         abstract = True
@@ -199,6 +201,8 @@ class Departamento(TerritorioPolitico):
     rural_area = CharField(max_length=255)
 
     plan_desarrollo = ForeignKey(PlanDesarrollo)
+
+    objects = models.GeoManager()
 
 
 #TO-DO relacionar pueblos
@@ -358,6 +362,8 @@ class Municipio(TerritorioPolitico):
 
     masivo = TextField('Masivo (sobre desplazados)')
 
+    objects = models.GeoManager()
+
 
 class Limite(models.Model):
     tipo = SmallIntegerField(choices=TIPOS_LIMITE, default=0)
@@ -376,6 +382,9 @@ class TerritorioComunidad(Territorio):
     departamento = models.ForeignKey(Departamento)
     asentamientos = ManyToManyField(Asentamiento)
     poblacion_total = ForeignKey(PoblacionPequena)
+
+    objects = models.GeoManager()
+
 
 class Titulacion(models.Model):
     resolucion_fecha = DateField()
@@ -407,6 +416,9 @@ class TerritorioIndio(TerritorioComunidad):
     familias = IntegerField("Número de familias", default=0)
     situacion_juridica = ForeignKey(Saneamiento)
 
+    objects = models.GeoManager()
+
+
     class Meta:
         verbose_name="Territorio Indígena: Resguardo"
         verbose_name_plural="Territorios Indígenas: Resguardo"
@@ -418,6 +430,8 @@ class TerritorioIndioNoTitulado(TerritorioComunidad):
     familias = IntegerField("Número de familias", default=0)
     situacion_juridica = ForeignKey(Titulacion)
 
+    objects = models.GeoManager()
+
     class Meta:
         verbose_name="Territorio Indígena: NT"
         verbose_name_plural="Territorios Indígenas: NT"
@@ -428,6 +442,8 @@ class TerritorioNegro(TerritorioComunidad):
     area = CharField(max_length=255) #gis?
     limites = CharField(max_length=255) #gis?
 
+    objects = models.GeoManager()
+
     class Meta:
         verbose_name="Territorio Comunidades Negras"
         verbose_name_plural="Territorios Comunidades Negras"
@@ -437,6 +453,8 @@ class TerritorioNegroNoTitulado(TerritorioComunidad):
     municipios = models.ManyToManyField(Municipio, related_name='negro_not_municipio')
     area_solicitada = CharField(max_length=255) #gis?
     situacion_juridica = ForeignKey(Titulacion)
+
+    objects = models.GeoManager()
 
     class Meta:
         verbose_name="Territorio Comunidades Negras NT"
