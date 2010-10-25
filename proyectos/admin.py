@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from proyectos.models import *
 
-admin.site.register(Megaproyecto)
-admin.site.register([])
+from django.db.models import get_models, get_app
+admin.site.register(get_models(get_app('proyectos'))
+
