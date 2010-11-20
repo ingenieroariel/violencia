@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from territorios.models import *
 from django.contrib.gis import admin
 from django.contrib.gis.maps.google import GoogleMap
+from django import forms
 
 GMAP = GoogleMap()
 
@@ -10,207 +12,64 @@ class GoogleAdmin(admin.OSMGeoAdmin):
     default_lon = -8228293
     default_lat = 508764
     default_zoom = 5
-    
-admin.site.register(TerritorioIndio, GoogleAdmin)
-admin.site.register(TerritorioIndioNoTitulado, GoogleAdmin)
+
+class DepartamentoAdmin(GoogleAdmin):
+    list_display = ('nombre', 'area_total', 'capital', 'ingresos', 'gastos','cantidad_municipios_pacifico', 'total')
+    fieldsets = (
+          (None, {
+              'fields': 
+                 (
+                 'nombre', 
+                 ('area_total', 'area_rural', 'area_urbana'), 
+                'capital',
+                 ('cantidad_municipios_total', 'cantidad_municipios_pacifico'),
+                  'fecha_creacion',
+
+                 )
+                
+          }),
+          ('Presupuesto', {
+              'fields': (('ingresos', 'gastos'),
+                          'fuente_presupuesto',
+                          )
+          }),
+          ('Poblacion', {
+              'fields': (
+                        'total',
+                        ('hombres', 'mujeres'),
+                        ('edad_0_a_9', 'edad_10_a_19', 'edad_20_a_29'),
+                        ('edad_30_a_39', 'edad_40_a_49', 'edad_50_a_59'),
+                        ('edad_60_a_69', 'edad_70_a_79', 'edad_80_a_89'),
+                        'edad_90_o_mas',
+                        ('etnia_indigena', 'etnia_afro'),
+                        ('etnia_otros', 'etnia_no_informa'),
+                        ('cabecera', 'rural'),
+                        'fuente_poblacion',
+                        
+                        )   
+                         
+          }),
+#          ('Advanced options', {
+#              'classes': ('collapse',),
+#              'fields': ('geom', )
+#          }),
+      )
+
+
+
+
+class TitulosIndividualesForm(forms.ModelForm):
+    grupo_poblacional = forms.MultipleChoiceField(choices=GRUPO_POBLACIONAL_CHOICES, widget=forms.SelectMultiple,  help_text="Puede seleccionar múltiples grupos dejando presionada la tecla Control")
+    class Meta:
+        model = TitulosIndividuales
+
+class TitulosIndividualesAdmin(admin.ModelAdmin):
+#    form = TitulosIndividualesForm
+     pass
+
+admin.site.register(Departamento, DepartamentoAdmin)
+admin.site.register(TitulosIndividuales, TitulosIndividualesAdmin)
+admin.site.register(TerritorioIndigena, GoogleAdmin)
+admin.site.register(TerritorioIndigenaNoTitulado, GoogleAdmin)
 admin.site.register(TerritorioNegro, GoogleAdmin)
 admin.site.register(TerritorioNegroNoTitulado, GoogleAdmin)
-
-
-""" BEGIN InstitucionEducativa """
-class PoblacionPreescolarStacked(admin.StackedInline):
-    model = PoblacionEstudiantilPreescolar
-    extra = 1
-    max_num=1
-
-class PoblacionBasicaPrimariaStacked(admin.StackedInline):
-    model = PoblacionEstudiantilBasicaPrimaria
-    extra = 1
-    max_num=1
-
-class PoblacionBasicaSecundariaStacked(admin.StackedInline):
-    model = PoblacionEstudiantilBasicaSecundaria
-    extra = 1
-    max_num=1
-
-class PoblacionMediaVocacionalStacked(admin.StackedInline):
-    model = PoblacionEstudiantilMediaVocacional
-    extra = 1
-    max_num=1
-
-class CoberturaPreescolarStacked(admin.StackedInline):
-    model = CoberturaEstudiantilPreescolar
-    extra = 1
-    max_num=1
-
-class CoberturaPrimariaStacked(admin.StackedInline):
-    model = CoberturaEstudiantilBasicaPrimaria
-    extra = 1
-    max_num=1
-
-class CoberturaSecundariaStacked(admin.StackedInline):
-    model = CoberturaEstudiantilBasicaSecundaria
-    extra = 1
-    max_num=1
-
-class CoberturaMediaVocacionalStacked(admin.StackedInline):
-    model = CoberturaEstudiantilMediaVocacional
-    extra = 1
-    max_num=1
-
-class CoberturaDesplazadosPreescolarStacked(admin.StackedInline):
-    model = CoberturaDesplazadosPreescolar
-    extra = 1
-    max_num=1
-
-class CoberturaDesplazadosPrimariaStacked(admin.StackedInline):
-    model = CoberturaDesplazadosPrimaria
-    extra = 1
-    max_num=1
-
-class CoberturaDesplazadosSecundariaStacked(admin.StackedInline):
-    model = CoberturaDesplazadosSecundaria
-    extra = 1
-    max_num=1
-
-class CoberturaDesplazadosMediaStacked(admin.StackedInline):
-    model = CoberturaDesplazadosMedia
-    extra = 1
-    max_num=1
-
-class EstudiantesDesercionStacked(admin.StackedInline):
-    model = EstudiantesDesercion
-    extra = 1
-    max_num=1
-
-class EstudiantesPromocionStacked(admin.StackedInline):
-    model = EstudiantesPromocion
-    extra = 1
-    max_num=1
-
-class EstudiantesRepitenciaStacked(admin.StackedInline):
-    model = EstudiantesRepitencia
-    extra = 1
-    max_num=1
-
-class EstudiantesAnalfabetismoStacked(admin.StackedInline):
-    model = EstudiantesAnalfabetismo
-    extra = 1
-    max_num=1
-    
-class InstitucionEducativaAdmin(admin.ModelAdmin):
-    inlines = [PoblacionPreescolarStacked,PoblacionBasicaPrimariaStacked,PoblacionBasicaSecundariaStacked,PoblacionMediaVocacionalStacked,
-    CoberturaPreescolarStacked,CoberturaPrimariaStacked,CoberturaSecundariaStacked,CoberturaMediaVocacionalStacked,
-    CoberturaDesplazadosPreescolarStacked,CoberturaDesplazadosPrimariaStacked,CoberturaDesplazadosMediaStacked,CoberturaDesplazadosMediaStacked,
-    EstudiantesDesercionStacked,EstudiantesPromocionStacked,EstudiantesRepitenciaStacked,EstudiantesAnalfabetismoStacked]
-
-admin.site.register(InstitucionEducativa, InstitucionEducativaAdmin)
-"""  END InstitucionEducativa """
-
-
-""" BEGIN Desc """
-class EsperanzaVidaStacked(admin.StackedInline):
-    model = EsperanzaVida
-    extra = 1
-    max_num=1
-
-class MortalidadInfantilStacked(admin.StackedInline):
-    model = MortalidadInfantil
-    extra = 1
-    max_num=1
-
-class MortalidadMaternoInfantilStacked(admin.StackedInline):
-    model = MortalidadMaternoInfantil
-    extra = 1
-    max_num=1
-
-class MortalidadTotalStacked(admin.StackedInline):
-    model = MortalidadTotal
-    extra = 1
-    max_num=1
-
-class TasaAnalfabetizacionStacked(admin.StackedInline):
-    model = TasaAnalfabetizacion
-    extra = 1
-    max_num=1
-
-class MatriculasStacked(admin.StackedInline):
-    model = Matriculas
-    extra = 1
-    max_num=1
-
-class EducacionPreescolarStacked(admin.StackedInline):
-    model = EducacionPreescolar
-    extra = 1
-    max_num=1
-
-class EducacionPrimariaStacked(admin.StackedInline):
-    model = EducacionPrimaria
-    extra = 1
-    max_num=1
-
-class EducacionSecundariaStacked(admin.StackedInline):
-    model = EducacionSecundaria
-    extra = 1
-    max_num=1
-
-class EducacionVocacionalStacked(admin.StackedInline):
-    model = EducacionVocacional
-    extra = 1
-    max_num=1
-
-class EducacionTecnicaStacked(admin.StackedInline):
-    model = EducacionTecnica
-    extra = 1
-    max_num=1
-
-class EducacionNormalistaStacked(admin.StackedInline):
-    model = EducacionNormalista
-    extra = 1
-    max_num=1
-
-class EducacionTecnicaTecnologicaStacked(admin.StackedInline):
-    model = EducacionTecnicaTecnologica
-    extra = 1
-    max_num=1
-
-class EducacionSuperiorStacked(admin.StackedInline):
-    model = EducacionSuperior
-    extra = 1
-    max_num=1
-
-
-class ICBFStacked(admin.StackedInline):
-    model = ICBF
-    extra = 1
-    max_num=1
-
-class EconomiaStacked(admin.StackedInline):
-    model = Economia
-    extra = 1
-    max_num=1
-
-class EconomiaStacked(admin.StackedInline):
-    model = Economia
-    extra = 1
-    max_num=1
-
-class CulturaStacked(admin.StackedInline):
-    model = Cultura
-    extra = 1
-    max_num=1
-
-class ServicioPublicoStacked(admin.StackedInline):
-    model = ServicioPublico
-    extra = 3
-    max_num=3
-
-
-class DescAdmin(admin.ModelAdmin):
-    inlines = [EsperanzaVidaStacked,MortalidadInfantilStacked,MortalidadMaternoInfantilStacked,MortalidadTotalStacked,
-    TasaAnalfabetizacionStacked,MatriculasStacked,EducacionPreescolarStacked,EducacionPrimariaStacked,EducacionSecundariaStacked,
-    EducacionVocacionalStacked,EducacionTecnicaStacked,EducacionNormalistaStacked,EducacionTecnicaTecnologicaStacked,EducacionSuperiorStacked,
-    ICBFStacked,EconomiaStacked,CulturaStacked,ServicioPublicoStacked]
-
-admin.site.register(Desc, DescAdmin)
-""" END BEGIN Desc """

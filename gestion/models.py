@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.gis.db import models
-from territorios.models import TerritorioComunidad
+from territorios.models import TerritorioComunidad, TerritorioComunidadIndigena, TerritorioComunidadNegra
 
 class ActividadProductiva(models.Model):
     tipo = models.CharField(max_length=200)
@@ -80,6 +80,17 @@ AGENTE_CHOICES = (
     ('otro', 'Otro...'),
 )
 
+# cabildo mayor, 
+
+class CabildoMayor(models.Model):
+    nombre = models.CharField(max_length=255)
+    cantidad_resguardos = models.IntegerField()
+#    nombres_resguardos = models.TextField()
+    pertenece_asociacion_cabildos = models.BooleanField()
+    nombre_asiciacion_cabildos = models.CharField(max_length=255)
+
+    territorios = models.ManyToManyField(TerritorioComunidadIndigena, through='CabildoLocal')
+
 class CabildoLocal(models.Model):
     nombre = models.CharField(max_length=255)
     estructura_organizativa = models.TextField()
@@ -89,14 +100,8 @@ class CabildoLocal(models.Model):
     agentes_salud_tradicional = models.BooleanField()
     tipo_agente_salud = models.CharField(max_length=50, choices= AGENTE_CHOICES)
     cantidad_agentes_salud = models.IntegerField()
-    territorio = models.ForeignKey(TerritorioComunidad)
-
-class CabildoMayor(models.Model):
-    nombre = models.CharField(max_length=255)
-    cantidad_resguardos = models.IntegerField()
-    nombres_resguardos = models.TextField()
-    asociacion_cabildos = models.BooleanField()
-    territorio = models.ForeignKey(TerritorioComunidad)
+    territorio = models.ForeignKey(TerritorioComunidadIndigena)
+    cabildo_mayor = models.ForeignKey(CabildoMayor)
 
 class PlanVida(models.Model):
     nombre = models.CharField(max_length=255)
