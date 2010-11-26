@@ -1,0 +1,65 @@
+     _  _ |   _ _  _  _  _
+    |_)(_)|\/| | |(_||_)_\
+    |      /         |    
+
+Polymaps is a BSD-licensed display and interaction library for tile-based vector
+and raster  maps using SVG and Javascript.
+
+Our intent is to provide a minimal, extensible, customizable, and free display 
+library for discriminating designers and developers who want to use interactive
+maps in their own projects. Polymaps provides a core set of features in a tight,
+clean package, with plenty of hooks for additional functionality. 
+
+
+CAVEATS, FEATURE REQUESTS AND KNOWN BUGS
+
+Browser Support:
+
+- Tested in recent Webkit browsers (Safari 4+, Chrome 6, Webkit nightlies)
+- Tested in recent Firefox browsers (3.6+) 
+- Optimistic about Opera, IE9, but not part of core testing yet.
+- SVG is *required*, even for image display...
+  - in other words: if you can't require SVG, don't use Polymaps!
+
+Features:
+
+- Vector overlays in GeoJSON format are supported, both  tiled and single file
+- Image layers in Google-y spherical mercator format are supported
+- There are *no default markers* or infobubbles (yet?) 
+
+API:
+
+- No defensive copying (on input or output).
+- No type coercion (e.g., String -> Number for zoom).
+- Using == instead of ===.
+- Many properties cannot be changed after load (e.g., tile size, URL).
+- No (easy) way to lookup a GeoJSON elements by feature id.
+- Missing in-code documentation, API reference.
+- Include support (not just examples) for TileCache, TileStache, Bing?
+
+Events:
+
+- "move" event does not distinguish zoom / pan / zoom+pan events.
+- "show" events are not supported on image tiles.
+- There are no corresponding "unload" or "hide" events.
+- There is no "error" event if a tile fails to load.
+- Arrow control pans three times for two keydowns.
+
+Sizing:
+
+- Maps with no explicit size are auto-resized on window resize;
+  - This may miss resize based on DOM changes (e.g., element removal).
+  - This may generate spurious resize events for fixed-size parents.
+- If the map is bigger than its parent, tiles are not automatically clipped.
+
+Tiles:
+
+- Assumes Mercator projection, with Google-y transform.
+- Anti-aliasing artifacts are visible with smooth zooming / rescaled tiles.
+- When translucent tiles are rescaled, they can overlap with other resolutions.
+
+Queue:
+
+- Should prioritize tile requests from the center out.
+- Create host-specific queues to allow more than 6 simultaneous requests?
+
