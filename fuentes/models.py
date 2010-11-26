@@ -15,10 +15,18 @@ class AutorDato(models.Model):
     def __unicode__(self):
         return self.nombre
     
+FRECUENCIA_CHOICES=(
+     ('diario', 'Cada día'),
+     ('mensual', 'Cada mes'),
+     ('anual', 'Cada año'),
+     ('demanda', 'Sin periodo definido'),
+)
+
 class FuenteDato(TimeStampedModel):
     nombre_documento = models.CharField(max_length=255)
     autor = models.ForeignKey(AutorDato)
-    fecha = models.IntegerField(help_text="Año en que la fuente creó la información, por ejemplo: 2005")
+    fecha = models.DateField(help_text="Fecha en que la fuente creó la información, si solamente se tiene el año, poner un dia y mes cualquiera y seleccionar debajo frecuencia de actualizacion anual")
+    frecuencia_actualizacion = models.CharField(max_length=255, choices=FRECUENCIA_CHOICES, default='anual')
     fecha_ingreso = models.DateField(help_text="Fecha en que se cargó la información en el sistema, por ejemplo: hoy")
     usuario = models.ForeignKey(User)
     archivo = models.FileField(upload_to="upload", null=True, blank=True)

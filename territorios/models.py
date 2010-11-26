@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django_extensions.db.fields import ModificationDateTimeField
-from django_extensions.db.fields import CreationDateTimeField
+from django_extensions.db.fields import CreationDateTimeField, AutoSlugField
 from django.contrib.gis.db.models import MultiPolygonField
 from django_extensions.db.models import TitleSlugDescriptionModel, TimeStampedModel
 from fuentes.models import FuenteDato, AutorDato
@@ -25,16 +25,18 @@ TIPOS_INSTALACIONES_SALUD = ((0,'Centro de salud'),(1,'Puesto de salud'),(2,'Hos
 TIPOS_REGIMEN = ((0,'Subsidiario'),(1,'Contributivo'))
 
 # Create your models here.
-class Territorio(TitleSlugDescriptionModel):
+class Territorio(models.Model):
     nombre = models.CharField(max_length=100)
-    geom = models.PolygonField(srid=4326)
+    slug = AutoSlugField('slug', populate_from='nombre', blank=True, null=True)
+    geom = models.GeometryField(srid=4326)
     objects = models.GeoManager()
+    informacion_adicional = models.TextField(blank=True, null=True)    
 
     class Meta:
         abstract = True
 
     def __unicode__(self):
-        return nombre
+        return self.nombre
 
 
 class TerritorioPolitico(Territorio):
@@ -42,8 +44,19 @@ class TerritorioPolitico(Territorio):
     presupuesto_anual = models.IntegerField(blank=True, null=True)
     ingresos = models.FloatField('ingresos totales', blank=True, null=True, help_text="millones de pesos")
     gastos = models.FloatField('gastos totales', blank=True, null=True, help_text="millones de pesos")
+    objects = models.GeoManager()
 
-    #poblacion
+    class Meta:
+        abstract = True
+
+ESTADISTICA_CHOICES = (
+    ('poblacion', 'Poblacion'),
+    ('recepcion', 'Recepcion desplazados'),
+    ('expulsion', 'Expulsion desplazados'),
+)
+
+class Estadistica(models.Model):
+    tipo = models.CharField(max_length=255, choices=ESTADISTICA_CHOICES)
     total = models.SmallIntegerField(verbose_name="Población Total", blank=True, null=True, help_text="habitantes")
     hombres = models.FloatField(help_text="%", blank=True, null=True)
     mujeres = models.FloatField(help_text="%", blank=True, null=True)
@@ -61,13 +74,28 @@ class TerritorioPolitico(Territorio):
     etnia_afro = models.SmallIntegerField(help_text="%", blank=True, null=True)
     etnia_otros = models.SmallIntegerField(help_text="%", blank=True, null=True)
     etnia_no_informa = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    cabecera = models.IntegerField(help_text='habitantes', blank=True, null=True)
     rural = models.IntegerField(help_text='habitantes', blank=True, null=True)
-
-    objects = models.GeoManager()
+    individual = models.IntegerField(help_text='habitante (solo deplazados)', blank=True, null=True)
+    masivo = models.IntegerField(help_text='habitantes (solo desplazados)', blank=True, null=True)
+    cabecera = models.IntegerField(help_text='habitantes', blank=True, null=True)
+    rural = models.IntegerField(help_text='habitantes (solo desplazados)', blank=True, null=True)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
 
     class Meta:
-        abstract = True
+        abstract=True 
+
+    def __unicode__(self):
+        return self.tipo
+
+class EstadisticaDepartamento(Estadistica):
+    territorio = models.ForeignKey('Departamento')
+    
+class EstadisticaMunicipio(Estadistica):
+    territorio = models.ForeignKey('Municipio')
+
+    def __unicode__(self):
+        return "Estadistica "+ self.tipo
+
 
 class Departamento(TerritorioPolitico):
     """
@@ -91,44 +119,6 @@ class Departamento(TerritorioPolitico):
     def __unicode__(self):
         return self.nombre
 
-class PoblacionPequena(models.Model):
-    cantidad_hombres = models.SmallIntegerField()
-    cantidad_mujeres = models.SmallIntegerField()
-    edad_0_5 = models.SmallIntegerField(verbose_name="Edad entre 0 y 5", default=0)
-    edad_6_10 = models.SmallIntegerField(verbose_name="Edad entre 6 y 10", default=0)
-    edad_11_15 = models.SmallIntegerField(verbose_name="Edad entre 11 y 15", default=0)
-    edad_16_20 = models.SmallIntegerField(verbose_name="Edad entre 16 y 20", default=0)
-    edad_21_25 = models.SmallIntegerField(verbose_name="Edad entre 21 y 25", default=0)
-    edad_26_30 = models.SmallIntegerField(verbose_name="Edad entre 26 y 30", default=0)
-    edad_31_35 = models.SmallIntegerField(verbose_name="Edad entre 31 y 35", default=0)
-    edad_36_40 = models.SmallIntegerField(verbose_name="Edad entre 36 y 40", default=0)
-    edad_41_45 = models.SmallIntegerField(verbose_name="Edad entre 41 y 45", default=0)
-    edad_46_50 = models.SmallIntegerField(verbose_name="Edad entre 46 y 50", default=0)
-    edad_51_55 = models.SmallIntegerField(verbose_name="Edad entre 51 y 55", default=0)
-    edad_56_60 = models.SmallIntegerField(verbose_name="Edad entre 56 y 60", default=0)
-    edad_61_65 = models.SmallIntegerField(verbose_name="Edad entre 61 y 65", default=0)
-    edad_66_70 = models.SmallIntegerField(verbose_name="Edad entre 66 y 70", default=0)
-    edad_71_75 = models.SmallIntegerField(verbose_name="Edad entre 71 y 75", default=0)
-    edad_76_80 = models.SmallIntegerField(verbose_name="Edad entre 76 y 80", default=0)
-    edad_81_85 = models.SmallIntegerField(verbose_name="Edad entre 81 y 85", default=0)
-    edad_86_90 = models.SmallIntegerField(verbose_name="Edad entre 86 y 90", default=0)
-    edad_91_95 = models.SmallIntegerField(verbose_name="Edad entre 91 y 95", default=0)
-    porcentaje_pueblos = models.SmallIntegerField()
-
-    def __unicode__(self):
-        return 'Hombres: %s, Mujeres: %s, Pueblos: %s %' % (self.cantidad_hombres, self.cantidad_mujeres, self.porcentaje_pueblos)
-
-"""
-    Cantidad de comunidades, asentamientos
-    Nombre de comunidades, asentamientos
-"""
-class Asentamiento(models.Model):
-    nombre = models.CharField(max_length=100)
-    fecha_creacion = models.DateField()
-    decha_disolucion = models.DateField(null=True, blank=True)
-
-    def __unicode__(self):
-        return self.nombre
 
 GRUPO_POBLACIONAL_CHOICES = (
       ("indigena", "Indigena"),
@@ -149,106 +139,120 @@ class Municipio(TerritorioPolitico):
     departamento = models.ForeignKey(Departamento)
     area_total = models.FloatField(help_text="km2", blank=True, null=True)
     area_cabecera = models.FloatField(help_text="km2", blank=True, null=True)
-    titulos_cabecera = models.ForeignKey(TitulosIndividuales, verbose_name="titulos individuales área cabecera", related_name="tit_cab")
+    titulos_cabecera = models.ForeignKey(TitulosIndividuales, verbose_name="titulos individuales área cabecera", related_name="tit_cab", null=True, blank=True)
     area_rural = models.FloatField(help_text="km2", blank=True, null=True)
-    titulos_rural = models.ForeignKey(TitulosIndividuales, verbose_name="titulos individuales área cabecera", related_name="tit_rur")
+    titulos_rural = models.ForeignKey(TitulosIndividuales, verbose_name="titulos individuales área cabecera", related_name="tit_rur", null=True, blank=True)
     fuente_presupuesto = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_presupuesto_mpio")
-    fuente_poblacion = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_poblacion_mpio")
 
     objects = models.GeoManager()
 
+class Pueblo(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return "Pueblo "+self.nombre
+
 class TerritorioComunidad(Territorio):
-    departamento = models.ForeignKey(Departamento)
-    asentamientos = models.ManyToManyField(Asentamiento)
-    poblacion_total = models.ForeignKey(PoblacionPequena)
+    departamento = models.ForeignKey(Departamento, null=True, blank=True)
+    municipios = models.ManyToManyField(Municipio, null=True, blank=True)
+    area = models.FloatField(null=True, blank=True)
+    limites = models.TextField(null=True, blank=True) 
+    familias = models.IntegerField("Número de familias", null=True, blank=True)
+    titulado = models.BooleanField(default=True)
+    resolucion_constitucion = models.CharField(max_length=255, help_text="Dejar en blanco si no esta titulado", null=True, blank=True)
 
     objects = models.GeoManager()
 
 class TerritorioComunidadIndigena(TerritorioComunidad):
-    objects = models.GeoManager()
+   class Meta:
+        verbose_name="Territorio Colectivo Indígena"
+        verbose_name_plural="Territorios Colectivos Indígenas"
+
+   objects = models.GeoManager()
+
 
 class TerritorioComunidadNegra(TerritorioComunidad):
+    class Meta:
+        verbose_name="Territorio Colectivo Comunidades Negras"
+        verbose_name="Territorios Colectivos Comunidades Negras"
+
     objects = models.GeoManager()
 
-class Titulacion(models.Model):
-    resolucion_fecha = models.DateField()
-    resolucion_codigo = models.CharField(max_length=50)
-    limites = models.CharField(max_length=255) #gis?
-    estado_tramite = models.CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
-
-class Saneamiento(models.Model):
-    ampliacion_resolucion_fecha = models.DateField()
-    ampliacion_resolucion_codigo = models.CharField(max_length=50)
-    ampliacion_limites = models.CharField(max_length=255) #gis?
-    ampliacion_estado_tramite = models.CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
-
-    saneamiento_resolucion_fecha = models.DateField()
-    saneamiento_resolucion_codigo = models.CharField(max_length=50)
-    saneamiento_area = models.CharField(max_length=255) #gis?
-    saneamiento_poblacion_general = models.IntegerField()
-    saneamiento_poblacion_afro = models.IntegerField()
-    saneamiento_poblacion_otros = models.IntegerField()
-    saneamiento_limites = models.CharField(max_length=255) #gis?
-    saneamiento_estado_tramite = models.CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
-
-class Pueblo(models.Model):
+class Comunidad(models.Model):
     nombre = models.CharField(max_length=100)
+    fecha_creacion = models.DateField(null=True, blank=True)
+    fecha_disolucion = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.nombre
-
-class TerritorioIndigena(TerritorioComunidadIndigena):
-    departamento = models.ForeignKey(Departamento)
-    municipios = models.ManyToManyField(Municipio, related_name='indigena_municipio')
-    pueblos = models.ManyToManyField(Pueblo)
-    resolucion_constitucion = models.IntegerField()
-    area = models.CharField(max_length=255) #gis?
-    limites = models.CharField(max_length=255) #gis?
-    familias = models.IntegerField("Número de familias", default=0)
-    situacion_juridica = models.ForeignKey(Saneamiento)
-
-    objects = models.GeoManager()
+        return "Comunidad: "+ self.nombre
 
     class Meta:
-        verbose_name="Territorio Colectivo Indígena: Resguardo"
-        verbose_name_plural="Territorios Colectivos Indígenas: Resguardos"
+         verbose_name_plural = "comunidades"
+         abstract=True
 
-class TerritorioIndigenaNoTitulado(TerritorioComunidadIndigena):
-    departamento = models.ForeignKey(Departamento)
-    municipios = models.ManyToManyField(Municipio, related_name='indigena_not_municipio')
-    pueblos = models.ManyToManyField(Pueblo)
-    area_solicitada = models.CharField(max_length=255) #gis?
-    familias = models.IntegerField("Número de familias", default=0)
-    situacion_juridica = models.ForeignKey(Titulacion)
+class ComunidadNegra(Comunidad):
+    territorio = models.ForeignKey('TerritorioComunidadNegra')
 
-    objects = models.GeoManager()
+class ComunidadIndigena(Comunidad):
+    territorio = models.ForeignKey('TerritorioComunidadIndigena')
+    pueblo = models.ForeignKey(Pueblo)
 
-    class Meta:
-        verbose_name="Territorio Colectivo Indígena No Titulado"
-        verbose_name_plural="Territorios Colectivos Indígenas No Titulados"
 
-class TerritorioNegro(TerritorioComunidadNegra):
-    departamento = models.ForeignKey(Departamento)
-    municipios = models.ManyToManyField(Municipio, related_name='negro_municipio')
-    resolucion_constitucion = models.IntegerField()
-    area = models.CharField(max_length=255) #gis?
-    limites = models.CharField(max_length=255) #gis?
+SITUACION_CHOICES=(
+   ('ampliacion','Ampliacion'),
+   ('saneamiento', 'Saneamiento'),
+   ('solicitud', 'Solicitud'),
+)
 
-    objects = models.GeoManager()
-
-    class Meta:
-        verbose_name="Territorio Colectivo Comunidades Negras: Título Colectivo"
-        verbose_name_plural="Territorios Colectivos Comunidades Negras: Títulos Colectivos"
-
-class TerritorioNegroNoTitulado(TerritorioComunidadNegra):
-    departamento = models.ForeignKey(Departamento)
-    municipios = models.ManyToManyField(Municipio, related_name='negro_not_municipio')
-    area_solicitada = models.CharField(max_length=255) #gis?
-    situacion_juridica = models.ForeignKey(Titulacion)
-
-    objects = models.GeoManager()
+class SituacionJuridica(models.Model):
+    tipo = models.CharField(max_length=255, choices=SITUACION_CHOICES, blank=True, null=True)
+    territorio = models.ForeignKey(TerritorioComunidad)
+    fecha = models.DateField(help_text="Fecha de la resolucion o solicitud", blank=True, null=True)
+    resolucion = models.CharField(max_length=255, null=True, blank=True, help_text="Numero de resolucion (si existe)")
+    area = models.FloatField(help_text='Area en metros cuadrados', null=True, blank=True)
+    limites = models.TextField('Limites o linderos')
+    estado_tramite = models.CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
+    observaciones = models.TextField(blank=True, null=True)
+    poblacion_general = models.IntegerField(help_text='Solo para saneamiento', blank=True, null=True)
+    poblacion_afro = models.IntegerField(help_text='Solo para saneamiento', blank=True, null=True)
+    poblacion_otros = models.IntegerField(help_text='Solo para saneamiento', blank=True, null=True)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True, help_text="Campo opcional")
 
     class Meta:
-        verbose_name="Territorio Colectivo Comunidades Negras No Titulado"
-        verbose_name_plural="Territorios Colectivos Comunidades Negras No Titulados"
+        verbose_name_plural="situaciones juridicas"
 
+class PoblacionSimple(models.Model):
+    total = models.SmallIntegerField(verbose_name="Población Total", blank=True, null=True, help_text="habitantes")
+    hombres = models.FloatField(help_text="%", blank=True, null=True)
+    mujeres = models.FloatField(help_text="%", blank=True, null=True)
+    edad_0_a_9 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_10_a_19 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_20_a_29 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_30_a_39 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_40_a_49 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_50_a_59 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_60_a_69 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_70_a_79 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_80_a_89 = models.SmallIntegerField(help_text="%", blank=True, null=True)
+    edad_90_o_mas = models.SmallIntegerField(help_text="%", blank=True, null=True)    
+    fuente = models.ForeignKey(FuenteDato) 
+
+    class Meta:
+        abstract=True
+
+
+class PoblacionTerritorioColectivo(PoblacionSimple):
+    territorio = models.ForeignKey(TerritorioComunidad, related_name="estadistica_comunidad")
+
+class PoblacionComunidadNegra(PoblacionSimple):
+    territorio = models.ForeignKey(ComunidadNegra, related_name="estadistica_asentamiento")
+    class Meta:
+        verbose_name= "poblacion de comunidad"
+        verbose_name_plural= "poblaciones de comunidades"
+
+class PoblacionComunidadIndigena(PoblacionSimple):
+    territorio = models.ForeignKey(ComunidadIndigena, related_name="estadistica_asentamiento")
+    class Meta:
+        verbose_name= "poblacion de comunidad"
+        verbose_name_plural= "poblaciones de comunidades"

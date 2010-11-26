@@ -1,0 +1,9 @@
+<html> 
+  <head> 
+   <title>{% block title %}{% endblock %}</title>
+ {% block head %}{% endblock %}
+  </head> 
+  <body id="{% block body_id %}{% endblock %}"> 
+    {% block content %} {% endblock %}
+  </body> 
+</html> 

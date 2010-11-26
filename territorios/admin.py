@@ -13,8 +13,18 @@ class GoogleAdmin(admin.OSMGeoAdmin):
     default_lat = 508764
     default_zoom = 5
 
+class EstadisticaMunicipioInline(admin.StackedInline):
+    model = EstadisticaMunicipio
+
+class EstadisticaDepartamentoInline(admin.StackedInline):
+    model = EstadisticaDepartamento
+
+
 class DepartamentoAdmin(GoogleAdmin):
-    list_display = ('nombre', 'area_total', 'capital', 'ingresos', 'gastos','cantidad_municipios_pacifico', 'total')
+    list_display = ('id', 'nombre', 'area_total', 'capital', 'ingresos', 'gastos','cantidad_municipios_pacifico',)
+    search_fields = ['nombre','capital']
+    list_filter = ('fecha_creacion',)
+    inlines = [EstadisticaDepartamentoInline,]
     fieldsets = (
           (None, {
               'fields': 
@@ -24,7 +34,7 @@ class DepartamentoAdmin(GoogleAdmin):
                 'capital',
                  ('cantidad_municipios_total', 'cantidad_municipios_pacifico'),
                   'fecha_creacion',
-
+                  'informacion_adicional',
                  )
                 
           }),
@@ -33,43 +43,79 @@ class DepartamentoAdmin(GoogleAdmin):
                           'fuente_presupuesto',
                           )
           }),
-          ('Poblacion', {
-              'fields': (
-                        'total',
-                        ('hombres', 'mujeres'),
-                        ('edad_0_a_9', 'edad_10_a_19', 'edad_20_a_29'),
-                        ('edad_30_a_39', 'edad_40_a_49', 'edad_50_a_59'),
-                        ('edad_60_a_69', 'edad_70_a_79', 'edad_80_a_89'),
-                        'edad_90_o_mas',
-                        ('etnia_indigena', 'etnia_afro'),
-                        ('etnia_otros', 'etnia_no_informa'),
-                        ('cabecera', 'rural'),
-                        'fuente_poblacion',
-                        
-                        )   
-                         
-          }),
-#          ('Advanced options', {
-#              'classes': ('collapse',),
-#              'fields': ('geom', )
-#          }),
       )
 
+class MunicipioAdmin(GoogleAdmin):
+    list_display = ('id', 'nombre', 'departamento', 'area_total',  'ingresos', 'gastos',)
+    list_filter = ('departamento','fecha_creacion')
+    inlines = [EstadisticaMunicipioInline,]
+    fieldsets = (
+          (None, {
+              'fields': 
+                 (
+                 'nombre', 
+                 ('area_total', 'area_rural', 'area_cabecera'), 
+                  'fecha_creacion',
+                  'informacion_adicional',
+                 )
+                
+          }),
+          ('Presupuesto', {
+              'fields': (('ingresos', 'gastos'),
+                          'fuente_presupuesto',
+                          )
+          }),
+      )
+
+class PoblacionComunidadIndigenaAdmin(admin.StackedInline):    
+    model = PoblacionComunidadIndigena
+    extra = 1
+
+class PoblacionComunidadNegraAdmin(admin.StackedInline):    
+    model = PoblacionComunidadNegra
+    extra = 1
+
+class PoblacionTerritorioColectivoAdmin(admin.StackedInline):
+    model = PoblacionTerritorioColectivo
+    extra = 1
+
+class SituacionJuridicaAdmin(admin.StackedInline):
+    model = SituacionJuridica
+    extra=1
+
+class ComunidadInlineAdmin(admin.TabularInline):
+    model = Comunidad
+
+class ComunidadAdmin(GoogleAdmin):
+    list_display = ('nombre', 'fecha_creacion', 'fecha_disolucion')
+
+class ComunidadIndigenaInlineAdmin(admin.TabularInline):
+    model = ComunidadIndigena
+    inlines = [PoblacionComunidadNegraAdmin,]
+
+class ComunidadNegraInlineAdmin(admin.TabularInline):
+    model = ComunidadNegra
+    inlines = [PoblacionComunidadNegraAdmin,]
+
+class TerritorioComunidadAdmin(GoogleAdmin):
+    list_display = ('id', 'nombre', 'departamento')
+    search_fields = ('nombre', 'departamento')
+    list_filter = ('departamento',)
+    exclude = ('geom','informacion_adicional')
+
+class TerritorioComunidadIndigenaAdmin(TerritorioComunidadAdmin):
+    inlines = [ComunidadIndigenaInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
+
+class TerritorioComunidadNegraAdmin(TerritorioComunidadAdmin):
+    inlines = [ComunidadNegraInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
 
 
+class PuebloAdmin(GoogleAdmin):
+    list_display = ('nombre', 'descripcion')
 
-class TitulosIndividualesForm(forms.ModelForm):
-    grupo_poblacional = forms.MultipleChoiceField(choices=GRUPO_POBLACIONAL_CHOICES, widget=forms.SelectMultiple,  help_text="Puede seleccionar múltiples grupos dejando presionada la tecla Control")
-    class Meta:
-        model = TitulosIndividuales
-
-class TitulosIndividualesAdmin(admin.ModelAdmin):
-#    form = TitulosIndividualesForm
-     pass
-
+admin.site.register(Municipio,MunicipioAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)
-admin.site.register(TitulosIndividuales, TitulosIndividualesAdmin)
-admin.site.register(TerritorioIndigena, GoogleAdmin)
-admin.site.register(TerritorioIndigenaNoTitulado, GoogleAdmin)
-admin.site.register(TerritorioNegro, GoogleAdmin)
-admin.site.register(TerritorioNegroNoTitulado, GoogleAdmin)
+admin.site.register(TerritorioComunidadIndigena, TerritorioComunidadIndigenaAdmin)
+admin.site.register(TerritorioComunidadNegra, TerritorioComunidadNegraAdmin)
+admin.site.register(Comunidad, ComunidadAdmin)
+admin.site.register([Pueblo, ])

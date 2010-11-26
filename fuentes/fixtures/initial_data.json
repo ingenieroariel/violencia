@@ -1,0 +1,29 @@
+[
+    {
+        "pk": 1, 
+        "model": "fuentes.autordato", 
+        "fields": {
+            "descripcion": "Departamento Administrativo Nacional de Estad\u00edstica", 
+            "nombre": "DANE", 
+            "link": "http://www.dane.gov.co/"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "fuentes.autordato", 
+        "fields": {
+            "descripcion": "Departamento de Planeaci\u00f3n Nacional", 
+            "nombre": "DNP", 
+            "link": "http://www.dnp.gov.co/"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "fuentes.autordato", 
+        "fields": {
+            "descripcion": "Registro \u00danico De Poblaci\u00f3n Desplazada", 
+            "nombre": "RUPD - Acci\u00f3n Social", 
+            "link": "http://www.accionsocial.gov.co/"
+        }
+    }
+]

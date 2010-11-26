@@ -20,7 +20,6 @@ class VictimaAdmin(admin.ModelAdmin):
 class FuenteAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Municipio, GoogleAdmin)
 admin.site.register(Relato, RelatoAdmin)
 admin.site.register(Victima, VictimaAdmin)
 admin.site.register(Fuente, FuenteAdmin)

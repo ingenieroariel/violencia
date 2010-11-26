@@ -5,7 +5,7 @@ easy_install pip
 pip install -r requirements.txt
 
 dropdb observa
-sudo su - postgres createdb observa -T template_postgis -O ubuntu
+sudo -u postgres createdb observa -T template_postgis -O ubuntu
 ./manage.py syncdb --settings=dummy_settings --noinput
 psql observa < sql/fix_auth_permission.sql
 ./manage.py syncdb --noinput
