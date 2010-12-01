@@ -3,6 +3,8 @@ from territorios.models import *
 from django.contrib.gis import admin
 from django.contrib.gis.maps.google import GoogleMap
 from django import forms
+from django.contrib.contenttypes import generic
+from desc.models import IndicadorBasico
 
 GMAP = GoogleMap()
 
@@ -19,12 +21,15 @@ class EstadisticaMunicipioInline(admin.StackedInline):
 class EstadisticaDepartamentoInline(admin.StackedInline):
     model = EstadisticaDepartamento
 
+class IndicadorBasicoInline(generic.GenericStackedInline):
+    model = IndicadorBasico
+    extra = 1
 
 class DepartamentoAdmin(GoogleAdmin):
-    list_display = ('id', 'nombre', 'area_total', 'capital', 'ingresos', 'gastos','cantidad_municipios_pacifico',)
+    list_display = ( 'nombre', 'id', 'area_total', 'capital', 'ingresos', 'gastos','cantidad_municipios_pacifico',)
     search_fields = ['nombre','capital']
     list_filter = ('fecha_creacion',)
-    inlines = [EstadisticaDepartamentoInline,]
+    inlines = [EstadisticaDepartamentoInline, IndicadorBasicoInline]
     fieldsets = (
           (None, {
               'fields': 
@@ -46,9 +51,9 @@ class DepartamentoAdmin(GoogleAdmin):
       )
 
 class MunicipioAdmin(GoogleAdmin):
-    list_display = ('id', 'nombre', 'departamento', 'area_total',  'ingresos', 'gastos',)
+    list_display = ('nombre', 'id', 'departamento', 'area_total',  'ingresos', 'gastos',)
     list_filter = ('departamento','fecha_creacion')
-    inlines = [EstadisticaMunicipioInline,]
+    inlines = [EstadisticaMunicipioInline, IndicadorBasicoInline]
     fieldsets = (
           (None, {
               'fields': 
@@ -91,17 +96,29 @@ class ComunidadAdmin(GoogleAdmin):
 
 class ComunidadIndigenaInlineAdmin(admin.TabularInline):
     model = ComunidadIndigena
-    inlines = [PoblacionComunidadNegraAdmin,]
+    inlines = [PoblacionComunidadNegraAdmin, IndicadorBasicoInline]
 
 class ComunidadNegraInlineAdmin(admin.TabularInline):
     model = ComunidadNegra
-    inlines = [PoblacionComunidadNegraAdmin,]
+    inlines = [PoblacionComunidadNegraAdmin, IndicadorBasicoInline]
 
 class TerritorioComunidadAdmin(GoogleAdmin):
-    list_display = ('id', 'nombre', 'departamento')
+    list_display = ('id', 'nombre', 'departamento', 'titulado', 'resolucion_constitucion', 'numero_comunidades')
     search_fields = ('nombre', 'departamento')
-    list_filter = ('departamento',)
+    list_filter = ('departamento','titulado')
     exclude = ('geom','informacion_adicional')
+    fieldsets = (
+          (None, {
+              'fields': 
+                 (
+                 'nombre', 
+                 ('departamento', 'municipios'),
+                 ('titulado', 'resolucion_constitucion',), 
+                 ('area', 'limites'))
+          }),
+      )
+
+   
 
 class TerritorioComunidadIndigenaAdmin(TerritorioComunidadAdmin):
     inlines = [ComunidadIndigenaInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]

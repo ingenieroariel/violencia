@@ -28,7 +28,7 @@ TIPOS_REGIMEN = ((0,'Subsidiario'),(1,'Contributivo'))
 class Territorio(models.Model):
     nombre = models.CharField(max_length=100)
     slug = AutoSlugField('slug', populate_from='nombre', blank=True, null=True)
-    geom = models.GeometryField(srid=4326)
+    geom = models.GeometryField(srid=4326, null=True, blank=True)
     objects = models.GeoManager()
     informacion_adicional = models.TextField(blank=True, null=True)    
 
@@ -156,13 +156,16 @@ class Pueblo(models.Model):
 class TerritorioComunidad(Territorio):
     departamento = models.ForeignKey(Departamento, null=True, blank=True)
     municipios = models.ManyToManyField(Municipio, null=True, blank=True)
-    area = models.FloatField(null=True, blank=True)
+    area = models.FloatField(null=True, blank=True, help_text="Area asignada en caso de ser titulado y area solicitada en caso de no serlo")
     limites = models.TextField(null=True, blank=True) 
-    familias = models.IntegerField("Número de familias", null=True, blank=True)
-    titulado = models.BooleanField(default=True)
+    titulado = models.BooleanField(default=False)
     resolucion_constitucion = models.CharField(max_length=255, help_text="Dejar en blanco si no esta titulado", null=True, blank=True)
 
     objects = models.GeoManager()
+
+    def numero_comunidades(self):
+        return self.comunidadnegra_set.count()
+    
 
 class TerritorioComunidadIndigena(TerritorioComunidad):
    class Meta:
@@ -202,7 +205,7 @@ class ComunidadIndigena(Comunidad):
 SITUACION_CHOICES=(
    ('ampliacion','Ampliacion'),
    ('saneamiento', 'Saneamiento'),
-   ('solicitud', 'Solicitud'),
+   ('titulacion', 'Solicitud de Titulacion'),
 )
 
 class SituacionJuridica(models.Model):
@@ -220,9 +223,10 @@ class SituacionJuridica(models.Model):
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True, help_text="Campo opcional")
 
     class Meta:
-        verbose_name_plural="situaciones juridicas"
+        abstract = True
 
 class PoblacionSimple(models.Model):
+    familias = models.IntegerField(blank=True, null=True)
     total = models.SmallIntegerField(verbose_name="Población Total", blank=True, null=True, help_text="habitantes")
     hombres = models.FloatField(help_text="%", blank=True, null=True)
     mujeres = models.FloatField(help_text="%", blank=True, null=True)
