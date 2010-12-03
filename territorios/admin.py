@@ -4,7 +4,7 @@ from django.contrib.gis import admin
 from django.contrib.gis.maps.google import GoogleMap
 from django import forms
 from django.contrib.contenttypes import generic
-from desc.models import IndicadorBasico
+from desc.models import IndicadorBasico, Educacion, SistemaSalud, DerechoPrimeraInfancia, DerechoAlTrabajo, DerechoCultura
 
 GMAP = GoogleMap()
 
@@ -23,6 +23,26 @@ class EstadisticaDepartamentoInline(admin.StackedInline):
 
 class IndicadorBasicoInline(generic.GenericStackedInline):
     model = IndicadorBasico
+    extra = 1
+    
+class IndicadorBasicoEducacion(generic.GenericStackedInline):
+    model = Educacion
+    extra = 1
+    
+class IndicadorBasicoSistemaSalud(generic.GenericStackedInline):
+    model = SistemaSalud
+    extra = 1
+
+class IndicadorBasicoDerechoPrimeraInfancia(generic.GenericStackedInline):
+    model = DerechoPrimeraInfancia
+    extra = 1
+    
+class IndicadorBasicoDerechoAlTrabajo(generic.GenericStackedInline):
+    model = DerechoAlTrabajo
+    extra = 1
+    
+class IndicadorBasicoDerechoCultura(generic.GenericStackedInline):
+    model = DerechoCultura
     extra = 1
 
 class DepartamentoAdmin(GoogleAdmin):
@@ -53,7 +73,7 @@ class DepartamentoAdmin(GoogleAdmin):
 class MunicipioAdmin(GoogleAdmin):
     list_display = ('nombre', 'id', 'departamento', 'area_total',  'ingresos', 'gastos',)
     list_filter = ('departamento','fecha_creacion')
-    inlines = [EstadisticaMunicipioInline, IndicadorBasicoInline]
+    inlines = [EstadisticaMunicipioInline, IndicadorBasicoInline, IndicadorBasicoEducacion, IndicadorBasicoSistemaSalud, IndicadorBasicoDerechoPrimeraInfancia, IndicadorBasicoDerechoAlTrabajo, IndicadorBasicoDerechoCultura]
     fieldsets = (
           (None, {
               'fields': 
