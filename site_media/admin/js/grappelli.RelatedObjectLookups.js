@@ -78,6 +78,21 @@ function showAddAnotherPopup(triggeringLink) {
     return false;
 }
 
+// customized  for violencia
+function showPopup(triggeringLink) {
+    var name = triggeringLink.id.replace(/^add_/, '');
+    name = id_to_windowname(name);
+    href = triggeringLink.href;
+    var win = window.open(href, name, 'height=500,width=1000,resizable=yes,scrollbars=yes');
+    win.focus();
+    return false;
+}
+function getURLParameter(name) {
+    return unescape(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+    );
+}
+
 // customized from RelatedObjectLoopups.js
 function dismissAddAnotherPopup(win, newId, newRepr) {
     // newId and newRepr are expected to have previously been escaped by

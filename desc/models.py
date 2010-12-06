@@ -67,7 +67,7 @@ class Educacion(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_1")
     object_id = models.PositiveIntegerField(blank=True, null=True)
 
-    content_object = generic.GenericForeignKey("tipo_de_territorio", "codigo")
+    content_object = generic.GenericForeignKey()
 
     nivel_educativo_preescolar = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Preescolar") 
     nivel_educativo_primaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Basica primaria") 
@@ -87,6 +87,9 @@ class Educacion(models.Model):
     class Meta:
         verbose_name_plural = "indicadores basicos de educacion"
         verbose_name = "indicador basico de educacion"
+
+    def __unicode__(self):
+        return "Indicador Educacion de %s" % (self.content_object.nombre)
 
 class InstitucionEducativa(models.Model):
     indicador_educacion = models.ForeignKey(Educacion, related_name="instituciones")
@@ -129,6 +132,9 @@ class InstitucionEducativa(models.Model):
     
     class Meta:
         verbose_name_plural = "instituciones educativas"
+
+    def __unicode__(self):
+        return "%s (Municipio: %s)" % (self.nombre, self.indicador_educacion.content_object.nombre)
 
 class SistemaSalud(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_2")
