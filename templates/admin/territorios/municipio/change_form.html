@@ -3,10 +3,20 @@
 {% block object-tools %}
       {% if change %}{% if not is_popup %}
       <ul class="tools">
+
+         <li style="padding-top: 5px;padding-right: 15px;">DESC:</li>
       
-         <li><a onclick="return showPopup(this);" href="/admin/desc/educacion/?object_id={{ object_id }}">Indicadores basicos de educación</a></li>
+         <li><a onclick="return showPopup(this);" href="/admin/desc/educacion/?object_id={{ object_id }}">Educación</a></li>
+
+         <li><a onclick="return showPopup(this);" href="/admin/desc/sistemasalud/?object_id={{ object_id }}">Sistema de salud</a></li>
+
+         <li><a onclick="return showPopup(this);" href="/admin/desc/derechoprimerainfancia/?object_id={{ object_id }}">Der. de la primera infancia</a></li>
+
+         <li><a onclick="return showPopup(this);" href="/admin/desc/derechoaltrabajo/?object_id={{ object_id }}">Der. al  trabajo</a></li>
+
+         <li><a onclick="return showPopup(this);" href="/admin/desc/derechocultura/?object_id={{ object_id }}">Der. a la cultura</a></li>
       
-      <li><a href="history/" class="historylink">History</a></li>
+        <li><a href="history/" class="historylink">History</a></li>
 
       </ul>
       {% endif %}{% endif %}

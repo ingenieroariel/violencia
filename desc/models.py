@@ -85,11 +85,11 @@ class Educacion(models.Model):
     fuente_nivel_educativo = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="niveles_educativos")
     
     class Meta:
-        verbose_name_plural = "indicadores basicos de educacion"
-        verbose_name = "indicador basico de educacion"
+        verbose_name_plural = "Sistemas de educacion"
+        verbose_name = "sistema basico de educacion"
 
     def __unicode__(self):
-        return "Indicador Educacion de %s" % (self.content_object.nombre)
+        return "DESC de %s" % (self.content_object.nombre)
 
 class InstitucionEducativa(models.Model):
     indicador_educacion = models.ForeignKey(Educacion, related_name="instituciones")
@@ -167,8 +167,8 @@ class SistemaSalud(models.Model):
     fuente_regimenes = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fregs")
     
     class Meta:
-        verbose_name_plural = "indicadores basico de sistemas de salud"
-        verbose_name = "indicador basico de sistema de salud"
+        verbose_name_plural = "Sistemas de salud"
+        verbose_name = "sistema de salud"
     
 class PromotoresSalud(models.Model):
     sistema_salud = models.ForeignKey(SistemaSalud, related_name="promotores_salud")
@@ -229,8 +229,8 @@ class DerechoPrimeraInfancia(models.Model):
     fuente= models.ForeignKey(FuenteDato, null=True, blank=True)
     
     class Meta:
-        verbose_name_plural = "indicadores basicos de derechos de primera infancia"
-        verbose_name = "indicador basico de derechos de primera infancia"
+        verbose_name_plural = "Derechos de primera infancia"
+        verbose_name = "Derecho de primera infancia"
     
 class ProgramaSeguridadAlimentaria(models.Model):
     derecho = models.ForeignKey(DerechoPrimeraInfancia, related_name="programas")
@@ -250,7 +250,8 @@ class DerechoAlTrabajo(models.Model):
 
     content_object = generic.GenericForeignKey("tipo_de_territorio", "codigo")
     
-    desempleo_informal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
+    desempleo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
+    empleo_informal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
     empleo_formal_publico = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
     empleo_formal_privado = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
     empleo_formal_por_contrado_fijo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
@@ -259,8 +260,8 @@ class DerechoAlTrabajo(models.Model):
     fuente= models.ForeignKey(FuenteDato, null=True, blank=True)
     
     class Meta:
-        verbose_name_plural = "indicadores basicos de derecho al trabajo"
-        verbose_name = "indicador basicos de derecho al trabajo"
+        verbose_name_plural = "Derecho al trabajo"
+        verbose_name = "Derechos al trabajo"
     
 class DerechoCultura(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_5")
@@ -286,19 +287,14 @@ class DerechoCultura(models.Model):
     
     fuente= models.ForeignKey(FuenteDato, null=True, blank=True)
     
-    """ Proyectos Educativos """
-    """con_bilinguismo_indigena = models.BooleanField()
-    con_bilinguismo_instituciones = models.TextField(blank=True, null=True, verbose_name="Instituciones con bilinguismo indigena", help_text="Solo si marco la casilla anterior. Separadas por coma")
-    con_bilinguismo_descripcion = models.TextField(blank=True, null=True, verbose_name="Descripcion", help_text="Solo si marco la casilla anterior. Separadas por coma")"""
-    
     class Meta:
-        verbose_name_plural = "indicadores basicos de derecho a la cultura"
-        verbose_name = "indicador basico de derecho a la cultura"
+        verbose_name_plural = "Derecho a la cultura"
+        verbose_name = "Derechos a la cultura"
     
-class ProyectoEducativos(models.Model):
+class ProyectoEducativo(models.Model):
     derecho = models.ForeignKey(DerechoCultura, related_name="proyectos_educativos")
     tipo = models.CharField(max_length=100, choices=(("bi","Bilingüismo Indígena"),("ipi", "Interculturalidad en los pueblos indígenas"),("ica","Interculturalidad en las comunidades afro")), null=True, blank=True )
-    tiene = models.BooleanField(verbose_name="Tiene?", help_text="Marque la casilla si responde SI")
+    tiene = models.BooleanField(verbose_name="Existe este programa?", help_text="Marque la casilla si responde SI")
     instituciones = models.TextField(blank=True, null=True, verbose_name="Instituciones con bilinguismo indigena", help_text="Solo si marco la casilla anterior. Separadas por coma")
     descripcion = models.TextField(blank=True, null=True, verbose_name="Descripcion", help_text="Solo si marco la casilla anterior. Separadas por coma")
     

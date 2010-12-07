@@ -126,7 +126,20 @@ GRUPO_POBLACIONAL_CHOICES = (
       ("otros", "Otros"),
 )
 
+class Municipio(TerritorioPolitico):
+    departamento = models.ForeignKey(Departamento)
+    area_total = models.FloatField(help_text="km2", blank=True, null=True)
+    area_cabecera = models.FloatField(help_text="km2", blank=True, null=True)
+    titulos_cabecera = models.CharField(max_length=50, null=True, blank=True)
+    area_rural = models.FloatField(help_text="km2", blank=True, null=True)
+    titulos_rural = models.CharField(max_length=50, null=True, blank=True)
+    fuente_presupuesto = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_presupuesto_mpio")
+
+    objects = models.GeoManager()
+
 class TitulosIndividuales(models.Model):
+    departamento = models.ForeignKey(Municipio, related_name="titulos_individuales")
+    tipo = models.CharField(max_length=50, choices=( ("municipal","Cabecera municipal"),("rural","Rural") ) )
     cantidad = models.IntegerField(blank=True, null=True)
     area_total = models.FloatField(blank=True, null=True, help_text="Suma del área de todos los títulos individuales en km2")
     grupo_poblacional = models.CharField(max_length=255, blank=True, null=True, choices= GRUPO_POBLACIONAL_CHOICES, help_text="Puede seleccionar múltiples grupos dejando presionada la tecla Control")
@@ -134,17 +147,6 @@ class TitulosIndividuales(models.Model):
 
     def __unicode__(self):
         return "Cantidad: %s, Area: %s" % (self.cantidad, self.area_total)
-
-class Municipio(TerritorioPolitico):
-    departamento = models.ForeignKey(Departamento)
-    area_total = models.FloatField(help_text="km2", blank=True, null=True)
-    area_cabecera = models.FloatField(help_text="km2", blank=True, null=True)
-    titulos_cabecera = models.ForeignKey(TitulosIndividuales, verbose_name="titulos individuales área cabecera", related_name="tit_cab", null=True, blank=True)
-    area_rural = models.FloatField(help_text="km2", blank=True, null=True)
-    titulos_rural = models.ForeignKey(TitulosIndividuales, verbose_name="titulos individuales área cabecera", related_name="tit_rur", null=True, blank=True)
-    fuente_presupuesto = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_presupuesto_mpio")
-
-    objects = models.GeoManager()
 
 class Pueblo(models.Model):
     nombre = models.CharField(max_length=100)
@@ -178,7 +180,7 @@ class TerritorioComunidadIndigena(TerritorioComunidad):
 class TerritorioComunidadNegra(TerritorioComunidad):
     class Meta:
         verbose_name="Territorio Colectivo Comunidades Negras"
-        verbose_name="Territorios Colectivos Comunidades Negras"
+        verbose_name_plural="Territorios Colectivos Comunidades Negras"
 
     objects = models.GeoManager()
 
@@ -209,7 +211,7 @@ SITUACION_CHOICES=(
 )
 
 class SituacionJuridica(models.Model):
-    tipo = models.CharField(max_length=255, choices=SITUACION_CHOICES, blank=True, null=True)
+#    tipo = models.CharField(max_length=255, choices=SITUACION_CHOICES, blank=True, null=True)
     territorio = models.ForeignKey(TerritorioComunidad)
     fecha = models.DateField(help_text="Fecha de la resolucion o solicitud", blank=True, null=True)
     resolucion = models.CharField(max_length=255, null=True, blank=True, help_text="Numero de resolucion (si existe)")
@@ -217,13 +219,30 @@ class SituacionJuridica(models.Model):
     limites = models.TextField('Limites o linderos')
     estado_tramite = models.CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
     observaciones = models.TextField(blank=True, null=True)
-    poblacion_general = models.IntegerField(help_text='Solo para saneamiento', blank=True, null=True)
-    poblacion_afro = models.IntegerField(help_text='Solo para saneamiento', blank=True, null=True)
-    poblacion_otros = models.IntegerField(help_text='Solo para saneamiento', blank=True, null=True)
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True, help_text="Campo opcional")
 
     class Meta:
         abstract = True
+
+#para titulados solo indigenas
+class Ampliacion(SituacionJuridica):
+    class Meta:
+        verbose_name_plural = "Solicitud juridica: Ampliaciones"
+
+class Saneamiento(SituacionJuridica):
+    poblacion_general = models.IntegerField(blank=True, null=True)
+    poblacion_afro = models.IntegerField(blank=True, null=True)
+    poblacion_otros = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Solicitud juridica: Saneamientos"
+
+#para no titulados
+class SolicitudTitulacion(SituacionJuridica):
+    class Meta:
+        verbose_name = "Solicitud juridica: Titulacion"
+        verbose_name_plural = "Solicitud juridica: Titulacion (Solo para territorios no titulados)"
+
 
 class PoblacionSimple(models.Model):
     familias = models.IntegerField(blank=True, null=True)

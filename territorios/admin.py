@@ -21,28 +21,12 @@ class EstadisticaMunicipioInline(admin.StackedInline):
 class EstadisticaDepartamentoInline(admin.StackedInline):
     model = EstadisticaDepartamento
 
+class TitulosIndividualesInlines(admin.StackedInline):
+    model = TitulosIndividuales
+    extra = 2
+
 class IndicadorBasicoInline(generic.GenericStackedInline):
     model = IndicadorBasico
-    extra = 1
-    
-class IndicadorBasicoEducacion(generic.GenericStackedInline):
-    model = Educacion
-    extra = 1
-    
-class IndicadorBasicoSistemaSalud(generic.GenericStackedInline):
-    model = SistemaSalud
-    extra = 1
-
-class IndicadorBasicoDerechoPrimeraInfancia(generic.GenericStackedInline):
-    model = DerechoPrimeraInfancia
-    extra = 1
-    
-class IndicadorBasicoDerechoAlTrabajo(generic.GenericStackedInline):
-    model = DerechoAlTrabajo
-    extra = 1
-    
-class IndicadorBasicoDerechoCultura(generic.GenericStackedInline):
-    model = DerechoCultura
     extra = 1
 
 class DepartamentoAdmin(GoogleAdmin):
@@ -61,7 +45,6 @@ class DepartamentoAdmin(GoogleAdmin):
                   'fecha_creacion',
                   'informacion_adicional',
                  )
-                
           }),
           ('Presupuesto', {
               'fields': (('ingresos', 'gastos'),
@@ -73,12 +56,12 @@ class DepartamentoAdmin(GoogleAdmin):
 class MunicipioAdmin(GoogleAdmin):
     list_display = ('nombre', 'id', 'departamento', 'area_total',  'ingresos', 'gastos',)
     list_filter = ('departamento','fecha_creacion')
-    inlines = [EstadisticaMunicipioInline, IndicadorBasicoInline, IndicadorBasicoEducacion, IndicadorBasicoSistemaSalud, IndicadorBasicoDerechoPrimeraInfancia, IndicadorBasicoDerechoAlTrabajo, IndicadorBasicoDerechoCultura]
+    inlines = [EstadisticaMunicipioInline, TitulosIndividualesInlines, IndicadorBasicoInline]
     fieldsets = (
           (None, {
               'fields': 
                  (
-                 'nombre', 
+                 ('nombre', 'departamento'),
                  ('area_total', 'area_rural', 'area_cabecera'), 
                   'fecha_creacion',
                   'informacion_adicional',
@@ -107,6 +90,18 @@ class PoblacionTerritorioColectivoAdmin(admin.StackedInline):
 class SituacionJuridicaAdmin(admin.StackedInline):
     model = SituacionJuridica
     extra=1
+
+class SituacionJuridicaSolicitudTitulacionAdmin(admin.StackedInline):
+    model = SolicitudTitulacion
+    extra = 1
+
+class SituacionJuridicaAmpliacion(admin.StackedInline):
+    model = Ampliacion
+    extra = 1
+
+class SituacionJuridicaSaneamiento(admin.StackedInline):
+    model = Saneamiento
+    extra = 1
 
 class ComunidadInlineAdmin(admin.TabularInline):
     model = Comunidad
@@ -141,10 +136,12 @@ class TerritorioComunidadAdmin(GoogleAdmin):
    
 
 class TerritorioComunidadIndigenaAdmin(TerritorioComunidadAdmin):
-    inlines = [ComunidadIndigenaInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
+    #inlines = [ComunidadIndigenaInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
+    inlines = [ComunidadIndigenaInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, SituacionJuridicaAmpliacion, SituacionJuridicaSaneamiento]
 
 class TerritorioComunidadNegraAdmin(TerritorioComunidadAdmin):
-    inlines = [ComunidadNegraInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
+    #inlines = [ComunidadNegraInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
+    inlines = [ComunidadNegraInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin]
 
 
 class PuebloAdmin(GoogleAdmin):
