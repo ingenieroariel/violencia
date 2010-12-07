@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-from violencia.desc.models import DerechoCultura
-from violencia.desc.models import DerechoAlTrabajo
-from violencia.desc.models import DerechoPrimeraInfancia
-from violencia.desc.models import SistemaSalud
 from desc.models import *
 from django.contrib.gis import admin
 

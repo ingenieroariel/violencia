@@ -5,6 +5,7 @@ from django.contrib.gis.maps.google import GoogleMap
 from django import forms
 from django.contrib.contenttypes import generic
 from desc.models import IndicadorBasico, Educacion, SistemaSalud, DerechoPrimeraInfancia, DerechoAlTrabajo, DerechoCultura
+from conflictos.models import Conflicto
 
 GMAP = GoogleMap()
 
@@ -117,6 +118,10 @@ class ComunidadNegraInlineAdmin(admin.TabularInline):
     model = ComunidadNegra
     inlines = [PoblacionComunidadNegraAdmin, IndicadorBasicoInline]
 
+class ConflictoInline(generic.GenericStackedInline):
+    model = Conflicto
+    extra = 1
+
 class TerritorioComunidadAdmin(GoogleAdmin):
     list_display = ('id', 'nombre', 'departamento', 'titulado', 'resolucion_constitucion', 'numero_comunidades')
     search_fields = ('nombre', 'departamento')
@@ -137,11 +142,11 @@ class TerritorioComunidadAdmin(GoogleAdmin):
 
 class TerritorioComunidadIndigenaAdmin(TerritorioComunidadAdmin):
     #inlines = [ComunidadIndigenaInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
-    inlines = [ComunidadIndigenaInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, SituacionJuridicaAmpliacion, SituacionJuridicaSaneamiento]
+    inlines = [ComunidadIndigenaInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, SituacionJuridicaAmpliacion, SituacionJuridicaSaneamiento, ConflictoInline]
 
 class TerritorioComunidadNegraAdmin(TerritorioComunidadAdmin):
     #inlines = [ComunidadNegraInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
-    inlines = [ComunidadNegraInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin]
+    inlines = [ComunidadNegraInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, ConflictoInline]
 
 
 class PuebloAdmin(GoogleAdmin):

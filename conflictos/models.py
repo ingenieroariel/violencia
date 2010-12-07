@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from fuentes.models import FuenteDato
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 # Create your models here.
 TIPO_CONFICTOS = (
@@ -26,7 +29,7 @@ class Conflicto(models.Model):
     ubicacion = models.TextField(null=True, blank=True)
     actores = models.TextField(null=True, blank=True)
     hechos = models.TextField(null=True, blank=True)
-    estado = models.CharField(null=True, blank=True, choices=( ("abierto","Abierto"),("cerrado","Cerrado") ) )
+    estado = models.CharField(max_length=50, null=True, blank=True, choices=( ("abierto","Abierto"),("cerrado","Cerrado") ) )
     fecha = models.DateField(null=True, blank=True)
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="conflictos")
 
