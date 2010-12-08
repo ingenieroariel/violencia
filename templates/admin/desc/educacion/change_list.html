@@ -14,10 +14,12 @@
     (function($) {
         $(document).ready(function($) {
             if(getURLParameter("object_id")!="null"){
-                //$("div#breadcrumbs").hide();
-                url = $("a#add-object").attr("href");
-                url = url+"?object_id="+getURLParameter("object_id")+"&content_type=22";
-                $("a#add-object").attr("href", url);
+                $.getJSON("{% url contenttype_by_model_name 'municipio' %}", function(data){
+                    municpio_ct_id = data.id;
+                    url = $("a#add-object").attr("href");
+                    url = url+"?object_id="+getURLParameter("object_id")+"&content_type="+municpio_ct_id;
+                    $("a#add-object").attr("href", url);
+                });
             }
         });
     })(django.jQuery);
