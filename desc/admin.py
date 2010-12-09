@@ -40,16 +40,61 @@ class EducacionAdmin(admin.ModelAdmin):
                  )
 
           }),
+          ('Maestros vinculados', {
+              'fields':
+                 (
+                 ('maestros_vinculados_indigenas', 'maestros_vinculados_afro'),
+                 ('maestros_vinculados_otros','maestros_vinculados_ejerciendo'),
+                 'maestros_vinculados_total',
+                 )
+
+          }),
+          ('Maestros contratados', {
+              'fields':
+                 (
+                 ('maestros_contratados_indigenas', 'maestros_contratados_afro'),
+                 ('maestros_contratados_otros','maestros_contratados_ejerciendo'),
+                 'maestros_contratados_total',
+                 )
+
+          }),
+          ('Poblacion estudiantil', {
+              'fields':
+                 (
+                 ('cobertura_preescolar', 'cobertura_primaria'),
+                 ('cobertura_secundaria','cobertura_mediavocacional'),
+                 'total_poblacion_estudiantil',
+                 )
+
+          }),
+          ('Poblacion estudiantil (desplazados)', {
+              'fields':
+                 (
+                 ('cobertura_preescolar_desplazados', 'cobertura_primaria_desplazados'),
+                 ('cobertura_secundaria_desplazados','cobertura_mediavocacional_desplazados'),
+                 'total_poblacion_estudiantil_desplazada',
+                 )
+
+          }),
+          (None, {
+              'fields':
+                 (
+                 ('desercion', 'promocion'),
+                 ('repitencia','analfabetismo'),
+                 )
+          }),
+          
       )
 
 class SistemaSaludAdmin(admin.ModelAdmin):
     inlines = (PromotoresSaludInline, InstalacionesSaludInline)
+    list_display = ('municipio', 'entidades_contratantes', 'total_promotores_de_salud', 'contratos_temporales','contratos_fijos', 'puestos_de_salud', 'centros_de_salud', 'total_hospitales')
     fieldsets = (
           (None, {
               'fields':
                   (
                     'content_type',
-                    'object_id'
+                    'object_id',
                   )
           }),
           ('Régimen subsidiado carnetizado', {
@@ -92,18 +137,21 @@ class DerechoPrimeraInfanciaAdmin(admin.ModelAdmin):
                     'object_id'
                   )
           }),
-          ('Proteccion', {
+          ('Registro civil', {
               'fields':
                  (
                  ('registro_civil'),
                  ('registro_civil_indigena','registro_civil_afro', 'registro_civil_otros'),
+                 'fuente_proteccion',
                  )
 
           }),
-         ('Salud', {
+         ('Vacunación', {
               'fields':
                  (
                  ('vacunacion_cobertura_indigena','vacunacion_cobertura_afro', 'vacunacion_cobertura_otros'),
+                 'vacunacion_covertura_total',
+                 'fuente_salud',
                  )
 
           }),
@@ -111,6 +159,8 @@ class DerechoPrimeraInfanciaAdmin(admin.ModelAdmin):
               'fields':
                  (
                  ('pcd_cobertura_indigena','pcd_cobertura_afro', 'pcd_cobertura_otros'),
+                 'pcd_cobertura_total',
+                 'fuente_crecimiento_y_desarrollo',
                  )
 
           }),
@@ -118,12 +168,16 @@ class DerechoPrimeraInfanciaAdmin(admin.ModelAdmin):
               'fields':
                  (
                  ('reg_sub_carnetizado_indigena','reg_sub_carnetizado_afro', 'reg_sub_carnetizado_otros'),
+                 'reg_sub_carnetizado_total',
                  ('reg_contrib_vinculado_indigena','reg_contrib_vinculado_afro', 'reg_contrib_vinculado_otros'),
+                 'reg_contrib_vinculado_total',
                  ('reg_contributivo_indigena','reg_contributivo_afro', 'reg_contributivo_otros'),
+                 'reg_contributivo_total',
+                 'fuente_afiliacion_salud',
                  )
 
           }),
-          (None, {'fields':('fuente',)}),
+
       )
 
 class DerechoAlTrabajoAdmin(admin.ModelAdmin):
@@ -135,17 +189,17 @@ class DerechoAlTrabajoAdmin(admin.ModelAdmin):
                     'object_id'
                   )
           }),
-          ('Desempleo', {
+          (None, {
               'fields':
-                 (
-                 ('desempleo'),
-                 )
-
+                  (
+                    'desempleo',
+                    'trabajo_informal',
+                    'trabajo_formal',
+                  )
           }),
          ('Empleo', {
               'fields':
                  (
-                 ('empleo_informal'),
                  ('empleo_formal_publico','empleo_formal_privado'),
                  ('empleo_formal_por_contrado_fijo','empleo_formal_por_contrado_temporal'),
                  )
@@ -169,6 +223,7 @@ class DerechoCulturaAdmin(admin.ModelAdmin):
                  (
                  'pc_indigenas','pc_indigenas_descripcion',
                  'pc_afro','pc_afro_descripcion',
+                 'fuente_pc',
                  )
 
           }),
@@ -177,6 +232,7 @@ class DerechoCulturaAdmin(admin.ModelAdmin):
                  (
                  'pamc_indigenas','pamc_indigenas_descripcion',
                  'pamc_afro','pamc_afro_descripcion',
+                 'fuente_pamc',
                  )
 
           }),
@@ -184,11 +240,16 @@ class DerechoCulturaAdmin(admin.ModelAdmin):
               'fields':
                  (
                  'pl_indigenas','pl_indigenas_descripcion',
-                 ('existencia_tr_indigenas_juzgado','existencia_tr_indigenas_hospitales'),
+                 'fuente_pl',
                  )
 
           }),
-          (None, {'fields':('fuente',)}),
+          (None, {'fields':(
+                ('existen_tr_indigenas_juzgado','total_tr_indigenas_juzgado'),
+                ('existen_tr_indigenas_hospitales','total_tr_indigenas_hospitales'),
+                'fuente_tr',
+                )
+           }),
       )
     
 
