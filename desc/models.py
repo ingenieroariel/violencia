@@ -128,25 +128,6 @@ class Educacion(models.Model):
     
     
     class Meta:
-        verbose_name_plural = "Sistemas de educacion"
-        verbose_name = "sistema basico de educacion"
-
-    def __unicode__(self):
-        return "DESC de %s" % (self.content_object.nombre)
-
-class InstitucionEducativa(models.Model):
-    indicador_educacion = models.ForeignKey(Educacion, related_name="instituciones")
-    nombre = models.CharField(max_length=200)
-    es_publica = models.BooleanField(help_text="Desmarque si es privada", default=True)
-    fecha_constitucion = models.DateField(blank=True, null=True)
-    enfasis = models.CharField(max_length=200,blank=True, null=True)
-    etnoeducacion = models.BooleanField(default=True)
-    tiene_pei = models.BooleanField(default=True)
-    tiene_pec = models.BooleanField(default=True)
-    educa_adultos = models.BooleanField(default=False)
-    adultos = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Educacion de personas adultas")
-
-    class Meta:
         verbose_name_plural = "instituciones educativas del municipio"
         verbose_name = "instituciones educativas del municipio"
 
