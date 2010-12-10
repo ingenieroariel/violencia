@@ -230,9 +230,9 @@ class Ampliacion(SituacionJuridica):
         verbose_name_plural = "Solicitud juridica: Ampliaciones"
 
 class Saneamiento(SituacionJuridica):
-    poblacion_general = models.IntegerField(blank=True, null=True)
-    poblacion_afro = models.IntegerField(blank=True, null=True)
-    poblacion_otros = models.IntegerField(blank=True, null=True)
+    poblacion_total = models.IntegerField(blank=True, null=True, help_text="cantidad de poblacion ajena")
+    poblacion_afro = models.IntegerField(blank=True, null=True, help_text="cantidad")
+    poblacion_otros = models.IntegerField(blank=True, null=True, help_text="cantidad")
 
     class Meta:
         verbose_name_plural = "Solicitud juridica: Saneamientos"
