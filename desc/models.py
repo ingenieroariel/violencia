@@ -13,14 +13,14 @@ class IndicadorBasico(models.Model):
 
     content_object = generic.GenericForeignKey("tipo_de_territorio", "codigo")
 
-    ingreso_per_capita = models.IntegerField(null=True, blank=True)
+    ingresos_publicos_per_capita = models.IntegerField(null=True, blank=True)
     fuente_ingreso_per_capita = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="per")
     indice_desarrollo_humano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
     fuente_indice_desarrollo_humano = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="desa")
-    necesidades_insatisfechas_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
-    necesidades_insatisfechas_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
-    necesidades_insatisfechas_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
-    fuente_necesidades_insatisfechas = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="insat")
+    necesidades_basicas_insatisfechas_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
+    necesidades_basicas_insatisfechas_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
+    necesidades_basicas_insatisfechas_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
+    fuente_necesidades_basicas_insatisfechas = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="insat")
     indice_condiciones_de_vida= models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
     fuente_indice_condiciones_de_vida = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="condic")
     
@@ -43,23 +43,29 @@ class IndicadorBasico(models.Model):
     esperanza_vida_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True) #solo dptos
     esperanza_vida_mujeres = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True) #solo dptos
     esperanza_vida_hombres = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True) #solo dptos
+    fuente_esperanza_vida = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bb")
     
     mortalidad_total = models.IntegerField(null=True, blank=True) #solo dptos
     mortalidad_infantil = models.IntegerField(help_text="numero total", null=True, blank=True)
     mortalidad_maternoinfantil = models.IntegerField(help_text="numero total", null=True, blank=True)
     
+    fuente_mortalidad = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbb")
+
     morbilidad_descripcion = models.TextField(null=True, blank=True, verbose_name="Descripcion morbilidad")
     morbilidad_porcentaje = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Porcentaje de morbilidad")
     morbimortalidad_descripcion = models.TextField(null=True, blank=True, verbose_name="Descripcion morbi-mortalidad")
     morbimortalidad_porcentaje = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Porcentaje de morbi-motalidad")
     
+    fuente_morbilidad = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbbb")
+
     alfabetizacion_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Tasa de alfabetizacion total") 
     alfabetizacion_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Tasa de alfabetizacion urbana") 
     alfabetizacion_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Tasa de alfabetizacion rural")
     
-    fuente_esperanza_vida = models.ForeignKey(FuenteDato, null=True, blank=True)
+    fuente_alfabetizacion = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbbbb")
     
     matricula_total = models.IntegerField(null=True, blank=True, help_text="numero total")
+    fuente_matricula = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbbbbb")
     
     class Meta:
         verbose_name_plural = "indicadores basicos"
@@ -86,8 +92,6 @@ class Educacion(models.Model):
     instituciones_total = models.IntegerField(null=True, blank=True, help_text="numero total de instituciones educativas") #todo: hacerlo como propiedad count InstitucionEducativa
     
     fuente_nivel_educativo = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="niveles_educativos")
-
-
     """ maestros """
     maestros_vinculados_indigenas = models.IntegerField(null=True, blank=True, verbose_name="indigenas", help_text="total")
     maestros_vinculados_afro = models.IntegerField(null=True, blank=True, verbose_name="afro", help_text="total")
@@ -122,6 +126,26 @@ class Educacion(models.Model):
 
     fuente_poblacion_estudiantil = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_pobestudiantil")
     
+    
+    class Meta:
+        verbose_name_plural = "Sistemas de educacion"
+        verbose_name = "sistema basico de educacion"
+
+    def __unicode__(self):
+        return "DESC de %s" % (self.content_object.nombre)
+
+class InstitucionEducativa(models.Model):
+    indicador_educacion = models.ForeignKey(Educacion, related_name="instituciones")
+    nombre = models.CharField(max_length=200)
+    es_publica = models.BooleanField(help_text="Desmarque si es privada", default=True)
+    fecha_constitucion = models.DateField(blank=True, null=True)
+    enfasis = models.CharField(max_length=200,blank=True, null=True)
+    etnoeducacion = models.BooleanField(default=True)
+    tiene_pei = models.BooleanField(default=True)
+    tiene_pec = models.BooleanField(default=True)
+    educa_adultos = models.BooleanField(default=False)
+    adultos = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Educacion de personas adultas")
+
     class Meta:
         verbose_name_plural = "instituciones educativas del municipio"
         verbose_name = "instituciones educativas del municipio"
@@ -382,4 +406,3 @@ class ProyectoEducativo(models.Model):
     
     class Meta:
         verbose_name_plural = "proyectos educativos culturales"
-    
