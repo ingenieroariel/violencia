@@ -227,7 +227,7 @@ class SituacionJuridica(models.Model):
 #para titulados solo indigenas
 class Ampliacion(SituacionJuridica):
     class Meta:
-        verbose_name_plural = "Solicitud juridica: Ampliaciones"
+        verbose_name_plural = "Solicitud juridica: Ampliaciones (solo para territorios titulados)"
 
 class Saneamiento(SituacionJuridica):
     poblacion_general = models.IntegerField(blank=True, null=True)
@@ -235,13 +235,13 @@ class Saneamiento(SituacionJuridica):
     poblacion_otros = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Solicitud juridica: Saneamientos"
+        verbose_name_plural = "Solicitud juridica: Saneamientos (solo para territorios titulados)"
 
 #para no titulados
 class SolicitudTitulacion(SituacionJuridica):
     class Meta:
         verbose_name = "Solicitud juridica: Titulacion"
-        verbose_name_plural = "Solicitud juridica: Titulacion (Solo para territorios no titulados)"
+        verbose_name_plural = "Solicitud juridica: Titulacion (Solo para territorios NO titulados)"
 
 
 class PoblacionSimple(models.Model):

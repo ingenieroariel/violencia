@@ -4,7 +4,7 @@ from django.contrib.gis import admin
 from django.contrib.gis.maps.google import GoogleMap
 from django import forms
 from django.contrib.contenttypes import generic
-from desc.models import IndicadorBasico, Educacion, SistemaSalud, DerechoPrimeraInfancia, DerechoAlTrabajo, DerechoCultura
+from desc.models import IndicadorBasico
 from conflictos.models import Conflicto
 
 GMAP = GoogleMap()

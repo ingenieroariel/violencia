@@ -24,7 +24,7 @@ class ProyectoEducativoInline(admin.StackedInline):
 
 class EducacionAdmin(admin.ModelAdmin):
     inlines = (InstitucionEducativaInline,)
-    #list_filter = ('object_id', )
+    list_display = ('municipio', 'total_instituciones')
     fieldsets = (
           ('Nivel Educativo', {
               'fields':
@@ -34,8 +34,10 @@ class EducacionAdmin(admin.ModelAdmin):
 
                  ('nivel_educativo_preescolar', 'nivel_educativo_primaria', 'nivel_educativo_secundaria'),
                  ('nivel_educativo_mediatec','nivel_educativo_normalista'),
+                 'nivel_educativo_media_total',
                  ('nivel_educativo_sup_tecnica','nivel_educativo_sup_tecnologica','nivel_educativo_sup_profesional'),
-                  'instituciones_total',
+                 'nivel_educativo_sup_total',
+                  #'instituciones_total',
                   'fuente_nivel_educativo',
                  )
 
@@ -43,36 +45,42 @@ class EducacionAdmin(admin.ModelAdmin):
           ('Maestros vinculados', {
               'fields':
                  (
+                 'maestros_vinculados_total',
                  ('maestros_vinculados_indigenas', 'maestros_vinculados_afro'),
                  ('maestros_vinculados_otros','maestros_vinculados_ejerciendo'),
-                 'maestros_vinculados_total',
                  )
 
           }),
           ('Maestros contratados', {
               'fields':
                  (
+                 'maestros_contratados_total',
                  ('maestros_contratados_indigenas', 'maestros_contratados_afro'),
                  ('maestros_contratados_otros','maestros_contratados_ejerciendo'),
-                 'maestros_contratados_total',
                  )
 
+          }),
+          (None, {
+                'fields':
+                    (
+                    'fuente_maestros',
+                    )
           }),
           ('Poblacion estudiantil', {
               'fields':
                  (
+                 'total_poblacion_estudiantil',
                  ('cobertura_preescolar', 'cobertura_primaria'),
                  ('cobertura_secundaria','cobertura_mediavocacional'),
-                 'total_poblacion_estudiantil',
                  )
 
           }),
           ('Poblacion estudiantil (desplazados)', {
               'fields':
                  (
+                 'total_poblacion_estudiantil_desplazada',
                  ('cobertura_preescolar_desplazados', 'cobertura_primaria_desplazados'),
                  ('cobertura_secundaria_desplazados','cobertura_mediavocacional_desplazados'),
-                 'total_poblacion_estudiantil_desplazada',
                  )
 
           }),
@@ -83,6 +91,12 @@ class EducacionAdmin(admin.ModelAdmin):
                  ('repitencia','analfabetismo'),
                  )
           }),
+          (None, {
+                'fields':
+                    (
+                    'fuente_poblacion_estudiantil',
+                    )
+           }),
           
       )
 
@@ -142,7 +156,7 @@ class DerechoPrimeraInfanciaAdmin(admin.ModelAdmin):
                  (
                  ('registro_civil'),
                  ('registro_civil_indigena','registro_civil_afro', 'registro_civil_otros'),
-                 'fuente_proteccion',
+                 'fuente_registro_civil',
                  )
 
           }),
@@ -151,7 +165,7 @@ class DerechoPrimeraInfanciaAdmin(admin.ModelAdmin):
                  (
                  ('vacunacion_cobertura_indigena','vacunacion_cobertura_afro', 'vacunacion_cobertura_otros'),
                  'vacunacion_covertura_total',
-                 'fuente_salud',
+                 'fuente_vacunacion',
                  )
 
           }),
