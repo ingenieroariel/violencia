@@ -145,6 +145,9 @@ class TitulosIndividuales(models.Model):
     grupo_poblacional = models.CharField(max_length=255, blank=True, null=True, choices= GRUPO_POBLACIONAL_CHOICES, help_text="Puede seleccionar múltiples grupos dejando presionada la tecla Control")
     fuente_titulos = models.ForeignKey(FuenteDato, null=True, blank=True)
 
+    class Meta:
+        verbose_name_plural = 'Titulos individuales'
+
     def __unicode__(self):
         return "Cantidad: %s, Area: %s" % (self.cantidad, self.area_total)
 
@@ -165,10 +168,6 @@ class TerritorioComunidad(Territorio):
 
     objects = models.GeoManager()
 
-    def numero_comunidades(self):
-        return self.comunidadnegra_set.count()
-    
-
 class TerritorioComunidadIndigena(TerritorioComunidad):
    class Meta:
         verbose_name="Territorio Colectivo Indígena"
@@ -176,6 +175,8 @@ class TerritorioComunidadIndigena(TerritorioComunidad):
 
    objects = models.GeoManager()
 
+   def numero_comunidades(self):
+        return self.comunidadindigena_set.count()
 
 class TerritorioComunidadNegra(TerritorioComunidad):
     class Meta:
@@ -183,6 +184,9 @@ class TerritorioComunidadNegra(TerritorioComunidad):
         verbose_name_plural="Territorios Colectivos Comunidades Negras"
 
     objects = models.GeoManager()
+
+    def numero_comunidades(self):
+        return self.comunidadnegra_set.count()
 
 class Comunidad(models.Model):
     nombre = models.CharField(max_length=100)
@@ -199,9 +203,17 @@ class Comunidad(models.Model):
 class ComunidadNegra(Comunidad):
     territorio = models.ForeignKey('TerritorioComunidadNegra')
 
+    class Meta:
+        verbose_name_plural = "comunidades negras"
+        verbose_name = "comunidad negra"
+
 class ComunidadIndigena(Comunidad):
     territorio = models.ForeignKey('TerritorioComunidadIndigena')
     pueblo = models.ForeignKey(Pueblo)
+
+    class Meta:
+        verbose_name_plural = "comunidades indigenas"
+        verbose_name = "comunidad indigena"
 
 
 SITUACION_CHOICES=(
@@ -211,7 +223,6 @@ SITUACION_CHOICES=(
 )
 
 class SituacionJuridica(models.Model):
-#    tipo = models.CharField(max_length=255, choices=SITUACION_CHOICES, blank=True, null=True)
     territorio = models.ForeignKey(TerritorioComunidad)
     fecha = models.DateField(help_text="Fecha de la resolucion o solicitud", blank=True, null=True)
     resolucion = models.CharField(max_length=255, null=True, blank=True, help_text="Numero de resolucion (si existe)")
@@ -271,8 +282,8 @@ class PoblacionTerritorioColectivo(PoblacionSimple):
 class PoblacionComunidadNegra(PoblacionSimple):
     territorio = models.ForeignKey(ComunidadNegra, related_name="estadistica_asentamiento")
     class Meta:
-        verbose_name= "poblacion de comunidad"
-        verbose_name_plural= "poblaciones de comunidades"
+        verbose_name= "poblacion de comunidad negra"
+        verbose_name_plural= "poblaciones de comunidades negras"
 
 class PoblacionComunidadIndigena(PoblacionSimple):
     territorio = models.ForeignKey(ComunidadIndigena, related_name="estadistica_asentamiento")

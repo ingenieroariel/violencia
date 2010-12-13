@@ -110,20 +110,21 @@ class ComunidadInlineAdmin(admin.TabularInline):
 class ComunidadAdmin(GoogleAdmin):
     list_display = ('nombre', 'fecha_creacion', 'fecha_disolucion')
 
-class ComunidadIndigenaInlineAdmin(admin.TabularInline):
-    model = ComunidadIndigena
-    inlines = [PoblacionComunidadNegraAdmin, IndicadorBasicoInline]
-
-class ComunidadNegraInlineAdmin(admin.TabularInline):
-    model = ComunidadNegra
-    inlines = [PoblacionComunidadNegraAdmin, IndicadorBasicoInline]
+#TODO: eliminar comentario cuando se verifiquen dependencias
+#class ComunidadIndigenaInlineAdmin(admin.TabularInline):
+#    model = ComunidadIndigena
+#    inlines = [PoblacionComunidadNegraAdmin, IndicadorBasicoInline]
+#
+#class ComunidadNegraInlineAdmin(admin.TabularInline):
+#    model = ComunidadNegra
+#    inlines = [PoblacionComunidadNegraAdmin, IndicadorBasicoInline]
 
 class ConflictoInline(generic.GenericStackedInline):
     model = Conflicto
     extra = 1
 
 class TerritorioComunidadAdmin(GoogleAdmin):
-    list_display = ('id', 'nombre', 'departamento', 'titulado', 'resolucion_constitucion', 'numero_comunidades')
+    list_display = ('nombre', 'departamento', 'titulado', 'resolucion_constitucion', 'numero_comunidades')
     search_fields = ('nombre', 'departamento')
     list_filter = ('departamento','titulado')
     exclude = ('geom','informacion_adicional')
@@ -138,23 +139,34 @@ class TerritorioComunidadAdmin(GoogleAdmin):
           }),
       )
 
-   
-
 class TerritorioComunidadIndigenaAdmin(TerritorioComunidadAdmin):
-    #inlines = [ComunidadIndigenaInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
-    inlines = [ComunidadIndigenaInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, SituacionJuridicaAmpliacion, SituacionJuridicaSaneamiento, ConflictoInline]
+    inlines = [PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, SituacionJuridicaAmpliacion, SituacionJuridicaSaneamiento, ConflictoInline]
 
 class TerritorioComunidadNegraAdmin(TerritorioComunidadAdmin):
-    #inlines = [ComunidadNegraInlineAdmin, SituacionJuridicaAdmin, PoblacionTerritorioColectivoAdmin]
-    inlines = [ComunidadNegraInlineAdmin, PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, ConflictoInline]
+    inlines = [PoblacionTerritorioColectivoAdmin, SituacionJuridicaSolicitudTitulacionAdmin, ConflictoInline]
 
 
 class PuebloAdmin(GoogleAdmin):
     list_display = ('nombre', 'descripcion')
 
+class ComunidadNegraInline(admin.StackedInline):
+    model = PoblacionComunidadNegra
+    extra = 1
+
+class ComunidadNegraAdmin(GoogleAdmin):
+    inlines = [ComunidadNegraInline]
+
+class ComunidadIndigenaInline(admin.StackedInline):
+    model = PoblacionComunidadIndigena
+    extra = 1
+
+class ComunidadIndigenaAdmin(GoogleAdmin):
+    inlines = [ComunidadIndigenaInline]
+
 admin.site.register(Municipio,MunicipioAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)
 admin.site.register(TerritorioComunidadIndigena, TerritorioComunidadIndigenaAdmin)
 admin.site.register(TerritorioComunidadNegra, TerritorioComunidadNegraAdmin)
-admin.site.register(Comunidad, ComunidadAdmin)
 admin.site.register([Pueblo, ])
+admin.site.register(ComunidadNegra, ComunidadNegraAdmin)
+admin.site.register(ComunidadIndigena, ComunidadIndigenaAdmin)

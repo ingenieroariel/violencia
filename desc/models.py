@@ -128,8 +128,8 @@ class Educacion(models.Model):
     
     
     class Meta:
-        verbose_name_plural = "instituciones educativas del municipio"
-        verbose_name = "instituciones educativas del municipio"
+        verbose_name_plural = "Educación"
+        verbose_name = "Educación"
 
     def __unicode__(self):
         return "DESC de %s" % (self.content_object.nombre)
@@ -238,7 +238,7 @@ class PromotoresSalud(models.Model):
     nombre = models.CharField(max_length=200,null=True, blank=True, verbose_name="Nombre de entidad")
     promotores = models.IntegerField(null=True, blank=True, help_text="total", default=0)
     tipo_contrato = models.CharField(max_length=50, choices=(("temporal","Temporal"),("fijo","Fijo")) )
-    numero_contrato_temporal = models.IntegerField(null=True, blank=True, help_text="solo si selecciono tipo de contrato temporal")
+    numero_contrato = models.IntegerField(null=True, blank=True)
     
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
     
@@ -314,10 +314,11 @@ class ProgramaSeguridadAlimentaria(models.Model):
     monto = models.CharField(max_length=50, null=True, blank=True)
     duracion = models.CharField(max_length=50, null=True, blank=True)
 
-    cobertura = models.CharField(max_length=50, choices=(("indigena","Indigena"),("afro","Afro"),("otro","Otro")) )
-    cobertura_porcentaje = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True)
-    cobertura_total = models.IntegerField(null=True, blank=True)
-    
+    cobertura_total = models.IntegerField(null=True, blank=True, help_text="% de población del municipio en edad de primera infancia")
+    cobertura_indigena = models.IntegerField(null=True, blank=True, help_text="% de población indigena en edad de primera infancia")
+    cobertura_afro = models.IntegerField(null=True, blank=True, help_text="% de población afro en edad de primera infancia")
+    cobertura_otros = models.IntegerField(null=True, blank=True, help_text="% de población otros en edad de primera infancia")
+
     fuente= models.ForeignKey(FuenteDato, null=True, blank=True)
     
     class Meta:

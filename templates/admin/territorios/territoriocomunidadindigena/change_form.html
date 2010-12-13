@@ -1,0 +1,14 @@
+{% extends "admin/change_form.html" %}
+
+{% block object-tools %}
+      {% if change %}{% if not is_popup %}
+      <ul class="tools">
+      
+         <li><a onclick="return showPopup(this);" href="/admin/territorios/comunidadindigena/?territorio__territoriocomunidad_ptr__exact={{ object_id }}">Gestionar comunidades indigenas</a></li>
+      
+        <li><a href="history/" class="historylink">History</a></li>
+
+      </ul>
+      {% endif %}{% endif %}
+{% endblock %}
+ 
