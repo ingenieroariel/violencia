@@ -76,6 +76,7 @@ class ConsultaPrevia(models.Model):
     conflictos = models.TextField()
 
     def __unicode__(self):
+
        return "Consulta Previa #%d (%s)" % (self.pk, self.fecha_acuerdo)
 
 class LicenciaAmbiental(models.Model):
