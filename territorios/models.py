@@ -6,6 +6,7 @@ from django_extensions.db.fields import CreationDateTimeField, AutoSlugField
 from django.contrib.gis.db.models import MultiPolygonField
 from django_extensions.db.models import TitleSlugDescriptionModel, TimeStampedModel
 from fuentes.models import FuenteDato, AutorDato
+from django.template.defaultfilters import yesno
 from violencia.territorios.utils import gen_rangos_cantidad
 
 """
@@ -167,6 +168,16 @@ class TerritorioComunidad(Territorio):
     resolucion_constitucion = models.CharField(max_length=255, help_text="Dejar en blanco si no esta titulado", null=True, blank=True)
 
     objects = models.GeoManager()
+
+    def __unicode__(self):
+        titulacion =  yesno(self.titulado, 'titulado, no titulado')
+        label = ''
+        try:
+            t = self.territoriocomunidadnegra
+            label = "%s (%s): %s" % ('Com. Negra',titulacion, self.nombre)
+        except:
+            label = "%s (%s): %s" % ('Com. Indigena', titulacion, self.nombre)
+        return label
 
 class TerritorioComunidadIndigena(TerritorioComunidad):
    class Meta:

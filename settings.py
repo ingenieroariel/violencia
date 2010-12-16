@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     'fuentes',
     'conflictos',
     'megaproyectos',
+    'cultivosilicitos',
 )
 
 GRAPPELLI_ADMIN_TITLE = "Base de Datos Observatorio"
