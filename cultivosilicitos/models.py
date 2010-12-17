@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from gestion.models import Ubicacion
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato
@@ -40,11 +41,7 @@ CULTIVOS_TIPOS_INVERSION = (
     ("","Proyectos productivos"),
 )
 
-class CultivosIlicitos(models.Model):
-    municipios = models.ManyToManyField(Municipio)
-    territorios = models.ManyToManyField(TerritorioComunidad)
-    referencia_cartografica = models.FileField(null=True, blank=True, upload_to='uploads/cultivos_ilicitos/referencias_cartograficas')
-    area = models.CharField(max_length=200, null=True, blank=True)
+class CultivosIlicitos(Ubicacion):
     promotores = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_PROMOTRES_ILICITOS)
     """ PARTICIPACION """
     participacion_comunidad = models.BooleanField(help_text='Seleccione si tiene participacion de la comunidad')

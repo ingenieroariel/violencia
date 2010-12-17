@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib.gis.db import models
 from territorios.models import TerritorioComunidad, TerritorioComunidadIndigena, TerritorioComunidadNegra
+from territorios.models import TerritorioComunidad
+from territorios.models import Municipio
 
 class ActividadProductiva(models.Model):
     tipo = models.CharField(max_length=200)
@@ -163,3 +165,12 @@ class AccionesExigibilidadDerechos(models.Model):
     descripcion_otro = models.TextField()
     resultado_otro = models.TextField()
     territorio = models.ForeignKey(TerritorioComunidad)
+
+class Ubicacion(models.Model):
+    municipios = models.ManyToManyField(Municipio)
+    territorios = models.ManyToManyField(TerritorioComunidad)
+    referencia_cartografica = models.FileField(null=True, blank=True, upload_to='uploads/cultivos_ilicitos/referencias_cartograficas')
+    area = models.CharField(max_length=200, null=True, blank=True)
+
+    class Meta:
+        abstract = True
