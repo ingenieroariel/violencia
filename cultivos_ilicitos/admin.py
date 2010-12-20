@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from megaproyectos.models import Afectacion
-from cultivosilicitos.models import *
+from cultivos_ilicitos.models import *
 from django.contrib.gis import admin
 from django.contrib.contenttypes import generic
 

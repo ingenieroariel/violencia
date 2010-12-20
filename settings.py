@@ -119,7 +119,7 @@ INSTALLED_APPS = (
     'fuentes',
     'conflictos',
     'megaproyectos',
-    'cultivosilicitos',
+    'cultivos_ilicitos',
     'colonizacion',
     'actores_armados',
     'cooperacion',
