@@ -24,6 +24,12 @@ TIPOS_INSTITUCION = ((0,'Publica'),(1,'Privada'))
 TIPOS_CONTRATO = ((0,'Temporal'),(1,'Fijo'))
 TIPOS_INSTALACIONES_SALUD = ((0,'Centro de salud'),(1,'Puesto de salud'),(2,'Hospital') )
 TIPOS_REGIMEN = ((0,'Subsidiario'),(1,'Contributivo'))
+TERRITORIOS = (
+    ("territorio-col-indigena-titulado","Territorio Colectivo Indígena titulado"),
+    ("territorio-col-indigena-no-titulado","Territorio Colectivo Indígena no titulado"),
+    ("territorio-col-coms-negras-titulado","Territorio Colectivo Comunidades Negras titulado"),
+    ("territorio-col-coms-negras-no-titulado","Territorio Colectivo Comunidades Negras no titulado"),
+)
 
 # Create your models here.
 class Territorio(models.Model):
