@@ -146,7 +146,7 @@ class DesarrolloLegislativo(models.Model):
 
 class Megaproyecto(models.Model):
     municipios = models.ManyToManyField(Municipio)
-    nombre_documento = models.CharField(max_length=255, null=True, blank=True)
+    nombre_documento = models.CharField(max_length=255)
     documento = models.FileField(upload_to='uploads/documentos_megaproyectos', blank=True, null=True)
     vigencia = models.DateField()
 
@@ -294,5 +294,12 @@ class ObraInfraestructura(Megaproyecto):
     class Meta:
         verbose_name_plural = 'Infraestructura: Obras de infraestructura'
 
+    def __unicode__(self):
+        return 'Megaproyecto de obra de infraestructura: %s' % self.nombre_documento
+
 class ProyectoObraInfraestructura(Proyecto):
+    megaproyecto = models.ForeignKey(ObraInfraestructura, related_name='obras_de_infraestructura')
     nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)

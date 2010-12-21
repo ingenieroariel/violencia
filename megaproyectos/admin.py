@@ -53,10 +53,12 @@ class ObraInfraestructuraAdmin(admin.ModelAdmin):
 
 class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
     inlines = [InstitucionFinanciadoraInline, EstadoEjecucionInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
+    list_filter = ('megaproyecto',)
     fieldsets = (
         (None, {
               'fields':
                  (
+                 'megaproyecto',
                  'nombre',
                  )
           }),
