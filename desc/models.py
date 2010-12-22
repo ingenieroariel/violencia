@@ -266,9 +266,9 @@ class DerechoPrimeraInfancia(models.Model):
     
     """proteccion"""
     registro_civil = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Total de registros civiles")
-    registro_civil_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Indigenas")
-    registro_civil_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Afros")
-    registro_civil_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Otros")
+    registro_civil_indigena = models.DecimalField(help_text="porcentaje de indigenas del municipio en edad de primera infancia", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Indigenas")
+    registro_civil_afro = models.DecimalField(help_text="porcentaje de afros del municipio en edad de primera infancia", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Afros")
+    registro_civil_otros = models.DecimalField(help_text="porcentaje de otros del municipio en edad de primera infancia", max_digits=5, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Otros")
     fuente_registro_civil = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuente_registro_civil')
     
     """ salud """

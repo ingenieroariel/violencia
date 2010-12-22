@@ -81,6 +81,33 @@ TIPO_CONTRATACIONES_PUBLICAS = (
     ("convocatoria","Convocatoria pública para el proyecto concreto"),
     ("ajudicacion","Ajudicación del proyecto"),
 )
+
+TIPO_EXPLORACION_SISMICA = (
+    ("con-vias","con vías (LA-MAVDT)"),
+    ("sin-vias","sin vías"),
+    ("areas-marítimas","areas marítimas (LA-MAVDT) "),
+)
+
+TIPO_EXPLORACION_SISMICA_SIN_VIAS = (
+    ("permiso","Permiso"),
+    ("concesion","Concesión"),
+    ("autorizacion","Autorización")
+)
+
+TIPO_EXPLOTACION = (
+    ("con-obras-complementarias","con obras complementarias (LA-MAVDT)"),
+    ("transporte-liquidos","transporte y conducción liquidos (LA-MAVDT)"),
+    ("transporte-gaseoso","transporte y conducción gaseosos (LA-MAVDT)"),
+    ("transporte-ambos","transporte y conducción liquido y gaseosos (LA-MAVDT)"),
+    ("terminales-entrega","terminales de entrega y estaciones de transferencias (LA-MAVDT)"),
+    ("contruccion-operacion-refinerias","Construcción y operación de refinerías (LA-MAVDT)"),
+)
+
+TIPOS_DE_PERFORACION_EXPLORATORIA = (
+    ("dentro","Dentro de campos de producción de hidrocarburos"),
+    ("fuera","Afuera de campos de producción de hidrocarburos (LA-MAVDT)"),
+)
+
 TIPOS_MEGAPROYECTOS_OBRAS_INFRAESTRUCTURA = (
     ("maritimo-portuario-nacional","Marítimo y Portuario / Nacional (Licencia Ambiental del Ministerio del Medio Ambiente, Vivienda y Desarrollo TerritorialLA-MAVDT)"),
     ("maritimo-portuario-regional","Marítimo y Portuario / Regional (Licencia Ambiental de la Corporación Autónoma Regional LA-CAR)"),
@@ -115,6 +142,11 @@ TIPOS_MEGAPROYECTOS_OBRAS_INFRAESTRUCTURA = (
     ("sector-electrico-generadores-1","Sector Eléctrico / Centrales Generadoras de Energia Eléctrica - Capacidad igual o superior a 100mw (LA-MAVDT)"),
     ("sector-electrico-generadores-2","Sector Eléctrico / Centrales Generadoras de Energia Eléctrica - Capacidad menor de 100mw (LA-CAR)"),
     ("sector-electrico-fuentes","Sector Eléctrico / Uso de fuentes de energías alternativas virtualmente contaminantes (LA-MAVDT)"),
+)
+
+TIPO_MEGAPROYECTOS_INDUSTRIA_HIDROCARBUROS = (
+    ("petroleo","Petroleo"),
+    ("petroleo-gas","Petroleo y Gas"),
 )
 
 class Afectacion(models.Model):
@@ -153,10 +185,21 @@ class Megaproyecto(models.Model):
     class Meta:
         abstract = True
 
+class InstitucionFinanciadora(models.Model):
+    cubrimiento = models.CharField(max_length=255, null=True, blank=True, choices=CUBRIMIENTO_INSTITUCIONES_FINANCIADORAS)
+    tipo = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_INSTITUCIONES_FINANCIADORAS)
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Instituciones Financiadoras'
+
+    def __unicode__(self):
+        return self.nombre
+
 class Proyecto(models.Model):
     """ Información general """
-    municipios = models.ManyToManyField(Municipio, related_name='municipios')
-    territorios = models.ManyToManyField(TerritorioComunidad, null=True, blank=True, related_name='territorios')
+    municipios = models.ManyToManyField(Municipio)
+    territorios = models.ManyToManyField(TerritorioComunidad, null=True, blank=True)
     area_terrestre = models.CharField(max_length=255, null=True, blank=True)
     area_maritima = models.CharField(max_length=255, null=True, blank=True)
     fecha_iniciacion = models.DateField()
@@ -171,28 +214,14 @@ class Proyecto(models.Model):
     empresa_otras_actividades = models.BooleanField(verbose_name='Esta empresa tiene otras actividades?')
     empresa_otras_actividades_descripcion = models.TextField(null=True, blank=True, help_text='En caso de que tenga otras actividades', verbose_name='Descripción')
     monto_inversion = models.IntegerField(null=True, blank=True, help_text='Monto de inversión')
+    instituciones_financiadoras = models.ManyToManyField(InstitucionFinanciadora, null = True, blank = True)
 
     class Meta:
         abstract = True
 
-class InstitucionFinanciadora(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_instituciones")
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
-
-    cubrimiento = models.CharField(max_length=255, null=True, blank=True, choices=CUBRIMIENTO_INSTITUCIONES_FINANCIADORAS)
-    tipo = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_INSTITUCIONES_FINANCIADORAS)
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = 'Instituciones Financiadoras'
 
 class EstadoEjecucion(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_estadosejecucion")
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
-    """Contratación pública"""
-    contratacion_publica = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_CONTRATACIONES_PUBLICAS)
+    
     """ Desarrollo del proyecto """
     fecha_iniciacion = models.DateField(null=True, blank=True)
     fecha_finalizacion = models.DateField(null=True, blank=True)
@@ -208,6 +237,7 @@ class EstadoEjecucion(models.Model):
 
     class Meta:
         verbose_name_plural = 'Estados de ejecución'
+        abstract = True
 
 class RequisitoLegal(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_requisitos")
@@ -221,6 +251,11 @@ class RequisitoLegal(models.Model):
     metodologia = models.TextField(null = True, blank = True, verbose_name='Descripción de metodologia')
     participacion = models.TextField(null = True, blank = True, verbose_name='Descripción de participación')
     cumplimientos_acuerdo = models.TextField(null = True, blank = True, verbose_name='Descripción de cumplimientos de acuerdo')
+    """ CONFLICTOS """
+    conflictos_influencia_directa = models.TextField(null = True, blank = True, verbose_name='Descripción de conclictos area de influencia directa', help_text='conflictos')
+    conflictos_territorio = models.TextField(null = True, blank = True, verbose_name='Descripción de conflictos de territorio', help_text='conflictos')
+    conflictos_judicializacion = models.TextField(null = True, blank = True, verbose_name='Descripción de conflictos de judicialización', help_text='conflictos')
+    conflictos_correspondencia = models.TextField(null = True, blank = True, verbose_name='Descripción de conflictos de Correspondencia de los impactos y los acuerdos', help_text='conflictos')
     """ LICENCIA AMBIENTAL """
     impacto_ambiental = models.TextField(null=True, blank=True, verbose_name='LICENCIA AMBIENTAL - descripcion de impacto ambiental')
     impacto_cultural = models.TextField(null=True, blank=True, verbose_name='descripcion de impacto cultural')
@@ -287,6 +322,8 @@ class ReferenciaCartografica(models.Model):
         verbose_name_plural = 'Referencias cartograficas'
 
 
+""" OBRAS DE INFRAESTRUCTURA """
+
 class ObraInfraestructura(Megaproyecto):
     tipo = models.CharField(max_length=255, choices=TIPOS_MEGAPROYECTOS_OBRAS_INFRAESTRUCTURA)
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
@@ -303,3 +340,47 @@ class ProyectoObraInfraestructura(Proyecto):
 
     def __unicode__(self):
         return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+
+class EstadoEjecucionInfraestructura(EstadoEjecucion):
+    proyecto = models.ForeignKey(ProyectoObraInfraestructura)
+    """Contratación pública"""
+    contratacion_publica = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_CONTRATACIONES_PUBLICAS)
+
+
+""" INDUSTRIAS DE HIDROCARBURO """
+
+class IndustriaHidrocarburos(Megaproyecto):
+    tipo = models.CharField(max_length=255, choices=TIPO_MEGAPROYECTOS_INDUSTRIA_HIDROCARBUROS)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Economia Extractiva: Industria hidrocarburos'
+
+    def __unicode__(self):
+        return 'Megaproyecto de : %s' % self.nombre_documento
+
+class ProyectoInsdustriaHidrocarburos(Proyecto):
+    megaproyecto = models.ForeignKey(IndustriaHidrocarburos, related_name='industrias_hidrocarburos')
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+
+class EstadoEjecucionHidrocarburos(EstadoEjecucion):
+    proyecto = models.ForeignKey(ProyectoInsdustriaHidrocarburos)
+    concesion_empresa_nombre = models.CharField(max_length=255, null=True, blank=True, verbose_name='Nombre de empresa que hace ka Concesión')
+    concesion_contrato_ecopetrol = models.BooleanField(verbose_name='Tiene contrato de asociaciñon con Ecopetrol?')
+    consesion_resolusion_registro = models.CharField(max_length=255, null=True, blank=True, verbose_name='Resolución o Registro Nº')
+    exploracion_sismica = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_EXPLORACION_SISMICA)
+    exploracion_sismica_sin_vias = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_EXPLORACION_SISMICA_SIN_VIAS, help_text='en caso de haber seleccionado SIN VIAS')
+    exploracion_sismica_sin_vias_objeto = models.TextField(null = True, blank = True, verbose_name='Objeto', help_text='en caso de haber seleccionado SIN VIAS')
+    exploracion_sismica_sin_vias_desc = models.TextField(null = True, blank = True, verbose_name='Descripción', help_text='en caso de haber seleccionado SIN VIAS')
+    perforacion_exploratoria = models.CharField(max_length=255, null=True, blank=True, choices=TIPOS_DE_PERFORACION_EXPLORATORIA)
+    exploracion_exploratoria_objeto = models.TextField(null = True, blank = True, verbose_name='Objeto', help_text='en caso de haber seleccionado Dentro de campos de producción de hidrocarburos')
+    exploracion_exploratoria_desc = models.TextField(null = True, blank = True, verbose_name='Descripción', help_text='en caso de haber seleccionado Dentro de campos de producción de hidrocarburos')
+    explotacion = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_EXPLOTACION)
+    explotacion_cuales = models.TextField(null = True, blank = True, verbose_name='cuales', help_text='En caso de haber escojido Con obras complementarias')
+    explotacion_logitud = models.CharField(max_length=255, null=True, blank=True, verbose_name='longitud', help_text='en caso de haber escogido Transporte y conduccion de liquidos')
+    explotacion_ubicacion_descripcion = models.TextField(null = True, blank = True, verbose_name='Ubicación', help_text='Descripción')
+
+
