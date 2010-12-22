@@ -341,6 +341,9 @@ class ProyectoObraInfraestructura(Proyecto):
     def __unicode__(self):
         return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
 
+    class Meta:
+        verbose_name_plural = 'Proyectos de Obras de Infraestructura'
+
 class EstadoEjecucionInfraestructura(EstadoEjecucion):
     proyecto = models.ForeignKey(ProyectoObraInfraestructura)
     """Contratación pública"""
@@ -362,6 +365,9 @@ class IndustriaHidrocarburos(Megaproyecto):
 class ProyectoInsdustriaHidrocarburos(Proyecto):
     megaproyecto = models.ForeignKey(IndustriaHidrocarburos, related_name='industrias_hidrocarburos')
     nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Proyectos de Industria de Hidrocarburos'
 
     def __unicode__(self):
         return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
