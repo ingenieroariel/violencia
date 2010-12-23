@@ -165,6 +165,25 @@ TIPO_MEGAPROYECTOS_INDUSTRIA_HIDROCARBUROS = (
     ("petroleo-gas","Petroleo y Gas"),
 )
 
+TIPO_EXTRACCION_PUBLICA = (
+    ("concesion","Concesión"),
+    ("permiso","Permiso"),
+    ("asociacion","Asociación"),
+)
+TIPO_EXTRACCION_PRIVADA = (
+    ("autorizacion","Autorización"),
+)
+
+TIPOS_AGROINDUSTRIA = (
+    ("agro-palma","Agrocombustibles / Palma"),
+    ("agro-cana","Agrocombustibles / Caña"),
+    ("agro-otros","Agrocombustibles / Otros"),
+    ("agro-platano","Alimentaria / Plátano"),
+    ("ali-otros","Alimentaria / Otros"),
+    ("ali-arracacho","Otros usos / Arracacho"),
+    ("ali-otros","Otros usos / Otros")
+)
+
 class Afectacion(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_afectacion")
     object_id = models.PositiveIntegerField(blank=True, null=True)
@@ -255,8 +274,8 @@ class EstadoEjecucion(models.Model):
         verbose_name_plural = 'Estados de ejecución'
         abstract = True
 
-class RequisitoLegal(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_requisitos")
+class RequisitoLegalBase(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True)
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = generic.GenericForeignKey()
     """ CONSULTA PREVIA """
@@ -267,6 +286,12 @@ class RequisitoLegal(models.Model):
     metodologia = models.TextField(null = True, blank = True, verbose_name='Descripción de metodologia')
     participacion = models.TextField(null = True, blank = True, verbose_name='Descripción de participación')
     cumplimientos_acuerdo = models.TextField(null = True, blank = True, verbose_name='Descripción de cumplimientos de acuerdo')
+
+    class Meta:
+        abstract = True
+
+class RequisitoLegal(RequisitoLegalBase):
+    
     """ CONFLICTOS """
     conflictos_influencia_directa = models.TextField(null = True, blank = True, verbose_name='Descripción de conclictos area de influencia directa', help_text='conflictos')
     conflictos_territorio = models.TextField(null = True, blank = True, verbose_name='Descripción de conflictos de territorio', help_text='conflictos')
@@ -450,3 +475,72 @@ class Exploracion(models.Model):
 
     class Meta:
         verbose_name_plural = 'Exploraciones'
+
+""" APROVECHAMIENTO FORESTAL PRESISTENTE """
+"""
+class AprovechamientoForestarPersistente(Megaproyecto):
+    pass
+
+class Ambos(models.Model):
+    pass
+
+class Publico(Ambos):
+    tipo = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_PCA)
+
+class Privado(Ambos):
+    pass
+"""
+
+""" AGROINDUSTRIA """
+
+class Agroindustria(Megaproyecto):
+    tipo = models.CharField(max_length=255, choices=TIPOS_AGROINDUSTRIA)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+    cual = models.CharField(max_length=255, null=True, blank=True, help_text='En caso de haber seleccionado: otros')
+
+    class Meta:
+        verbose_name_plural = 'Agroindustria'
+
+    def __unicode__(self):
+        return 'Megaproyecto de agroindustria: %s' % self.nombre_documento
+
+class ProyectoAgroindustria(Proyecto):
+    megaproyecto = models.ForeignKey(Agroindustria, related_name='agroindustrias')
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+
+    class Meta:
+        verbose_name_plural = 'Proyectos de Agroindustrias'
+
+class EstadoEjecucionAgroindustria(models.Model):
+    proyecto = models.ForeignKey(ProyectoAgroindustria)
+    medida_preparacion = models.CharField(max_length=255, null=True, blank=True)
+    medida_cultivo = models.CharField(max_length=255, null=True, blank=True)
+    medida_produccion = models.CharField(max_length=255, null=True, blank=True, verbose_name='medida Producción')
+    medida_trasnformacion = models.CharField(max_length=255, null=True, blank=True, verbose_name='medida Transformación')
+    medida_transformacion_resultado = models.CharField(max_length=255, null=True, blank=True, verbose_name='resultado de medida de transformación')
+    medida_comercializacion = models.CharField(max_length=255, null=True, blank=True, verbose_name='medida Comercialización')
+    medida_comercializacion_resultado = models.CharField(max_length=255, null=True, blank=True, verbose_name='resultado de medida de Comercialización')
+
+    class Meta:
+        verbose_name_plural = 'Estados de ejecucion de agroindustria'
+
+class RequisitoLegalAgroindustria(RequisitoLegalBase):
+    adecuacion = models.BooleanField(verbose_name='Adecuación del proyecto al Plan de Manejo de humedales, manglares y páramos (de las CARs)')
+    adecuacion_descripcion = models.TextField(null = True, blank = True, verbose_name='Descrición de adecuación')
+    concesion_aguas_superficiales = models.BooleanField(verbose_name='Concesión de aguas superficiales')
+    concesion_aguas_superficiales_descripcion = models.TextField(null = True, blank = True, verbose_name='Descrición de Concesión de aguas superficiales')
+    concesion_aguas_subterraneas = models.BooleanField(verbose_name='Concesión de aguas subterráneas')
+    concesion_aguas_subterraneas_descripcion = models.TextField(null = True, blank = True, verbose_name='Descrición de Concesión de aguas subterráneas')
+    permisos_vertimiento = models.BooleanField(verbose_name='Permisos de vertimientos y disposición de residuos sólidos')
+    permisos_vertimiento_descripcion = models.TextField(null = True, blank = True, verbose_name='Descrición de Permisos de vertimientos y disposición de residuos sólidos')
+    permisos_emisiones = models.BooleanField(verbose_name='Permisos de emisiones atmosféricas')
+    permisos_emisiones = models.TextField(null = True, blank = True, verbose_name='Descrición de Permisos de emisiones atmosféricas')
+    permisos_autorizaciones = models.BooleanField(verbose_name='Permisos o autorizaciones de aprovechamientos forestales')
+    permisos_autorizaciones_descripcion = models.TextField(null = True, blank = True, verbose_name='Descrición de Permisos o autorizaciones de aprovechamientos forestales')
+
+    class Meta:
+        verbose_name_plural = 'Requicitos legales de Agroindustrias'
+

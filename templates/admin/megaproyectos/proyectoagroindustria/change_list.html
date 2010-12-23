@@ -1,0 +1,27 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools %}
+
+    <ul class="tools">
+      <li>
+          <a id="add-object" href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
+          Agregar
+        </a>
+      </li>
+    </ul>
+
+    <script type="text/javascript">
+    (function($) {
+        $(document).ready(function($) {
+            if(getURLParameter("megaproyecto__id__exact")!="null"){
+
+                    url = $("a#add-object").attr("href");
+                    url = url+"?megaproyecto="+getURLParameter("megaproyecto__id__exact");
+                    $("a#add-object").attr("href", url);
+
+            }
+        });
+    })(django.jQuery);
+    </script>
+
+{% endblock %}
