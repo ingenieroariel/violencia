@@ -11,6 +11,17 @@ class EstadoEjecucionHidrocarburosInline(admin.StackedInline):
     model = EstadoEjecucionHidrocarburos
     extra = 1
 
+class EstadoEjecucionMineriaInline(admin.StackedInline):
+    model = EstadoEjecucionMineria
+    extra = 1
+class TituloMineroInline(admin.StackedInline):
+    model = TituloMinero
+    extra = 1
+class ExploracionInline(admin.StackedInline):
+    model = Exploracion
+    extra = 1
+
+
 class RequisitoLegalInline(generic.GenericStackedInline):
     model = RequisitoLegal
     extra = 1
@@ -146,8 +157,79 @@ class ProyectoInsdustriaHidrocarburosAdmin(admin.ModelAdmin):
           }),
       )
 
+""" MINERIA """
+
+class MineriaAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Ubicación', {
+            'fields':(
+                'municipios',
+                'nombre_documento',
+                'documento',
+                'vigencia',
+            )
+        }),
+        ("Minerales", {
+              'fields':
+                 (
+                 'tipo',
+                 )
+          }),
+        ("Otros minerales", {
+              'fields':
+                 (
+                 'mineral',
+                 )
+          }),
+          (None, {
+              'fields':
+                 (
+                 'fuente',
+                 )
+          }),
+      )
+
+class ProyectoMineriaAdmin(admin.ModelAdmin):
+    inlines = [EstadoEjecucionMineriaInline, TituloMineroInline, ExploracionInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
+    list_filter = ('megaproyecto',)
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'megaproyecto',
+                 'nombre',
+                 )
+          }),
+        ('Información General', {
+            'fields':(
+                'municipios',
+                'territorios',
+                ('area_terrestre','area_maritima'),
+                ('fecha_iniciacion','fecha_finalizacion'),
+            )
+        }),
+        ("Empresa propietaria", {
+              'fields':
+                 (
+                 'empresa_nombre',
+                 'empresa_representante_legal',
+                 ('empresa_accionistas_nacionales','empresa_accionistas_extranjeros'),
+                 ('empresa_en_colombia','empresa_en_extranjero'),
+                 ('empresa_otras_actividades','empresa_otras_actividades_descripcion'),
+                 'monto_inversion',
+                 'instituciones_financiadoras',
+                 )
+          }),
+      )
+
+
+
 admin.site.register(InstitucionFinanciadora)
+
 admin.site.register(ObraInfraestructura, ObraInfraestructuraAdmin)
 admin.site.register(IndustriaHidrocarburos, IndustriaHidrocarburosAdmin)
+admin.site.register(Mineria, MineriaAdmin)
+
 admin.site.register(ProyectoObraInfraestructura, ProyectoObraInfraestructuraAdmin)
 admin.site.register(ProyectoInsdustriaHidrocarburos, ProyectoInsdustriaHidrocarburosAdmin)
+admin.site.register(ProyectoMineria, ProyectoMineriaAdmin)

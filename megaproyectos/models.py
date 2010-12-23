@@ -88,7 +88,7 @@ TIPO_EXPLORACION_SISMICA = (
     ("areas-marítimas","areas marítimas (LA-MAVDT) "),
 )
 
-TIPO_EXPLORACION_SISMICA_SIN_VIAS = (
+TIPO_PCA = (
     ("permiso","Permiso"),
     ("concesion","Concesión"),
     ("autorizacion","Autorización")
@@ -142,6 +142,22 @@ TIPOS_MEGAPROYECTOS_OBRAS_INFRAESTRUCTURA = (
     ("sector-electrico-generadores-1","Sector Eléctrico / Centrales Generadoras de Energia Eléctrica - Capacidad igual o superior a 100mw (LA-MAVDT)"),
     ("sector-electrico-generadores-2","Sector Eléctrico / Centrales Generadoras de Energia Eléctrica - Capacidad menor de 100mw (LA-CAR)"),
     ("sector-electrico-fuentes","Sector Eléctrico / Uso de fuentes de energías alternativas virtualmente contaminantes (LA-MAVDT)"),
+)
+
+TIPOS_MINERIA = (
+    ("carbon-mayor-800mil-tonxano","Carbon / Mayor de 800.000 ton/año (LA- MAVDT)"),
+    ("carbon-menor-800mil-tonxano","Carbon / Menor de 800.000 ton/año (LA-CAR)"),
+    ("construccion-mayor-600tonxano","Materiales de Construcción / igual o mayor a 600.000 ton/año (LA- MAVDT)"),
+    ("construccion-menor-600tonxano","Materiales de Construcción / menor de 600.000 ton/año (LA -CAR) "),
+    ("metales-material-removido-2millones-tonxano","Metales y Piedras preciosas / Material removido igual o mayor a 2.000.000 ton/año (LA MAVDT)"),
+    ("metales-material-removido-menor-2millones-tonxano","Metales y Piedras preciosas / Material removido menor de 2.000.000 ton/año (LA-CAR)"),
+    ("otros-1millon-tonxano","Otros minerales / Igual o mayor a 1.000.000 ton/año (LA MAVDT)"),
+    ("otros-1millon-menor-tonxano","Otros minerales / Menor de 1.000.000 ton/año (LA-CAR)")
+)
+
+TIPOS_CONCESION_MINERAS = (
+    ("","Titulo minero"),
+    ("","Titulo minero"),
 )
 
 TIPO_MEGAPROYECTOS_INDUSTRIA_HIDROCARBUROS = (
@@ -360,7 +376,7 @@ class IndustriaHidrocarburos(Megaproyecto):
         verbose_name_plural = 'Economia Extractiva: Industria hidrocarburos'
 
     def __unicode__(self):
-        return 'Megaproyecto de : %s' % self.nombre_documento
+        return 'Megaproyecto de Industria de Hidrocarburos: %s' % self.nombre_documento
 
 class ProyectoInsdustriaHidrocarburos(Proyecto):
     megaproyecto = models.ForeignKey(IndustriaHidrocarburos, related_name='industrias_hidrocarburos')
@@ -378,7 +394,7 @@ class EstadoEjecucionHidrocarburos(EstadoEjecucion):
     concesion_contrato_ecopetrol = models.BooleanField(verbose_name='Tiene contrato de asociaciñon con Ecopetrol?')
     consesion_resolusion_registro = models.CharField(max_length=255, null=True, blank=True, verbose_name='Resolución o Registro Nº')
     exploracion_sismica = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_EXPLORACION_SISMICA)
-    exploracion_sismica_sin_vias = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_EXPLORACION_SISMICA_SIN_VIAS, help_text='en caso de haber seleccionado SIN VIAS')
+    exploracion_sismica_sin_vias = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_PCA, help_text='en caso de haber seleccionado SIN VIAS')
     exploracion_sismica_sin_vias_objeto = models.TextField(null = True, blank = True, verbose_name='Objeto', help_text='en caso de haber seleccionado SIN VIAS')
     exploracion_sismica_sin_vias_desc = models.TextField(null = True, blank = True, verbose_name='Descripción', help_text='en caso de haber seleccionado SIN VIAS')
     perforacion_exploratoria = models.CharField(max_length=255, null=True, blank=True, choices=TIPOS_DE_PERFORACION_EXPLORATORIA)
@@ -389,4 +405,48 @@ class EstadoEjecucionHidrocarburos(EstadoEjecucion):
     explotacion_logitud = models.CharField(max_length=255, null=True, blank=True, verbose_name='longitud', help_text='en caso de haber escogido Transporte y conduccion de liquidos')
     explotacion_ubicacion_descripcion = models.TextField(null = True, blank = True, verbose_name='Ubicación', help_text='Descripción')
 
+""" MINERIA """
+class Mineria(Megaproyecto):
+    tipo = models.CharField(max_length=255, choices=TIPOS_MINERIA)
+    mineral = models.CharField(max_length=255, null=True, blank=True, help_text='En caso de haber seleccionado: otros minerales')
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
 
+    class Meta:
+        verbose_name_plural = 'Economia Extractiva: Minerias'
+
+    def __unicode__(self):
+        return 'Megaproyecto de Mineria: %s' % self.nombre_documento
+
+class ProyectoMineria(Proyecto):
+    megaproyecto = models.ForeignKey(Mineria, related_name='minerias')
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Proyectos de Minerias'
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+
+class EstadoEjecucionMineria(EstadoEjecucion):
+    proyecto = models.ForeignKey(ProyectoMineria)
+    prospeccion = models.CharField(max_length=255, null = True, blank = True, choices=(("libre","libre"),("excepto","excepto zona minera de grupos étnicos")), verbose_name='Prospección')
+    concesion_minera = models.CharField(max_length=255, null=True, blank=True, verbose_name='Concesión minera')
+
+class TituloMinero(models.Model):
+    proyecto = models.ForeignKey(ProyectoMineria)
+    nombre_empresa = models.CharField(max_length=255, null=True, blank=True)
+    descripcion_contrato_asociacion = models.TextField(null = True, blank = True)
+    resolucion_registro = models.CharField(max_length=255, null=True, blank=True, verbose_name='Resolución o Registro Nº')
+
+    class Meta:
+        verbose_name_plural = 'Titulos mineros'
+
+class Exploracion(models.Model):
+    proyecto = models.ForeignKey(ProyectoMineria)
+    tipo = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_PCA, help_text='de recursos naturales')
+    objeto = models.TextField(null = True, blank = True)
+    descripcion = models.TextField(null = True, blank = True)
+    la = models.BooleanField(verbose_name='LA si se construyen vías que la requieren (LA)')
+
+    class Meta:
+        verbose_name_plural = 'Exploraciones'
