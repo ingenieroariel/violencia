@@ -297,14 +297,116 @@ class ProyectoAgroindustriaAdmin(admin.ModelAdmin):
           }),
       )
 
+
+""" APROVECHAMIENTO FORESTAL PRESISTENTE """
+class AFPEspecieInline(generic.GenericStackedInline):
+    model = AFPEspecie
+    extra = 1
+
+class AFPObligacionInline(generic.GenericStackedInline):
+    model = AFPObligacion
+    extra = 1
+
+class AFPInformeSemestralInline(generic.GenericStackedInline):
+    model = AFPInformeSemestral
+    extra = 1
+
+class AFPESalvoconductoInline(generic.GenericStackedInline):
+    model = AFPESalvoconducto
+    extra = 1
+
+class DatosAFPPrivadaInline(generic.GenericStackedInline):
+    model = DatosAFPPrivada
+    extra = 1
+
+class DatosAFPPublicoInline(generic.GenericStackedInline):
+    model = DatosAFPPublico
+    extra = 1
+
+
+class AFPPrivadaAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Ubicación', {
+            'fields':(
+                'municipios',
+                'nombre_documento',
+                'documento',
+                'vigencia',
+            )
+        }),
+        (None, {
+              'fields':
+                 (
+                 'tipo',
+                 'nombre',
+                 'fuente',
+                 )
+          }),
+      )
+
+class ProyectoAFPPrivadaAdmin(admin.ModelAdmin):
+    inlines = [DatosAFPPrivadaInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
+    list_filter = ('megaproyecto',)
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'megaproyecto',
+                 'nombre',
+                 'autorizacion',
+                 )
+          }),
+        )
+
+
+class AFPPublicoAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Ubicación', {
+            'fields':(
+                'municipios',
+                'nombre_documento',
+                'documento',
+                'vigencia',
+            )
+        }),
+        (None, {
+              'fields':
+                 (
+                 'tipo',
+                 'nombre',
+                 'fuente',
+                 )
+          }),
+      )
+
+class ProyectoAFPPublicoAdmin(admin.ModelAdmin):
+    inlines = [DatosAFPPublicoInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
+    list_filter = ('megaproyecto',)
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'megaproyecto',
+                 'nombre',
+                 'concesion',
+                 'permiso',
+                 'asociacion',
+                 )
+          }),
+        )
+
 admin.site.register(InstitucionFinanciadora)
 
 admin.site.register(ObraInfraestructura, ObraInfraestructuraAdmin)
 admin.site.register(IndustriaHidrocarburos, IndustriaHidrocarburosAdmin)
 admin.site.register(Mineria, MineriaAdmin)
 admin.site.register(Agroindustria, AgroindustriaAdmin)
+admin.site.register(AFPPrivada, AFPPrivadaAdmin)
+admin.site.register(AFPPublico, AFPPublicoAdmin)
 
 admin.site.register(ProyectoObraInfraestructura, ProyectoObraInfraestructuraAdmin)
 admin.site.register(ProyectoInsdustriaHidrocarburos, ProyectoInsdustriaHidrocarburosAdmin)
 admin.site.register(ProyectoMineria, ProyectoMineriaAdmin)
 admin.site.register(ProyectoAgroindustria, ProyectoAgroindustriaAdmin)
+admin.site.register(ProyectoAFPPrivada, ProyectoAFPPrivadaAdmin)
+admin.site.register(ProyectoAFPPublico, ProyectoAFPPublicoAdmin)

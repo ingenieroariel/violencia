@@ -86,7 +86,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
-    "grappelli.context_processors.admin_template_path",
+    #"grappelli.context_processors.admin_template_path",
 )
 
 ROOT_URLCONF = 'violencia.urls'
