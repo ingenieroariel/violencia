@@ -231,7 +231,7 @@ class InstitucionFinanciadora(models.Model):
     def __unicode__(self):
         return self.nombre
 
-class Proyecto(models.Model):
+class ProyectoBase(models.Model):
     """ Información general """
     municipios = models.ManyToManyField(Municipio)
     territorios = models.ManyToManyField(TerritorioComunidad, null=True, blank=True)
@@ -248,6 +248,12 @@ class Proyecto(models.Model):
     empresa_en_extranjero = models.BooleanField(verbose_name='Esta empresa opera en el Extranjero?')
     empresa_otras_actividades = models.BooleanField(verbose_name='Esta empresa tiene otras actividades?')
     empresa_otras_actividades_descripcion = models.TextField(null=True, blank=True, help_text='En caso de que tenga otras actividades', verbose_name='Descripción')
+    
+    class Meta:
+        abstract = True
+
+class Proyecto(ProyectoBase):
+    
     monto_inversion = models.IntegerField(null=True, blank=True, help_text='Monto de inversión')
     instituciones_financiadoras = models.ManyToManyField(InstitucionFinanciadora, null = True, blank = True)
 
@@ -649,6 +655,135 @@ class ProyectoAFPPublico(ProyectoAFPBase):
 
 
 """ EXTRACCION PESQUERA """
+
+class ProyectoPesquero(ProyectoBase):
+    duracion = models.CharField(max_length=255, null=True, blank=True)
+    area_de_operaciones = models.CharField(max_length=255, null=True, blank=True)
+    cuota = models.CharField(max_length=255, null=True, blank=True, verbose_name='Cuota o volumen de pesca para el correspondiente período')
+    especies = models.TextField(null = True, blank = True)
+    sistema_tecnologico = models.TextField(null = True, blank = True)
+    causales = models.TextField(null = True, blank = True, verbose_name='Causales de revocación y las sanciones por incumplimiento')
+    valorizaciones = models.TextField(null = True, blank = True, verbose_name='Valor de las tasas y derechos y la forma de pago, para cada período')
+
+    plan_investigacion = models.TextField(null = True, blank = True, help_text='descripcion', verbose_name='Plan de investigacion')
+    vigencia = models.DateField(null = True, blank = True)
+    resultado = models.TextField(null = True, blank = True, help_text='descripcion')
+
+    class Meta:
+        abstract = True
+
+class PescaContinental(Megaproyecto):
+    tipo = models.CharField(max_length=255, choices=( ("fluvial","Fluvial"),("lacustre","Lacustre") ))
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+
+    def __unicode__(self):
+        return 'Megaproyecto de Pesca continental (%s): %s' % (self.tipo, self.nombre_documento)
+
+    class Meta:
+        verbose_name = 'Economia Extractiva: Pesca continental'
+        verbose_name_plural = 'Economia Extractiva: Pesca continental'
+
+class ProyectoPescaContinental(ProyectoPesquero):
+    megaproyecto = models.ForeignKey(PescaContinental, related_name='pescas_continentales')
+    tipo = models.CharField(max_length=255, choices=( ("artesanal","Comercial / Artesanal"),("industrial","Comercial / Industrial"), ("cientifica", "Cientifica") ))
+
+    class Meta:
+        verbose_name = 'Proyecto de pesca continental'
+        verbose_name_plural = 'Proyectos de pesca continental'
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.tipo, self.megaproyecto.nombre_documento)
+
+
+class PescaMarina(Megaproyecto):
+    tipo = models.CharField(max_length=255, choices=( ("costera","Costera"),("de-bajura","De bajura"),("de-altura","De altura") ))
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+
+    def __unicode__(self):
+        return 'Megaproyecto de Pesca marina (%s): %s' % (self.tipo, self.nombre_documento)
+
+    class Meta:
+        verbose_name = 'Economia Extractiva: Pesca marina'
+        verbose_name_plural = 'Economia Extractiva: Pesca marina'
+
+class ProyectoPescaMarina(ProyectoPesquero):
+    megaproyecto = models.ForeignKey(PescaMarina, related_name='pescas_marinas')
+    tipo = models.CharField(max_length=255, choices=( ("artesanal","Comercial / Artesanal"),("industrial","Comercial / Industrial"), ("cientifica", "Cientifica") ))
+
+    class Meta:
+        verbose_name = 'Proyecto de pesca marina'
+        verbose_name_plural = 'Proyectos de pesca marina'
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.tipo, self.megaproyecto.nombre_documento)
+
+class ProcesamientoPesca(Megaproyecto):
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+
+    def __unicode__(self):
+        return 'Megaproyecto de procesamiento de pesca: %s' % self.nombre_documento
+
+    class Meta:
+        verbose_name = 'Economia Extractiva: Procesamiento de pesca'
+        verbose_name_plural = 'Economia Extractiva: Procesamientos de pesca'
+
+class ProyectoProcesamientoPesca(ProyectoPesquero):
+    megaproyecto = models.ForeignKey(ProcesamientoPesca, related_name='procesamientos_pesca')
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Proyecto de procesamiento de pesca'
+        verbose_name_plural = 'Proyectos de procesamiento de pesca'
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+
+class ComercializacionPesca(Megaproyecto):
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+
+    def __unicode__(self):
+        return 'Megaproyecto de comercializacion de pesca: %s' % self.nombre_documento
+
+    class Meta:
+        verbose_name = 'Economia Extractiva: Comercializacion de pesca'
+        verbose_name_plural = 'Economia Extractiva: Comercializacion de pesca'
+
+class ProyectoComercializacionPesca(ProyectoPesquero):
+    megaproyecto = models.ForeignKey(ComercializacionPesca, related_name='comercializacion_pesca')
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Proyecto de comercializacion de pesca'
+        verbose_name_plural = 'Proyectos de comercializacion de pesca'
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+
+class PescaIntegrada(Megaproyecto):
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+
+    def __unicode__(self):
+        return 'Megaproyecto de pesca integrada: %s' % self.nombre_documento
+
+    class Meta:
+        verbose_name = 'Economia Extractiva: Pesca integrada'
+        verbose_name_plural = 'Economia Extractiva: Pesca integrada'
+
+class ProyectoPescaIntegrada(ProyectoPesquero):
+    megaproyecto = models.ForeignKey(PescaIntegrada, related_name='pescas_integradas')
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Proyecto de pesca integrada'
+        verbose_name_plural = 'Proyectos de pesca integrada'
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
 
 
 """ AGROINDUSTRIA """
