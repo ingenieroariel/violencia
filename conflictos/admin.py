@@ -14,9 +14,8 @@ class ConflictoAdmin(admin.ModelAdmin):
           ('Descripción', {
               'fields':
                  (
-#                 'ubicacion', 'actores','hechos',
                   'descripcion',
-                 ('estado','fecha','fuente'),
+                 ('estado', 'fuente'),
                  )
 
           }),

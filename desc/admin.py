@@ -58,6 +58,15 @@ class EducacionAdmin(admin.ModelAdmin):
                  ('maestros_contratados_indigenas', 'maestros_contratados_afro'),
                  ('maestros_contratados_otros','maestros_contratados_ejerciendo'),
                  )
+          }),
+         ('Maestros nombrados', {
+              'fields':
+                 (
+                 'maestros_nombrados_total',
+                 ('maestros_nombrados_indigenas', 'maestros_nombrados_afro'),
+                 ('maestros_nombrados_otros','maestros_nombrados_ejerciendo'),
+                 )
+
 
           }),
           (None, {
@@ -72,15 +81,17 @@ class EducacionAdmin(admin.ModelAdmin):
                  'total_poblacion_estudiantil',
                  ('cobertura_preescolar', 'cobertura_primaria'),
                  ('cobertura_secundaria','cobertura_mediavocacional'),
+                    'fuente_poblacion_estudiantil',
                  )
 
           }),
-          ('Poblacion estudiantil (desplazados)', {
+          (None, {
               'fields':
                  (
                  'total_poblacion_estudiantil_desplazada',
                  ('cobertura_preescolar_desplazados', 'cobertura_primaria_desplazados'),
                  ('cobertura_secundaria_desplazados','cobertura_mediavocacional_desplazados'),
+                    'fuente_poblacion_estudiantil_desplazados',
                  )
 
           }),
@@ -89,14 +100,9 @@ class EducacionAdmin(admin.ModelAdmin):
                  (
                  ('desercion', 'promocion'),
                  ('repitencia','analfabetismo'),
+                    'fuente_poblacion_estudiantil_otros',
                  )
           }),
-          (None, {
-                'fields':
-                    (
-                    'fuente_poblacion_estudiantil',
-                    )
-           }),
           
       )
 
@@ -113,7 +119,7 @@ class SistemaSaludAdmin(admin.ModelAdmin):
           }),
           ('Régimen subsidiado carnetizado', {
               'fields':
-                 (
+                 ('reg_sub_carnetizado_total_porcentaje',
                  ('reg_sub_carnetizado_indigena_porcentaje', 'reg_sub_carnetizado_indigena_empresas'),
                  ('reg_sub_carnetizado_afro_porcentaje','reg_sub_carnetizado_afro_empresas'),
                  ('reg_sub_carnetizado_otra_porcentaje','reg_sub_carnetizado_otra_empresas'),
@@ -122,7 +128,7 @@ class SistemaSaludAdmin(admin.ModelAdmin):
           }),
           ('Régimen subsidiado vinculado', {
               'fields':
-                 (
+                 ('reg_sub_vinculado_total_porcentaje',
                  ('reg_sub_vinculado_indigena_porcentaje', 'reg_sub_vinculado_indigena_empresas'),
                  ('reg_sub_vinculado_afro_porcentaje','reg_sub_vinculado_afro_empresas'),
                  ('reg_sub_vinculado_otra_porcentaje','reg_sub_vinculado_otra_empresas'),
@@ -131,7 +137,7 @@ class SistemaSaludAdmin(admin.ModelAdmin):
           }),
           ('Régimen contributivo', {
               'fields':
-                 (
+                 ('reg_contributivo_total_porcentaje',
                  ('reg_contributivo_indigena_porcentaje', 'reg_contributivo_indigena_empresas'),
                  ('reg_contributivo_afro_porcentaje','reg_contributivo_afro_empresas'),
                  ('reg_contributivo_otra_porcentaje','reg_contributivo_otra_empresas'),

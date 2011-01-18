@@ -13,7 +13,7 @@ from violencia.territorios.utils import gen_rangos_cantidad
 MODULO 1. LINEA BASE ORDENAMIENTO DEL TERRITORIO Y POBLACION
 """
 
-ESTADOS_TRAMITES_JURIDICOS = (('S','Solicitud'),('A','Aprovaci�n'),('N','Negaci�n'))
+ESTADOS_TRAMITES_JURIDICOS = (('S','Solicitud'),('N','Negaci�n'),('A','Aprovaci�n'))
 TIPOS_MUNICIPIO = ((0,'Fronterizo'),(1,u'Costero'),(2,'Rivere�o'),(3,'Del Interior'))
 TIPOS_LIMITE = ((0,'Departamento'),(1,'Pais'),(2,'Municipios'),(3,'Comunidades'))
 GRUPOS_POBLACIONAL = (('I','Indigena'),('A',u'Afro'), ('O','Otros'))
@@ -47,7 +47,7 @@ class Territorio(models.Model):
 
 
 class TerritorioPolitico(Territorio):
-    fecha_creacion = models.DateField('fecha de creacion', blank=True, null=True)
+    ano_creacion = models.IntegerField('año de creacion', blank=True, null=True)
     presupuesto_anual = models.IntegerField(blank=True, null=True)
     ingresos = models.FloatField('ingresos totales', blank=True, null=True, help_text="millones de pesos")
     gastos = models.FloatField('gastos totales', blank=True, null=True, help_text="millones de pesos")
@@ -64,28 +64,36 @@ ESTADISTICA_CHOICES = (
 
 class Estadistica(models.Model):
     tipo = models.CharField(max_length=255, choices=ESTADISTICA_CHOICES)
-    total = models.SmallIntegerField(verbose_name="Población Total", blank=True, null=True, help_text="habitantes")
-    hombres = models.FloatField(help_text="%", blank=True, null=True)
-    mujeres = models.FloatField(help_text="%", blank=True, null=True)
-    edad_0_a_9 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_10_a_19 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_20_a_29 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_30_a_39 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_40_a_49 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_50_a_59 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_60_a_69 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_70_a_79 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_80_a_89 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_90_o_mas = models.SmallIntegerField(help_text="%", blank=True, null=True)    
-    etnia_indigena = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    etnia_afro = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    etnia_otros = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    etnia_no_informa = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    rural = models.IntegerField(help_text='habitantes', blank=True, null=True)
+    total = models.IntegerField(verbose_name="Población Total", blank=True, null=True, help_text="habitantes")
+    hombres = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    mujeres = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_0_a_4 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_5_a_9 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_10_a_14 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_15_a_19 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_20_a_24 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_25_a_29 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_30_a_34 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_35_a_39 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_40_a_44 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_45_a_49 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_50_a_54 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_55_a_59 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_60_a_64 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_65_a_69 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_70_a_74 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_75_a_79 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_80_a_84 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_85_a_89 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_90_o_mas = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    etnia_indigena = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    etnia_afro = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    etnia_otros = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    etnia_no_informa = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
     individual = models.IntegerField(help_text='habitante (solo deplazados)', blank=True, null=True)
     masivo = models.IntegerField(help_text='habitantes (solo desplazados)', blank=True, null=True)
     cabecera = models.IntegerField(help_text='habitantes', blank=True, null=True)
-    rural = models.IntegerField(help_text='habitantes (solo desplazados)', blank=True, null=True)
+    rural = models.IntegerField(help_text='habitantes', blank=True, null=True)
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
 
     class Meta:
@@ -135,6 +143,7 @@ GRUPO_POBLACIONAL_CHOICES = (
 
 class Municipio(TerritorioPolitico):
     departamento = models.ForeignKey(Departamento)
+    certificado = models.BooleanField(help_text="poner chulo si es certificado", default=False)
     area_total = models.FloatField(help_text="km2", blank=True, null=True)
     area_cabecera = models.FloatField(help_text="km2", blank=True, null=True)
     titulos_cabecera = models.CharField(max_length=50, null=True, blank=True)
@@ -168,7 +177,7 @@ class Pueblo(models.Model):
 class TerritorioComunidad(Territorio):
     departamento = models.ForeignKey(Departamento, null=True, blank=True)
     municipios = models.ManyToManyField(Municipio, null=True, blank=True)
-    area = models.FloatField(null=True, blank=True, help_text="Area asignada en caso de ser titulado y area solicitada en caso de no serlo")
+    area = models.FloatField(null=True, blank=True, help_text="Area en hectáreas asignada en caso de ser titulado y area solicitada en caso de no serlo")
     limites = models.TextField(null=True, blank=True) 
     titulado = models.BooleanField(default=False)
     resolucion_constitucion = models.CharField(max_length=255, help_text="Dejar en blanco si no esta titulado", null=True, blank=True)
@@ -241,11 +250,11 @@ SITUACION_CHOICES=(
 
 class SituacionJuridica(models.Model):
     territorio = models.ForeignKey(TerritorioComunidad)
+    estado_tramite = models.CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
     fecha = models.DateField(help_text="Fecha de la resolucion o solicitud", blank=True, null=True)
     resolucion = models.CharField(max_length=255, null=True, blank=True, help_text="Numero de resolucion (si existe)")
-    area = models.FloatField(help_text='Area en metros cuadrados', null=True, blank=True)
+    area = models.FloatField(help_text='Area en hectáreas', null=True, blank=True)
     limites = models.TextField('Limites o linderos')
-    estado_tramite = models.CharField(max_length=2, choices=ESTADOS_TRAMITES_JURIDICOS, default='S')
     observaciones = models.TextField(blank=True, null=True)
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True, help_text="Campo opcional")
 
@@ -255,7 +264,7 @@ class SituacionJuridica(models.Model):
 #para titulados solo indigenas
 class Ampliacion(SituacionJuridica):
     class Meta:
-        verbose_name_plural = "Solicitud juridica: Ampliaciones (solo para territorios titulados)"
+        verbose_name_plural = "Solicitud: Ampliaciones (solo para territorios titulados)"
 
 class Saneamiento(SituacionJuridica):
     poblacion_total = models.IntegerField(blank=True, null=True, help_text="cantidad de poblacion ajena")
@@ -263,30 +272,39 @@ class Saneamiento(SituacionJuridica):
     poblacion_otros = models.IntegerField(blank=True, null=True, help_text="cantidad")
 
     class Meta:
-        verbose_name_plural = "Solicitud juridica: Saneamientos (solo para territorios titulados)"
+        verbose_name_plural = "Solicitud: Saneamientos (solo para territorios titulados)"
 
 #para no titulados
 class SolicitudTitulacion(SituacionJuridica):
     class Meta:
-        verbose_name = "Solicitud juridica: Titulacion"
-        verbose_name_plural = "Solicitud juridica: Titulacion (Solo para territorios NO titulados)"
+        verbose_name = "Solicitud: Titulacion"
+        verbose_name_plural = "Solicitud: Titulacion (Solo para territorios NO titulados)"
 
 
 class PoblacionSimple(models.Model):
     familias = models.IntegerField(blank=True, null=True)
-    total = models.SmallIntegerField(verbose_name="Población Total", blank=True, null=True, help_text="habitantes")
-    hombres = models.FloatField(help_text="%", blank=True, null=True)
-    mujeres = models.FloatField(help_text="%", blank=True, null=True)
-    edad_0_a_9 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_10_a_19 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_20_a_29 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_30_a_39 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_40_a_49 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_50_a_59 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_60_a_69 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_70_a_79 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_80_a_89 = models.SmallIntegerField(help_text="%", blank=True, null=True)
-    edad_90_o_mas = models.SmallIntegerField(help_text="%", blank=True, null=True)    
+    total = models.IntegerField(verbose_name="Población Total", blank=True, null=True, help_text="habitantes")
+    hombres = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    mujeres = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_0_a_4 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_5_a_9 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_10_a_14 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_15_a_19 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_20_a_24 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_25_a_29 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_30_a_34 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_35_a_39 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_40_a_44 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_45_a_49 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_50_a_54 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_55_a_59 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_60_a_64 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_65_a_69 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_70_a_74 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_75_a_79 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_80_a_84 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_85_a_89 = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)
+    edad_90_o_mas = models.DecimalField(help_text="%", max_digits=4, decimal_places=1, blank=True, null=True)    
     fuente = models.ForeignKey(FuenteDato) 
 
     class Meta:

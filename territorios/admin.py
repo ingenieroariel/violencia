@@ -33,7 +33,7 @@ class IndicadorBasicoInline(generic.GenericStackedInline):
 class DepartamentoAdmin(GoogleAdmin):
     list_display = ( 'nombre', 'id', 'area_total', 'capital', 'ingresos', 'gastos','cantidad_municipios_pacifico',)
     search_fields = ['nombre','capital']
-    list_filter = ('fecha_creacion',)
+    list_filter = ('ano_creacion',)
     inlines = [EstadisticaDepartamentoInline, IndicadorBasicoInline]
     fieldsets = (
           (None, {
@@ -43,7 +43,7 @@ class DepartamentoAdmin(GoogleAdmin):
                  ('area_total', 'area_rural', 'area_urbana'), 
                 'capital',
                  ('cantidad_municipios_total', 'cantidad_municipios_pacifico'),
-                  'fecha_creacion',
+                  'ano_creacion',
                   'informacion_adicional',
                  )
           }),
@@ -55,8 +55,8 @@ class DepartamentoAdmin(GoogleAdmin):
       )
 
 class MunicipioAdmin(GoogleAdmin):
-    list_display = ('nombre', 'id', 'departamento', 'area_total',  'ingresos', 'gastos',)
-    list_filter = ('departamento','fecha_creacion')
+    list_display = ('nombre', 'id', 'departamento', 'area_total',  'ingresos', 'gastos','certificado')
+    list_filter = ('departamento','ano_creacion', 'certificado')
     inlines = [EstadisticaMunicipioInline, TitulosIndividualesInlines, IndicadorBasicoInline]
     fieldsets = (
           (None, {
@@ -64,7 +64,7 @@ class MunicipioAdmin(GoogleAdmin):
                  (
                  ('nombre', 'departamento'),
                  ('area_total', 'area_rural', 'area_cabecera'), 
-                  'fecha_creacion',
+                 ('ano_creacion', 'certificado'),
                   'informacion_adicional',
                  )
                 

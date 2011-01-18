@@ -24,14 +24,8 @@ class Conflicto(models.Model):
     content_object = generic.GenericForeignKey()
 
     categoria = models.CharField(max_length=50, choices=( ("intraetnico","Intraétnico"),("interetnico","Interétnico") ) )
-    tipo = models.CharField(max_length=50, choices=TIPO_CONFICTOS)
-    """ descripcion """
-#    ubicacion = models.TextField(null=True, blank=True)
-#    actores = models.TextField(null=True, blank=True)
-#    hechos = models.TextField(null=True, blank=True)
-    descripcion = models.TextField(null=True, blank=True)
-
+    tipo = models.CharField(max_length=50, choices=TIPO_CONFICTOS, null=True, blank=True)
+    descripcion = models.TextField(help_text="Ubicacion, actores, hechos, fecha", null=True, blank=True)
     estado = models.CharField(max_length=50, null=True, blank=True, choices=( ("abierto","Abierto"),("cerrado","Cerrado") ) )
-    fecha = models.DateField(null=True, blank=True)
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="conflictos")
 
