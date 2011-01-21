@@ -2,26 +2,23 @@
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato
-from territorios.models import TerritorioComunidad
-from territorios.models import Municipio
+from territorios.models import TerritorioComunidad, Departamento, Municipio
 from django.db import models
 
-TEMAS_DESAROLLO_LEGISLATIVO = (
-    ('oi-maritimo-portuario','Obras de Infraestructura / Marítimo y Portuario'),
-    ('oi-aereopuertos','Obras de Infraestructura / Aeropuertos'),
-    ('oi-re-vial','Obras de Infraestructura / Red vial'),
-    ('oi-red-fluvial-nac','Obras de Infraestructura / Red fluvial nacional'),
-    ('oi-red-ferea','Obras de Infraestructura / Red férrea'),
-    ('oi-distritos','Obras de Infraestructura / Distritos de riego'),
-    ('oi-rellenos','Obras de Infraestructura / Rellenos sanitarios'),
-    ('oi-vivienda','Obras de Infraestructura / Macroproyectos de Vivienda'),
-    ('oi-sector-electrico','Obras de Infraestructura / Sector Eléctrico'),
-    ('ee-ind-hidrocarburos','Economía Extractiva / Industria Hidrocarburos'),
-    ('ee-mineria','Economía Extractiva / Mineria'),
-    ('ee-aprovechamiento','Economía Extractiva / Aprovechamiento Forestal Persistente'),
-    ('ee-extraccion-pesquera','Economía Extractiva / Extracción pesquera'),
-    ('ee-agroindustria','Economía de Transformación / Agroindustria'),
+
+
+CATEGORIA_SECTOR= (
+    ('oi','Obras de Infraestructura'),
+    ('ee','Economía Extractiva '),
+    ('et','Economía de Transformación / '),
 )
+class Sector(models.Model):
+    nombre = models.CharField(max_length=255, blank=True, null=True)
+    categoria = models.CharField(max_length=255, blank=True, null=True, choices= CATEGORIA_SECTOR)
+
+    def __unicode__(self):
+        return self.get_categoria_display() + " / " + self.nombre
+
 IMPACTOS = (
     ("","Impacto Ambiental / Suelos"),
     ("","Impacto Ambiental / Rios"),
@@ -199,26 +196,41 @@ class Afectacion(models.Model):
     class Meta:
         verbose_name_plural = 'Afectacion'
 
+TIPO_LEGISLATIVO = (
+    ('ley', 'Ley'),
+    ('decreto', 'Decreto'),
+    ('resolucion', 'Resolucion'),
+    ('ordenanza', 'Ordenanza'),
+    ('jurisprudencia', 'Jurisprudencia'),
+)
+
 class DesarrolloLegislativo(models.Model):
-    tema = models.CharField(max_length=50, choices=TEMAS_DESAROLLO_LEGISLATIVO)
+    nombre_documento = models.CharField(max_length=255, blank=True, null=True)
     documento = models.FileField(upload_to='uploads/documentos_desarrollo_legislativos', blank=True, null=True)
+    departamento = models.ManyToManyField(Departamento, null=True, blank=True)
+    nacional = models.BooleanField(help_text="Aplica para todo el territorio nacional?", default=False)
     fecha = models.DateField(null=True, blank=True)
-    decreto = models.CharField(max_length=255, null=True, blank=True)
-    resolucion = models.CharField(max_length=255, null=True, blank=True)
-    ordenanza = models.CharField(max_length=255, null=True, blank=True)
-    jurisprudencia = models.CharField(max_length=255, null=True, blank=True)
-
+    sector = models.ForeignKey(Sector, blank=True, null=True)
+    tipo = models.CharField(max_length=255, blank=True, null=True, choices=TIPO_LEGISLATIVO)
+    resumen_del_contenido = models.TextField(blank=True, null=True)
+ 
     class Meta:
-        verbose_name_plural = 'Desarrollos Legislativos'
+        verbose_name = 'Documento de Desarrollo Legislativo'
+        verbose_name_plural = 'Documentos de Desarrollo Legislativo'
 
-class Megaproyecto(models.Model):
-    municipios = models.ManyToManyField(Municipio)
-    nombre_documento = models.CharField(max_length=255)
+class PoliticaMegaproyecto(models.Model):
+    nombre_documento = models.CharField(max_length=255, blank=True, null=True)
     documento = models.FileField(upload_to='uploads/documentos_megaproyectos', blank=True, null=True)
-    vigencia = models.DateField()
+    departamento = models.ManyToManyField(Departamento, null=True, blank=True)
+    nacional = models.BooleanField(help_text="Aplica para todo el territorio nacional?", default=False)
+    inicio_vigencia = models.IntegerField(help_text="Anio", blank=True, null=True)
+    fin_vigencia = models.IntegerField(help_text="Anio", blank=True, null=True)
+    sector = models.ForeignKey(Sector, blank=True, null=True)
+    resumen_del_contenido = models.TextField(blank=True, null=True)
 
     class Meta:
-        abstract = True
+        verbose_name="Documento de Politicas Publicas"
+        verbose_name_plural="Documentos de Politicas Publicas"
 
 class InstitucionFinanciadora(models.Model):
     cubrimiento = models.CharField(max_length=255, null=True, blank=True, choices=CUBRIMIENTO_INSTITUCIONES_FINANCIADORAS)
@@ -359,30 +371,16 @@ class ImplementacionSeguimiento(models.Model):
     class Meta:
         verbose_name_plural = 'Implementaciones y Seguimientos'
 
-class ReferenciaCartografica(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_referencias")
+class Ubicacion(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_ubicacion")
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = generic.GenericForeignKey()
-    referencia = models.FileField(upload_to='uploads/referencias_cartograficas', blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = 'Referencias cartograficas'
 
 
 """ OBRAS DE INFRAESTRUCTURA """
 
-class ObraInfraestructura(Megaproyecto):
-    tipo = models.CharField(max_length=255, choices=TIPOS_MEGAPROYECTOS_OBRAS_INFRAESTRUCTURA)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = 'Infraestructura: Obras de infraestructura'
-
-    def __unicode__(self):
-        return 'Megaproyecto de obra de infraestructura: %s' % self.nombre_documento
-
 class ProyectoObraInfraestructura(Proyecto):
-    megaproyecto = models.ForeignKey(ObraInfraestructura, related_name='obras_de_infraestructura')
+    tipo = models.CharField(max_length=255, choices=TIPOS_MEGAPROYECTOS_OBRAS_INFRAESTRUCTURA)
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
@@ -399,18 +397,8 @@ class EstadoEjecucionInfraestructura(EstadoEjecucion):
 
 """ INDUSTRIAS DE HIDROCARBURO """
 
-class IndustriaHidrocarburos(Megaproyecto):
-    tipo = models.CharField(max_length=255, choices=TIPO_MEGAPROYECTOS_INDUSTRIA_HIDROCARBUROS)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = 'Economia Extractiva: Industria hidrocarburos'
-
-    def __unicode__(self):
-        return 'Megaproyecto de Industria de Hidrocarburos: %s' % self.nombre_documento
-
 class ProyectoInsdustriaHidrocarburos(Proyecto):
-    megaproyecto = models.ForeignKey(IndustriaHidrocarburos, related_name='industrias_hidrocarburos')
+    tipo = models.CharField(max_length=255, choices=TIPO_MEGAPROYECTOS_INDUSTRIA_HIDROCARBUROS)
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
@@ -437,19 +425,9 @@ class EstadoEjecucionHidrocarburos(EstadoEjecucion):
     explotacion_ubicacion_descripcion = models.TextField(null = True, blank = True, verbose_name='Ubicación', help_text='Descripción')
 
 """ MINERIA """
-class Mineria(Megaproyecto):
+class ProyectoMineria(Proyecto):
     tipo = models.CharField(max_length=255, choices=TIPOS_MINERIA)
     mineral = models.CharField(max_length=255, null=True, blank=True, help_text='En caso de haber seleccionado: otros minerales')
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = 'Economia Extractiva: Minerias'
-
-    def __unicode__(self):
-        return 'Megaproyecto de Mineria: %s' % self.nombre_documento
-
-class ProyectoMineria(Proyecto):
-    megaproyecto = models.ForeignKey(Mineria, related_name='minerias')
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
@@ -589,20 +567,8 @@ class DatosAFPPrivada(DatosAFPBase):
             verbose_name = 'Datos de aprovechamiento forestal persistente privado'
             verbose_name_plural = 'Datos de aprovechamiento forestal persistente privado'
 
-class AFPPrivada(Megaproyecto):
-    tipo = models.CharField(max_length=255, choices=( ('privada', 'privada'), ), default='privada')
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Megaproyecto de Aprovechamiento forestal persistente (privada): %s' % self.nombre_documento
-
-    class Meta:
-        verbose_name = 'Economia Extractiva: Aprovechamiento forestal persistente (privada)'
-        verbose_name_plural = 'Economia Extractiva: Aprovechamiento forestal persistente (privada)'
-
 class ProyectoAFPPrivada(ProyectoAFPBase):
-    megaproyecto = models.ForeignKey(AFPPrivada, related_name='aprovechamiento_privada')
+    tipo = models.CharField(max_length=255, choices=( ('privada', 'privada'), ), default='privada')
     autorizacion = models.TextField()
 
     def __unicode__(self):
@@ -628,20 +594,8 @@ class DatosAFPPublico(DatosAFPBase):
             verbose_name = 'Datos de aprovechamiento forestal persistente publico'
             verbose_name_plural = 'Datos de aprovechamiento forestal persistente publico'
 
-class AFPPublico(Megaproyecto):
-    tipo = models.CharField(max_length=255, choices=( ('publico', 'publico'), ), default='publico')
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Megaproyecto de Aprovechamiento forestal persistente (publico): %s' % self.nombre_documento
-
-    class Meta:
-        verbose_name = 'Economia Extractiva: Aprovechamiento forestal persistente (publico)'
-        verbose_name_plural = 'Economia Extractiva: Aprovechamiento forestal persistente (publico)'
-
 class ProyectoAFPPublico(ProyectoAFPBase):
-    megaproyecto = models.ForeignKey(AFPPublico, related_name='aprovechamiento_publico')
+    tipo = models.CharField(max_length=255, choices=( ('publico', 'publico'), ), default='publico')
     concesion = models.TextField(null = True, blank = True)
     permiso = models.TextField(null = True, blank = True)
     asociacion = models.TextField(null = True, blank = True)
@@ -672,21 +626,9 @@ class ProyectoPesquero(ProyectoBase):
     class Meta:
         abstract = True
 
-class PescaContinental(Megaproyecto):
-    tipo = models.CharField(max_length=255, choices=( ("fluvial","Fluvial"),("lacustre","Lacustre") ))
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Megaproyecto de Pesca continental (%s): %s' % (self.tipo, self.nombre_documento)
-
-    class Meta:
-        verbose_name = 'Economia Extractiva: Pesca continental'
-        verbose_name_plural = 'Economia Extractiva: Pesca continental'
-
 class ProyectoPescaContinental(ProyectoPesquero):
-    megaproyecto = models.ForeignKey(PescaContinental, related_name='pescas_continentales')
-    tipo = models.CharField(max_length=255, choices=( ("artesanal","Comercial / Artesanal"),("industrial","Comercial / Industrial"), ("cientifica", "Cientifica") ))
+    tipo = models.CharField(max_length=255, choices=( ("fluvial","Fluvial"),("lacustre","Lacustre") ))
+    subtipo = models.CharField(max_length=255, choices=( ("artesanal","Comercial / Artesanal"),("industrial","Comercial / Industrial"), ("cientifica", "Cientifica") ))
 
     class Meta:
         verbose_name = 'Proyecto de pesca continental'
@@ -696,21 +638,9 @@ class ProyectoPescaContinental(ProyectoPesquero):
         return "%s (Megaproyecto: %s)" % (self.tipo, self.megaproyecto.nombre_documento)
 
 
-class PescaMarina(Megaproyecto):
-    tipo = models.CharField(max_length=255, choices=( ("costera","Costera"),("de-bajura","De bajura"),("de-altura","De altura") ))
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Megaproyecto de Pesca marina (%s): %s' % (self.tipo, self.nombre_documento)
-
-    class Meta:
-        verbose_name = 'Economia Extractiva: Pesca marina'
-        verbose_name_plural = 'Economia Extractiva: Pesca marina'
-
 class ProyectoPescaMarina(ProyectoPesquero):
-    megaproyecto = models.ForeignKey(PescaMarina, related_name='pescas_marinas')
-    tipo = models.CharField(max_length=255, choices=( ("artesanal","Comercial / Artesanal"),("industrial","Comercial / Industrial"), ("cientifica", "Cientifica") ))
+    tipo = models.CharField(max_length=255, choices=( ("costera","Costera"),("de-bajura","De bajura"),("de-altura","De altura") ))
+    subtipo = models.CharField(max_length=255, choices=( ("artesanal","Comercial / Artesanal"),("industrial","Comercial / Industrial"), ("cientifica", "Cientifica") ))
 
     class Meta:
         verbose_name = 'Proyecto de pesca marina'
@@ -719,19 +649,7 @@ class ProyectoPescaMarina(ProyectoPesquero):
     def __unicode__(self):
         return "%s (Megaproyecto: %s)" % (self.tipo, self.megaproyecto.nombre_documento)
 
-class ProcesamientoPesca(Megaproyecto):
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Megaproyecto de procesamiento de pesca: %s' % self.nombre_documento
-
-    class Meta:
-        verbose_name = 'Economia Extractiva: Procesamiento de pesca'
-        verbose_name_plural = 'Economia Extractiva: Procesamientos de pesca'
-
 class ProyectoProcesamientoPesca(ProyectoPesquero):
-    megaproyecto = models.ForeignKey(ProcesamientoPesca, related_name='procesamientos_pesca')
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
@@ -741,19 +659,7 @@ class ProyectoProcesamientoPesca(ProyectoPesquero):
     def __unicode__(self):
         return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
 
-class ComercializacionPesca(Megaproyecto):
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Megaproyecto de comercializacion de pesca: %s' % self.nombre_documento
-
-    class Meta:
-        verbose_name = 'Economia Extractiva: Comercializacion de pesca'
-        verbose_name_plural = 'Economia Extractiva: Comercializacion de pesca'
-
 class ProyectoComercializacionPesca(ProyectoPesquero):
-    megaproyecto = models.ForeignKey(ComercializacionPesca, related_name='comercializacion_pesca')
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
@@ -763,19 +669,7 @@ class ProyectoComercializacionPesca(ProyectoPesquero):
     def __unicode__(self):
         return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
 
-class PescaIntegrada(Megaproyecto):
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Megaproyecto de pesca integrada: %s' % self.nombre_documento
-
-    class Meta:
-        verbose_name = 'Economia Extractiva: Pesca integrada'
-        verbose_name_plural = 'Economia Extractiva: Pesca integrada'
-
 class ProyectoPescaIntegrada(ProyectoPesquero):
-    megaproyecto = models.ForeignKey(PescaIntegrada, related_name='pescas_integradas')
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
@@ -788,19 +682,8 @@ class ProyectoPescaIntegrada(ProyectoPesquero):
 
 """ AGROINDUSTRIA """
 
-class Agroindustria(Megaproyecto):
-    tipo = models.CharField(max_length=255, choices=TIPOS_AGROINDUSTRIA)
-    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
-    cual = models.CharField(max_length=255, null=True, blank=True, help_text='En caso de haber seleccionado: otros')
-
-    class Meta:
-        verbose_name_plural = 'Agroindustria'
-
-    def __unicode__(self):
-        return 'Megaproyecto de agroindustria: %s' % self.nombre_documento
-
 class ProyectoAgroindustria(Proyecto):
-    megaproyecto = models.ForeignKey(Agroindustria, related_name='agroindustrias')
+    tipo = models.CharField(max_length=255, choices=TIPOS_AGROINDUSTRIA)
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):

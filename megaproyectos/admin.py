@@ -43,45 +43,20 @@ class ImplementacionSeguimientoInline(generic.GenericStackedInline):
     model = ImplementacionSeguimiento
     extra = 1
     
-class ReferenciaCartograficaInline(generic.GenericStackedInline):
-    model = ReferenciaCartografica
+class UbicacionInline(generic.GenericStackedInline):
+    model = Ubicacion
     extra = 1
 
 
 """ OBRAS DE INFRAESTRUCTURA """
 
-class ObraInfraestructuraAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        ("Obras de infraestructura", {
-              'fields':
-                 (
-                 'tipo',
-                 )
-          }),
-          (None, {
-              'fields':
-                 (
-                 'fuente',
-                 )
-          }),
-      )
-
 class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
-    inlines = [EstadoEjecucionInfraestructuraInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [EstadoEjecucionInfraestructuraInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
+                 'tipo',
                  'nombre',
                  )
           }),
@@ -109,38 +84,13 @@ class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
 
 """ INDUSTRIAS DE HIDROCARBUROS """
 
-class IndustriaHidrocarburosAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        ("Obras de infraestructura", {
-              'fields':
-                 (
-                 'tipo',
-                 )
-          }),
-          (None, {
-              'fields':
-                 (
-                 'fuente',
-                 )
-          }),
-      )
-
 class ProyectoInsdustriaHidrocarburosAdmin(admin.ModelAdmin):
-    inlines = [EstadoEjecucionHidrocarburosInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [EstadoEjecucionHidrocarburosInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
+                 'tipo',
                  'nombre',
                  )
           }),
@@ -168,44 +118,13 @@ class ProyectoInsdustriaHidrocarburosAdmin(admin.ModelAdmin):
 
 """ MINERIA """
 
-class MineriaAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        ("Minerales", {
-              'fields':
-                 (
-                 'tipo',
-                 )
-          }),
-        ("Otros minerales", {
-              'fields':
-                 (
-                 'mineral',
-                 )
-          }),
-          (None, {
-              'fields':
-                 (
-                 'fuente',
-                 )
-          }),
-      )
-
 class ProyectoMineriaAdmin(admin.ModelAdmin):
-    inlines = [EstadoEjecucionMineriaInline, TituloMineroInline, ExploracionInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [EstadoEjecucionMineriaInline, TituloMineroInline, ExploracionInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
+                 'tipo',
                  'nombre',
                  )
           }),
@@ -233,45 +152,13 @@ class ProyectoMineriaAdmin(admin.ModelAdmin):
 
 
 """ AGROINDUSTRIA """
-
-class AgroindustriaAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        ("Obras de infraestructura", {
-              'fields':
-                 (
-                 'tipo',
-                 )
-          }),
-        ("Otros", {
-              'fields':
-                 (
-                 'cual',
-                 )
-          }),
-          (None, {
-              'fields':
-                 (
-                 'fuente',
-                 )
-          }),
-      )
-
 class ProyectoAgroindustriaAdmin(admin.ModelAdmin):
-    inlines = [EstadoEjecucionAgroindustriaInline, RequisitoLegalAgroindustriaInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [EstadoEjecucionAgroindustriaInline, RequisitoLegalAgroindustriaInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
+                 'tipo',
                  'nombre',
                  )
           }),
@@ -323,35 +210,13 @@ class DatosAFPPublicoInline(generic.GenericStackedInline):
     model = DatosAFPPublico
     extra = 1
 
-
-class AFPPrivadaAdmin(admin.ModelAdmin):
+class ProyectoAFPPrivadaAdmin(admin.ModelAdmin):
+    inlines = [DatosAFPPrivadaInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
         (None, {
               'fields':
                  (
                  'tipo',
-                 'nombre',
-                 'fuente',
-                 )
-          }),
-      )
-
-class ProyectoAFPPrivadaAdmin(admin.ModelAdmin):
-    inlines = [DatosAFPPrivadaInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
-    fieldsets = (
-        (None, {
-              'fields':
-                 (
-                 'megaproyecto',
                  'nombre',
                  'autorizacion',
                  )
@@ -359,34 +224,13 @@ class ProyectoAFPPrivadaAdmin(admin.ModelAdmin):
         )
 
 
-class AFPPublicoAdmin(admin.ModelAdmin):
+class ProyectoAFPPublicoAdmin(admin.ModelAdmin):
+    inlines = [DatosAFPPublicoInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
         (None, {
               'fields':
                  (
                  'tipo',
-                 'nombre',
-                 'fuente',
-                 )
-          }),
-      )
-
-class ProyectoAFPPublicoAdmin(admin.ModelAdmin):
-    inlines = [DatosAFPPublicoInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
-    fieldsets = (
-        (None, {
-              'fields':
-                 (
-                 'megaproyecto',
                  'nombre',
                  'concesion',
                  'permiso',
@@ -397,35 +241,14 @@ class ProyectoAFPPublicoAdmin(admin.ModelAdmin):
 
 """ EXTRACCION PESQUERA """
 
-class PescaContinentalAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        (None, {
-              'fields':
-                 (
-                 'tipo',
-                 'nombre',
-                 'fuente',
-                 )
-          }),
-      )
-
 class ProyectoPescaContinentalAdmin(admin.ModelAdmin):
-    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
                  'tipo',
+                 'subtipo',
                  )
           }),
           ('Información General', {
@@ -461,36 +284,15 @@ class ProyectoPescaContinentalAdmin(admin.ModelAdmin):
                 )
            }),
         )
-
-class PescaMarinaAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        (None, {
-              'fields':
-                 (
-                 'tipo',
-                 'nombre',
-                 'fuente',
-                 )
-          }),
-      )
 
 class ProyectoPescaMarinaAdmin(admin.ModelAdmin):
-    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
                  'tipo',
+                 'subtipo',
                  )
           }),
           ('Información General', {
@@ -526,34 +328,13 @@ class ProyectoPescaMarinaAdmin(admin.ModelAdmin):
                 )
            }),
         )
-
-class ProcesamientoPescaAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        (None, {
-              'fields':
-                 (
-                 'nombre',
-                 'fuente',
-                 )
-          }),
-      )
 
 class ProyectoProcesamientoPescaAdmin(admin.ModelAdmin):
-    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
                  'nombre',
                  )
           }),
@@ -590,34 +371,13 @@ class ProyectoProcesamientoPescaAdmin(admin.ModelAdmin):
                 )
            }),
         )
-
-class ComercializacionPescaAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        (None, {
-              'fields':
-                 (
-                 'nombre',
-                 'fuente',
-                 )
-          }),
-      )
 
 class ProyectoComercializacionPescaAdmin(admin.ModelAdmin):
-    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
                  'nombre',
                  )
           }),
@@ -655,33 +415,12 @@ class ProyectoComercializacionPescaAdmin(admin.ModelAdmin):
            }),
         )
 
-class PescaIntegradaAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Ubicación', {
-            'fields':(
-                'municipios',
-                'nombre_documento',
-                'documento',
-                'vigencia',
-            )
-        }),
-        (None, {
-              'fields':
-                 (
-                 'nombre',
-                 'fuente',
-                 )
-          }),
-      )
-
 class ProyectoPescaIntegradaAdmin(admin.ModelAdmin):
-    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, ReferenciaCartograficaInline]
-    list_filter = ('megaproyecto',)
+    inlines = [VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
                  (
-                 'megaproyecto',
                  'nombre',
                  )
           }),
@@ -723,17 +462,9 @@ class ProyectoPescaIntegradaAdmin(admin.ModelAdmin):
 
 admin.site.register(InstitucionFinanciadora)
 
-admin.site.register(ObraInfraestructura, ObraInfraestructuraAdmin)
-admin.site.register(IndustriaHidrocarburos, IndustriaHidrocarburosAdmin)
-admin.site.register(Mineria, MineriaAdmin)
-admin.site.register(Agroindustria, AgroindustriaAdmin)
-admin.site.register(AFPPrivada, AFPPrivadaAdmin)
-admin.site.register(AFPPublico, AFPPublicoAdmin)
-admin.site.register(PescaContinental, PescaContinentalAdmin)
-admin.site.register(PescaMarina, PescaMarinaAdmin)
-admin.site.register(ProcesamientoPesca, ProcesamientoPescaAdmin)
-admin.site.register(ComercializacionPesca, ComercializacionPescaAdmin)
-admin.site.register(PescaIntegrada, PescaIntegradaAdmin)
+admin.site.register(PoliticaMegaproyecto)
+admin.site.register(DesarrolloLegislativo)
+admin.site.register(Sector)
 
 admin.site.register(ProyectoObraInfraestructura, ProyectoObraInfraestructuraAdmin)
 admin.site.register(ProyectoInsdustriaHidrocarburos, ProyectoInsdustriaHidrocarburosAdmin)

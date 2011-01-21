@@ -124,16 +124,14 @@ class ConflictoInline(generic.GenericStackedInline):
     extra = 1
 
 class TerritorioComunidadAdmin(GoogleAdmin):
-    list_display = ('nombre', 'departamento', 'titulado', 'resolucion_constitucion', 'numero_comunidades')
-    search_fields = ('nombre', 'departamento')
-    list_filter = ('departamento','titulado')
+    list_display = ('nombre', 'titulado', 'resolucion_constitucion', 'numero_comunidades')
     exclude = ('geom','informacion_adicional')
     fieldsets = (
           (None, {
               'fields': 
                  (
                  'nombre', 
-                 ('departamento', 'municipios'),
+                 ( 'municipios'),
                  ('titulado', 'resolucion_constitucion',), 
                  ('area', 'limites'))
           }),

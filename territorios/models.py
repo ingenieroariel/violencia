@@ -175,7 +175,6 @@ class Pueblo(models.Model):
         return "Pueblo "+self.nombre
 
 class TerritorioComunidad(Territorio):
-    departamento = models.ForeignKey(Departamento, null=True, blank=True)
     municipios = models.ManyToManyField(Municipio, null=True, blank=True)
     area = models.FloatField(null=True, blank=True, help_text="Area en hectáreas asignada en caso de ser titulado y area solicitada en caso de no serlo")
     limites = models.TextField(null=True, blank=True) 

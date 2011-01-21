@@ -45,9 +45,9 @@ class IndicadorBasico(models.Model):
     esperanza_vida_hombres = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo dptos
     fuente_esperanza_vida = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bb")
     
-    mortalidad_total = models.IntegerField(null=True, blank=True) #solo dptos
-    mortalidad_infantil = models.IntegerField(help_text="numero total", null=True, blank=True)
-    mortalidad_maternoinfantil = models.IntegerField(help_text="numero total", null=True, blank=True)
+    mortalidad_total = models.FloatField(help_text="en % (Porcentaje)", null=True, blank=True) #solo dptos
+    mortalidad_infantil = models.FloatField(help_text="en % (Porcentaje)", null=True, blank=True)
+    mortalidad_maternoinfantil = models.FloatField(help_text="en % (Porcentaje)", null=True, blank=True)
     
     fuente_mortalidad = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbb")
 
