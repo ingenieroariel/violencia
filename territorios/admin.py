@@ -6,6 +6,7 @@ from django import forms
 from django.contrib.contenttypes import generic
 from desc.models import IndicadorBasico
 from conflictos.models import Conflicto
+from actores_armados.models import ActorArmado
 
 GMAP = GoogleMap()
 
@@ -15,6 +16,11 @@ class GoogleAdmin(admin.OSMGeoAdmin):
     default_lon = -8228293
     default_lat = 508764
     default_zoom = 5
+
+
+class ActorArmadoInline(admin.StackedInline):
+    model = ActorArmado
+    extra = 1
 
 class EstadisticaMunicipioInline(admin.StackedInline):
     model = EstadisticaMunicipio
@@ -57,7 +63,7 @@ class DepartamentoAdmin(GoogleAdmin):
 class MunicipioAdmin(GoogleAdmin):
     list_display = ('nombre', 'id', 'departamento', 'area_total',  'ingresos', 'gastos','certificado')
     list_filter = ('departamento','ano_creacion', 'certificado')
-    inlines = [EstadisticaMunicipioInline, TitulosIndividualesInlines, IndicadorBasicoInline]
+    inlines = [EstadisticaMunicipioInline, TitulosIndividualesInlines, IndicadorBasicoInline, ActorArmadoInline]
     fieldsets = (
           (None, {
               'fields': 

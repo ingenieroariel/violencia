@@ -2,7 +2,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato
-from territorios.models import TerritorioComunidad, Departamento, Municipio
+from territorios.models import TerritorioComunidad, Departamento, Municipio, Ubicacion
 from django.db import models
 
 

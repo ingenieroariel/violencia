@@ -20,14 +20,6 @@ class AreaNaturalProtegidaAdmin(admin.ModelAdmin):
                 'nombre'
             )
         }),
-        ("Ubicacion", {
-              'fields':
-                 (
-                 'municipios',
-                 'resolucion_creacion',
-                 'area'
-                 )
-          }),
         (None, {
               'fields':
                  (
@@ -47,15 +39,6 @@ class DesastreNaturalAdmin(admin.ModelAdmin):
                 'descripcion_desastre',
                 'fecha',
                 )
-          }),
-        ("Ubicación", {
-              'fields':
-                 (
-                 'municipios',
-                 'territorios',
-                 'referencia_cartografica',
-                 'area'
-                 )
           }),
           (None, {
               'fields': (

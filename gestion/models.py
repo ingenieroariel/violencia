@@ -165,12 +165,3 @@ class AccionesExigibilidadDerechos(models.Model):
     descripcion_otro = models.TextField()
     resultado_otro = models.TextField()
     territorio = models.ForeignKey(TerritorioComunidad)
-
-class Ubicacion(models.Model):
-    municipios = models.ManyToManyField(Municipio)
-    territorios = models.ManyToManyField(TerritorioComunidad)
-    referencia_cartografica = models.FileField(null=True, blank=True, upload_to='uploads/cultivos_ilicitos/referencias_cartograficas')
-    area = models.CharField(max_length=200, null=True, blank=True)
-
-    class Meta:
-        abstract = True

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from territorios.models import Municipio, TERRITORIOS
-from gestion.models import Ubicacion
+from territorios.models import Municipio, TERRITORIOS, Ubicacion
 from django.db import models
 
 TIPO_DESASTRE = (
@@ -40,7 +39,7 @@ CLASES_INTERVENCIONES = (
     ("otra","Otra"),
 )
 
-class DesastreNatural(Ubicacion):
+class DesastreNatural(models.Model):
     tipo = models.CharField(max_length=50, null=True, blank=True, choices=TIPO_DESASTRE)
     descripcion_desastre = models.TextField(null=True, blank=True)
     fecha = models.DateField(null=True, blank=True)

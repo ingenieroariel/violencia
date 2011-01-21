@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from gestion.models import Ubicacion
 from django.db import models
+from territorios.models import Municipio
 
 PROCEDENCIAS = (
     ("pacifico","De la región del pacifico"),
@@ -29,7 +29,8 @@ TIPOS_USO_AREA = (
     ("otros","Otros"),
 )
 
-class Colonizacion(Ubicacion):
+class Colonizacion(models.Model):
+    municipio = models.ForeignKey(Municipio, null=True, blank=True)
     procedencia = models.CharField(max_length=50, null=True, blank=True, choices=PROCEDENCIAS)
     cantidad_personas = models.IntegerField(help_text="Por año", null=True, blank=True)
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from megaproyectos.models import *
+from territorios.models import Ubicacion
 from django.contrib.contenttypes import generic
 
 class EstadoEjecucionInfraestructuraInline(admin.StackedInline):

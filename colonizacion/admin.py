@@ -12,16 +12,7 @@ class ColonizacionAdmin(admin.ModelAdmin):
 #    list_filter = ('fecha_creacion',)
     inlines = [UsoTerritorioInline]
     fieldsets = (
-        ("Ubicacion", {
-              'fields':
-                 (
-                 'municipios',
-                 'territorios',
-                 'referencia_cartografica',
-                 'area'
-                 )
-          }),
-          ('Procedencia', {
+         ('Procedencia', {
               'fields': (
                 'procedencia',
                 'cantidad_personas',

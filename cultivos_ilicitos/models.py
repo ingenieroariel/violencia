@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from gestion.models import Ubicacion
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato
@@ -41,7 +40,9 @@ CULTIVOS_TIPOS_INVERSION = (
     ("","Proyectos productivos"),
 )
 
-class CultivosIlicitos(Ubicacion):
+class CultivosIlicitos(models.Model):
+    municipio = models.ForeignKey(Municipio, null=True, blank=True)
+    area = models.FloatField(help_text="en hectareas", blank=True, null=True)
     promotores = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_PROMOTRES_ILICITOS)
     """ PARTICIPACION """
     participacion_comunidad = models.BooleanField(help_text='Seleccione si tiene participacion de la comunidad')
@@ -58,7 +59,6 @@ class ErradicacionCultivosIlicitos(models.Model):
     cultivos_ilicitos = models.ForeignKey(CultivosIlicitos, related_name='erradicaciones')
 
     erradicacion_tipo = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_TIPO_ERRADICACION)
-    municipios = models.ManyToManyField(Municipio)
     territorios = models.ManyToManyField(TerritorioComunidad)
     referencia_cartografica = models.FileField(null=True, blank=True, upload_to='uploads/cultivos_ilicitos/referencias_cartograficas')
     area = models.CharField(max_length=200, null=True, blank=True)
@@ -88,8 +88,6 @@ class InversionSocialCultivosIlicitos(models.Model):
 
     tipo = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_TIPOS_INVERSION)
     catidad_familias = models.PositiveIntegerField(null=True, blank=True)
-    municipios = models.ManyToManyField(Municipio)
-    referencia_cartografica = models.FileField(null=True, blank=True, upload_to='uploads/cultivos_ilicitos/referencias_cartograficas')
     monto_por_municipio = models.PositiveIntegerField(null=True, blank=True, help_text='millones de pesos')
 
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True)

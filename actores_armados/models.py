@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from gestion.models import Ubicacion
 from django.db import models
+from territorios.models import Municipio
 
 ACTORES_ARMADOS = (
     ("fp-policia","Fuerza pública / Policia"),
@@ -14,25 +14,16 @@ ACTORES_ARMADOS = (
     ("guerrilla-otro","Guerrilla / Otros"),
 )
 
-ACCIONES_AFECTAN_USO_TERRITORIO = (
-    ("campamentos","Campamentos"),
-    ("bases-fijas","Bases fijas"),
-    ("proteccion-megaproy","Protección megaproyectos"),
-    ("campos-minados","Campos minados"),
-    ("restricciones-movilidad","Restricciones a la movilidad"),
-    ("suplantacion","Suplantación de la autonomía y del gobierno local"),
-)
 
-class ActorArmado(Ubicacion):
-    fuerza_publica = models.CharField(max_length=50, blank=True, null=True, choices=ACTORES_ARMADOS)
-
+class ActorArmado(models.Model):
+    municipio = models.ForeignKey(Municipio, null=True, blank=True)
+    actor = models.CharField(max_length=50, blank=True, null=True, choices=ACTORES_ARMADOS)
+    acciones = models.ManyToManyField('AccionActorArmado', null=True, blank=True)
     class Meta:
         verbose_name_plural = "Actores armados"
 
 class AccionActorArmado(models.Model):
-    actor_armado = models.ForeignKey(ActorArmado, related_name='acciones')
-    acciones = models.CharField(max_length=50, blank=True, null=True, choices=ACCIONES_AFECTAN_USO_TERRITORIO)
-
+    nombre = models.CharField(max_length=255, null=True, blank=True)
     class Meta:
         verbose_name_plural = "Acciones de actor armado"
 

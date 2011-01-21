@@ -12,20 +12,16 @@ class ErradicacionInline(admin.StackedInline):
     model = ErradicacionCultivosIlicitos
     extra = 1
 
+class InversionInline(admin.StackedInline):
+    model = InversionSocialCultivosIlicitos
+    extra = 1
+
 class CultivosIlicitosAdmin(admin.ModelAdmin):
 #    list_display = ( 'nombre', 'id', 'area_total', 'capital', 'ingresos', 'gastos','cantidad_municipios_pacifico',)
 #    search_fields = ['nombre','capital']
 #    list_filter = ('fecha_creacion',)
-    inlines = [AfectacionInline, ErradicacionInline]
+    inlines = [AfectacionInline, ErradicacionInline, InversionInline]
     fieldsets = (
-        ("Ubicacion", {
-              'fields':
-                 (
-                 'municipios',
-                 'territorios',
-                 'referencia_cartografica',
-                 )
-          }),
           (None, {
               'fields': 
                  (

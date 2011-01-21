@@ -5,6 +5,8 @@ from django_extensions.db.fields import ModificationDateTimeField
 from django_extensions.db.fields import CreationDateTimeField, AutoSlugField
 from django.contrib.gis.db.models import MultiPolygonField
 from django_extensions.db.models import TitleSlugDescriptionModel, TimeStampedModel
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato, AutorDato
 from django.template.defaultfilters import yesno
 from violencia.territorios.utils import gen_rangos_cantidad
@@ -324,3 +326,9 @@ class PoblacionComunidadIndigena(PoblacionSimple):
     class Meta:
         verbose_name= "poblacion de comunidad"
         verbose_name_plural= "poblaciones de comunidades"
+
+class Ubicacion(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_ubicacio")
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = generic.GenericForeignKey()
+
