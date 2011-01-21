@@ -203,42 +203,19 @@ class AFPESalvoconductoInline(generic.GenericStackedInline):
     model = AFPESalvoconducto
     extra = 1
 
-class DatosAFPPrivadaInline(generic.GenericStackedInline):
-    model = DatosAFPPrivada
-    extra = 1
+class ProyectoAFPAdmin(admin.ModelAdmin):
+    inlines = [AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, UbicacionInline]
+#    fieldsets = (
+#        (None, {
+#              'fields':
+#                 (
+#                 'tipo',
+#                 'nombre',
+#                 'autorizacion',
+#                 )
+#          }),
+#        )
 
-class DatosAFPPublicoInline(generic.GenericStackedInline):
-    model = DatosAFPPublico
-    extra = 1
-
-class ProyectoAFPPrivadaAdmin(admin.ModelAdmin):
-    inlines = [DatosAFPPrivadaInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, UbicacionInline]
-    fieldsets = (
-        (None, {
-              'fields':
-                 (
-                 'tipo',
-                 'nombre',
-                 'autorizacion',
-                 )
-          }),
-        )
-
-
-class ProyectoAFPPublicoAdmin(admin.ModelAdmin):
-    inlines = [DatosAFPPublicoInline,AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, UbicacionInline]
-    fieldsets = (
-        (None, {
-              'fields':
-                 (
-                 'tipo',
-                 'nombre',
-                 'concesion',
-                 'permiso',
-                 'asociacion',
-                 )
-          }),
-        )
 
 """ EXTRACCION PESQUERA """
 
@@ -471,8 +448,7 @@ admin.site.register(ProyectoObraInfraestructura, ProyectoObraInfraestructuraAdmi
 admin.site.register(ProyectoInsdustriaHidrocarburos, ProyectoInsdustriaHidrocarburosAdmin)
 admin.site.register(ProyectoMineria, ProyectoMineriaAdmin)
 admin.site.register(ProyectoAgroindustria, ProyectoAgroindustriaAdmin)
-admin.site.register(ProyectoAFPPrivada, ProyectoAFPPrivadaAdmin)
-admin.site.register(ProyectoAFPPublico, ProyectoAFPPublicoAdmin)
+admin.site.register(ProyectoAFP, ProyectoAFPAdmin)
 admin.site.register(ProyectoPescaContinental, ProyectoPescaContinentalAdmin)
 admin.site.register(ProyectoPescaMarina, ProyectoPescaMarinaAdmin)
 admin.site.register(ProyectoProcesamientoPesca, ProyectoProcesamientoPescaAdmin)

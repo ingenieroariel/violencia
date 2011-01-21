@@ -518,30 +518,54 @@ class AFPESalvoconducto(models.Model):
         verbose_name = 'Salvoconducto'
         verbose_name_plural = 'Salvoconductos'
 
+PERMISOS_AFP=(
+    ('autorizacion', 'Autorizacion (en tipo propiedad privada)'),
+    ('concesion', 'Concesion (en tipo dominio publico)'),
+    ('permiso', 'Permiso (en tipo dominio publico)'),
+    ('asociacion', 'Asociacion (en tipo dominio publico)'),
+)
 
-class ProyectoAFPBase(models.Model):
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    municipios = models.ManyToManyField(Municipio)
-    territorios = models.ManyToManyField(TerritorioComunidad, null=True, blank=True)
-    extension = models.CharField(max_length=255, null=True, blank=True)
-    sistema_de_aprovechamiento = models.CharField(max_length=255, null=True, blank=True, help_text='tecnologia')
-    descripcion_derechos_y_tasas = models.TextField(null = True, blank = True)
+TIPO_AFP=(
+    ('privado', 'Extraccion forestal en propiedad privada individual o colectiva'),
+    ('publico', 'Extraccion forestal en dominio publico'),
+)
+USUARIOS_AFP=(
+   ('cabildo', 'Cabildo'),
+   ('consejo', 'Consejo comunitario'),
+   ('empresa', 'Empresa Forestal'),
+   ('sociedad', 'Sociedad (solamente para tipo dominio publico)'),
+)
+class ProyectoAFP(models.Model):
+    tipo = models.CharField(max_length=255, choices=TIPO_AFP, blank=True, null=True)
+    tipo_permiso = models.CharField(max_length=255, choices=PERMISOS_AFP, blank=True, null=True)
+    numero_permiso = models.CharField(max_length=255, blank=True, null=True)
+    fecha = models.DateField(help_text='fecha en que se dio autorizacion', null = True, blank = True)
     vigencia_desde = models.DateField(null = True, blank = True)
     vigencia_hasta = models.DateField(null = True, blank = True)
+    extension = models.FloatField(help_text="en hectareas",null=True, blank=True)
+    descripcion_derechos_y_tasas = models.TextField(null = True, blank = True)
+    sistema_de_aprovechamiento = models.CharField(max_length=255, null=True, blank=True, help_text='tecnologia')
+
+    # sistema de financiamiento
+    monto_de_inversion = models.FloatField(help_text="en millones de pesos", null=True, blank=True)
+    instituciones_financiadoras = models.ManyToManyField(InstitucionFinanciadora, null = True, blank = True)
+
+    # usuario
+    nombre_usuario = models.CharField(max_length=255, null=True, blank=True)
+    tipo_usuario = models.CharField(max_length=255, choices=USUARIOS_AFP, null=True, blank=True)
+
+    aval_descripcion = models.TextField(verbose_name='Aval del Cabildo o Junta', help_text="Solo para usuarios tipo cabildo o consejo comunitarios", null = True, blank = True)
+
+    def __unicode__(self):
+        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
 
     class Meta:
-        abstract = True
+        verbose_name = 'Proyecto de Aprovechamiento forestal per.'
+        verbose_name_plural = 'Proyectos de Aprovechamiento forestal per.'
 
-class DatosAFPBase(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True)
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
-    
-    numero = models.IntegerField(null = True, blank = True)
-    fecha = models.DateField(help_text='fecha en que se dio autorizacion', null = True, blank = True)
-    nombre_usuario = models.CharField(max_length=255, null=True, blank=True)
-    cabildo_aval_descripcion = models.TextField(verbose_name='Aval del Cabildo: Descripción', null = True, blank = True)
-    consejo_aval_descripcion = models.TextField(verbose_name='Aval Junta Consejo Comunitario: : Descripción', null = True, blank = True)
+
+ 
+class Nada():
     empresa_forestal = models.CharField(help_text='representante legal', max_length=255, null=True, blank=True)
     ef_accionistas_nacionales = models.BooleanField(verbose_name='Tiene accionistas nacionales?')
     ef_accionistas_extranjeros = models.BooleanField(verbose_name='Tiene accionistas extranjeros?')
@@ -550,35 +574,6 @@ class DatosAFPBase(models.Model):
     ef_otras_actividades = models.BooleanField(verbose_name='La empresa forestal tiene otras actividades?')
     ef_otras_actividades_cuales = models.TextField(verbose_name='Cuales', help_text='solo en caso de haber seleccionado que tiene otras actividades', null = True, blank = True)
 
-    #solo si es empresa forestal?
-    financiacion_monto_inversion = models.IntegerField(verbose_name='Financiación del proyecto completo: monto de inversion', null = True, blank = True)
-    instituciones_nacionales_privadas = models.TextField(help_text='Cuales', null = True, blank = True)
-    instituciones_nacionales_publicas = models.TextField(help_text='Cuales', null = True, blank = True)
-    instituciones_internacionales_privadas = models.TextField(help_text='Cuales', null = True, blank = True)
-    instituciones_internacionales_publicas = models.TextField(help_text='Cuales', null = True, blank = True)
-
-    class Meta:
-        abstract = True
-
-class DatosAFPPrivada(DatosAFPBase):
-    pass
-
-    class Meta:
-            verbose_name = 'Datos de aprovechamiento forestal persistente privado'
-            verbose_name_plural = 'Datos de aprovechamiento forestal persistente privado'
-
-class ProyectoAFPPrivada(ProyectoAFPBase):
-    tipo = models.CharField(max_length=255, choices=( ('privada', 'privada'), ), default='privada')
-    autorizacion = models.TextField()
-
-    def __unicode__(self):
-        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
-
-    class Meta:
-        verbose_name = 'Proyecto de Aprovechamiento forestal persistente (privada)'
-        verbose_name_plural = 'Proyectos de Aprovechamiento forestal persistente (privada)'
-
-class DatosAFPPublico(DatosAFPBase):
     sociedad = models.CharField(help_text='representante legal', max_length=255, null=True, blank=True)
     soc_sede_principal = models.CharField(max_length=255, null=True, blank=True)
     soc_accionistas_nacionales = models.BooleanField(verbose_name='Tiene accionistas nacionales?')
@@ -587,25 +582,6 @@ class DatosAFPPublico(DatosAFPBase):
     soc_opera_en_extrajero = models.BooleanField()
     soc_otras_actividades = models.BooleanField(verbose_name='La empresa forestal tiene otras actividades?')
     soc_otras_actividades_cuales = models.TextField(verbose_name='Cuales', help_text='solo en caso de haber seleccionado que tiene otras actividades', null = True, blank = True)
-
-    #se vuelve a repetir 'Financiación del proyecto completo' ?
-
-    class Meta:
-            verbose_name = 'Datos de aprovechamiento forestal persistente publico'
-            verbose_name_plural = 'Datos de aprovechamiento forestal persistente publico'
-
-class ProyectoAFPPublico(ProyectoAFPBase):
-    tipo = models.CharField(max_length=255, choices=( ('publico', 'publico'), ), default='publico')
-    concesion = models.TextField(null = True, blank = True)
-    permiso = models.TextField(null = True, blank = True)
-    asociacion = models.TextField(null = True, blank = True)
-
-    def __unicode__(self):
-        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
-
-    class Meta:
-        verbose_name = 'Proyecto de Aprovechamiento forestal persistente (publico)'
-        verbose_name_plural = 'Proyectos de Aprovechamiento forestal persistente (publico)'
 
 
 """ EXTRACCION PESQUERA """
