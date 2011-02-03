@@ -556,6 +556,16 @@ class ProyectoAFP(models.Model):
 
     aval_descripcion = models.TextField(verbose_name='Aval del Cabildo o Junta', help_text="Solo para usuarios tipo cabildo o consejo comunitarios", null = True, blank = True)
 
+    representante_legal = models.CharField(help_text='representante legal', max_length=255, null=True, blank=True)
+    accionistas_nacionales = models.BooleanField(verbose_name='Tiene accionistas nacionales?')
+    accionistas_extranjeros = models.BooleanField(verbose_name='Tiene accionistas extranjeros?')
+    opera_en_colombia = models.BooleanField()
+    opera_en_extrajero = models.BooleanField()
+    otras_actividades = models.BooleanField(verbose_name='La empresa forestal tiene otras actividades?')
+    otras_actividades_cuales = models.TextField(verbose_name='Cuales', help_text='solo en caso de haber seleccionado que tiene otras actividades', null = True, blank = True)
+
+
+
     def __unicode__(self):
         return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
 
@@ -565,25 +575,6 @@ class ProyectoAFP(models.Model):
 
 
  
-class Nada():
-    empresa_forestal = models.CharField(help_text='representante legal', max_length=255, null=True, blank=True)
-    ef_accionistas_nacionales = models.BooleanField(verbose_name='Tiene accionistas nacionales?')
-    ef_accionistas_extranjeros = models.BooleanField(verbose_name='Tiene accionistas extranjeros?')
-    ef_opera_en_colombia = models.BooleanField()
-    ef_opera_en_extrajero = models.BooleanField()
-    ef_otras_actividades = models.BooleanField(verbose_name='La empresa forestal tiene otras actividades?')
-    ef_otras_actividades_cuales = models.TextField(verbose_name='Cuales', help_text='solo en caso de haber seleccionado que tiene otras actividades', null = True, blank = True)
-
-    sociedad = models.CharField(help_text='representante legal', max_length=255, null=True, blank=True)
-    soc_sede_principal = models.CharField(max_length=255, null=True, blank=True)
-    soc_accionistas_nacionales = models.BooleanField(verbose_name='Tiene accionistas nacionales?')
-    soc_accionistas_extranjeros = models.BooleanField(verbose_name='Tiene accionistas extranjeros?')
-    soc_opera_en_colombia = models.BooleanField()
-    soc_opera_en_extrajero = models.BooleanField()
-    soc_otras_actividades = models.BooleanField(verbose_name='La empresa forestal tiene otras actividades?')
-    soc_otras_actividades_cuales = models.TextField(verbose_name='Cuales', help_text='solo en caso de haber seleccionado que tiene otras actividades', null = True, blank = True)
-
-
 """ EXTRACCION PESQUERA """
 
 class ProyectoPesquero(ProyectoBase):
