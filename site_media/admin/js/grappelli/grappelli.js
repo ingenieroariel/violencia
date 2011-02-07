@@ -8,7 +8,43 @@ var django = {
 };
 
 (function($) {
-    
+    $(document).ready(function($) {
+        
+        if($("div#territorios-ubicacion-content_type-object_id-group").length > 0){
+            //id_territorios-ubicacion-content_type-object_id-0-content_type_ubicacion
+            //id_territorios-ubicacion-content_type-object_id-0-seleccionador
+
+            $("select[id$='content_type_ubicacion']").change(function(){
+                element_id = $(this).attr('id');
+                inline_id = element_id.split("-")[4];
+                seleccionador = $("select#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-seleccionador");
+                $("#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-valor").val("");
+                seleccionador.html("<option>Cargando...</option>");
+
+                var valor = $(this).val();
+                $.getJSON("/api/content_types/"+valor+"/", function(data){
+                    seleccionador.html("").append("<option value=''>escoja</option>");
+                    $.each(data, function(k,v){
+                        seleccionador.append($("<option value='"+v.id+"'>"+v.unicode+"</option>"));
+                    })
+                    
+                });
+                
+            });
+
+            //id_territorios-ubicacion-content_type-object_id-0-seleccionador
+            $("select[id$='seleccionador']").change(function(){
+                element_id = $(this).attr('id');
+                inline_id = element_id.split("-")[4];
+                $("#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-valor").val( $(this).val());
+                $(this).find("").attr("selected", "selected");
+            });
+        }//if
+
+    });
+})(django.jQuery);
+
+(function($) {
     // dateformat
     grappelli.getFormat = function(type) {
         if (type == "date") {

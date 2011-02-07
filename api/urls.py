@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^victimas\.(?P<emitter_format>.+)', victimas, name='victimas'),
 
     url(r'^content_types/$', content_types),
+    url(r'^content_types/(?P<id>\d+)/$', content_types, name='contenttype_modelobjects_by_id'),
     url(r'^content_types/(?P<model_name>[^/]+)/$', content_types, name='contenttype_by_model_name'),
     url(r'^content_types\.(?P<emitter_format>.+)', content_types, name='content_types'),
 

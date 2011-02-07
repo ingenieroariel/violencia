@@ -35,12 +35,21 @@ class VictimaHandler(BaseHandler):
 class ContentTypeHandler(BaseHandler):
     allowed_methods = ('GET',)
 
-    def read(self, request, model_name=None):
+    def read(self, request, model_name=None, id=None):
         base = ContentType.objects
         if model_name:
             try:
                 return base.get(model=model_name)
             except ContentType.DoesNotExist:
                 return {}
+        elif id:
+            ct = base.get(id=id)
+            object = ct.model_class()
+            list = []
+            objects = object.objects.all()
+            for o in objects:
+                dict = {"id":o.id, "unicode":o.__unicode__()}
+                list.append(dict)
+            return list
         else:
             return base.all()

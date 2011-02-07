@@ -335,8 +335,9 @@ class Ubicacion(models.Model):
     content_object = generic.GenericForeignKey()
 
     # Agregar ForeignKey a un Territorio, ya sea depto, mpio, o territorio indigena / negro.x
-    content_type_ubicacion = models.ForeignKey(ContentType,  limit_choices_to={'id__in':get_content_types_ids()})
-    valor = models.PositiveIntegerField(choices=((9999,"selecciones arriba un Content type ubicacion"),) )
+    content_type_ubicacion = models.ForeignKey(ContentType,  limit_choices_to={'id__in':get_content_types_ids()}, null = True, blank = True)
+    seleccionador = models.CharField(max_length=255, choices=(("---","---"),) , null = True, blank = True)
+    valor = models.PositiveIntegerField(null = True, blank = True)
     objeto = generic.GenericForeignKey()
     
 
