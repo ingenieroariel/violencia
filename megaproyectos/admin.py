@@ -248,16 +248,42 @@ class AFPESalvoconductoInline(generic.GenericStackedInline):
 
 class ProyectoAFPAdmin(admin.ModelAdmin):
     inlines = [AFPEspecieInline, AFPObligacionInline, AFPInformeSemestralInline, AFPESalvoconductoInline, ImplementacionSeguimientoInline, UbicacionInline]
-#    fieldsets = (
-#        (None, {
-#              'fields':
-#                 (
-#                 'tipo',
-#                 'nombre',
-#                 'autorizacion',
-#                 )
-#          }),
-#        )
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'tipo',
+                 ('tipo_permiso', 'numero_permiso'),
+                 'fecha', 
+                 ('vigencia_desde', 'vigencia_hasta'),
+                 'extension',
+                 'descripcion_derechos_y_tasas',
+                 'sistema_de_aprovechamiento'
+                 )
+          }),
+        ('Financiacion', {
+             'fields':
+                (
+                  'monto_de_inversion',
+                  'instituciones_financiadoras',
+                )
+          }),
+        ('Usuario', {
+             'fields':
+                (
+                  'nombre_usuario',
+                  'tipo_usuario',
+                  'aval_descripcion',
+                  'representante_legal',
+                  'accionistas_nacionales',
+                  'accionistas_extranjeros',
+                  ( 'opera_en_colombia', 'opera_en_extrajero'),
+                  ('otras_actividades', 'otras_actividades_cuales'),
+                )
+          }),
+
+
+        )
 
 
 """ EXTRACCION PESQUERA """
