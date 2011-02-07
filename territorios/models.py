@@ -10,6 +10,7 @@ from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato, AutorDato
 from django.template.defaultfilters import yesno
 from violencia.territorios.utils import gen_rangos_cantidad
+from utils import get_content_types_ids
 
 """
 MODULO 1. LINEA BASE ORDENAMIENTO DEL TERRITORIO Y POBLACION
@@ -328,7 +329,18 @@ class PoblacionComunidadIndigena(PoblacionSimple):
         verbose_name_plural= "poblaciones de comunidades"
 
 class Ubicacion(models.Model):
+    # Este es el foreign key que apunta al objeto al que le queremos poner ubicacion.
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_ubicacio")
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = generic.GenericForeignKey()
+
+    # Agregar ForeignKey a un Territorio, ya sea depto, mpio, o territorio indigena / negro.x
+    content_type_ubicacion = models.ForeignKey(ContentType,  limit_choices_to={'id__in':get_content_types_ids()})
+    valor = models.PositiveIntegerField(choices=((9999,"selecciones arriba un Content type ubicacion"),) )
+    objeto = generic.GenericForeignKey()
+    
+
+    # Lo ideal es que primero se seleccione el tipo de territorio y luego el objeto.
+    # por ejemplo, primero seleccion "Departamento" y luego "Cauca" o "Territorio Indigena" y luego "Papuchi".
+    # A cualquier elemento de la base de datos se le puede agregar una ubicacion ( a algunos se le peude agregar varias).
 

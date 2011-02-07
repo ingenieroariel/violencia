@@ -663,7 +663,7 @@ class ProyectoAgroindustria(Proyecto):
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
-        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+        return "%s - %s" % (self.tipo, self.nombre)
 
     class Meta:
         verbose_name_plural = 'Proyectos de Agroindustrias'

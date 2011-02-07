@@ -49,6 +49,49 @@ class UbicacionInline(generic.GenericStackedInline):
     extra = 1
 
 
+class PoliticaMegaproyectoAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'nombre_documento',
+                 'documento',
+                 'inicio_vigencia',
+                 'fin_vigencia',
+                 'sector',
+                 'resumen_del_contenido',
+                 )
+          }),
+          ('Ubicacion', {
+              'fields':
+                 (
+                 'nacional',
+                 'departamento',
+                 )
+          }),
+    )
+class DesarrolloLegislativoAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'nombre_documento',
+                 'documento',
+                 'fecha',
+                 'tipo',
+                 'sector',
+                 )
+          }),
+          ('Ubicacion', {
+              'fields':
+                 (
+                 'nacional',
+                 'departamento',
+                 )
+          }),
+    )
+
+
 """ OBRAS DE INFRAESTRUCTURA """
 
 class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
@@ -440,8 +483,8 @@ class ProyectoPescaIntegradaAdmin(admin.ModelAdmin):
 
 admin.site.register(InstitucionFinanciadora)
 
-admin.site.register(PoliticaMegaproyecto)
-admin.site.register(DesarrolloLegislativo)
+admin.site.register(PoliticaMegaproyecto, PoliticaMegaproyectoAdmin)
+admin.site.register(DesarrolloLegislativo, DesarrolloLegislativoAdmin)
 admin.site.register(Sector)
 
 admin.site.register(ProyectoObraInfraestructura, ProyectoObraInfraestructuraAdmin)
