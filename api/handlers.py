@@ -53,3 +53,12 @@ class ContentTypeHandler(BaseHandler):
             return list
         else:
             return base.all()
+
+class TerritorioHandler(BaseHandler):
+    allowed_methods = ('GET',)
+
+    def read(self, request, content_type_id=None, territorio_id=None):
+        base = ContentType.objects
+        content_type = base.get(id=content_type_id)
+        object = content_type.model_class().objects.get(id=territorio_id)
+        return object.__unicode__()

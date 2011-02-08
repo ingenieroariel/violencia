@@ -7,8 +7,30 @@ var django = {
     "jQuery": jQuery.noConflict(true)
 };
 
+
 (function($) {
     $(document).ready(function($) {
+
+        /*
+         * violencia generic lookup para ubicaciones dinamicas
+         */
+        function setUbicacionName(){
+            $("input[id$='-valor']").each(function(k,v){
+                inline_id = $(v).attr("id").split("-")[4];
+                content_type = $("#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-content_type_ubicacion").val();
+                valor = $(v).val();
+                if(inline_id!="__prefix__"){
+                    if(valor){
+                        $.get("/api/territorios/"+content_type+"/"+valor+"/", function(data){
+                            $(v).next('span').remove();
+                            $(v).parent('div').append("<span style='display: inline-block;font-weight: bold;padding:3px 0 0 4px'>"+data+"</span>");
+                        });
+                    }
+                }
+            });
+        }
+
+        setUbicacionName();
         
         if($("div#territorios-ubicacion-content_type-object_id-group").length > 0){
             //id_territorios-ubicacion-content_type-object_id-0-content_type_ubicacion
@@ -18,7 +40,8 @@ var django = {
                 element_id = $(this).attr('id');
                 inline_id = element_id.split("-")[4];
                 seleccionador = $("select#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-seleccionador");
-                $("#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-valor").val("");
+                $("#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-valor").val("").next('span').remove();
+                //$("#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-valor").;
                 seleccionador.html("<option>Cargando...</option>");
 
                 var valor = $(this).val();
@@ -37,7 +60,8 @@ var django = {
                 element_id = $(this).attr('id');
                 inline_id = element_id.split("-")[4];
                 $("#id_territorios-ubicacion-content_type-object_id-"+inline_id+"-valor").val( $(this).val());
-                $(this).find("").attr("selected", "selected");
+                $(this).html("").append("<option value=''>------</option>");
+                setUbicacionName();
             });
         }//if
 

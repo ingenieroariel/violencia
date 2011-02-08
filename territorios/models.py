@@ -338,7 +338,10 @@ class Ubicacion(models.Model):
     content_type_ubicacion = models.ForeignKey(ContentType,  limit_choices_to={'id__in':get_content_types_ids()}, null = True, blank = True)
     seleccionador = models.CharField(max_length=255, choices=(("---","---"),) , null = True, blank = True)
     valor = models.PositiveIntegerField(null = True, blank = True)
-    objeto = generic.GenericForeignKey()
+    objeto = generic.GenericForeignKey('content_type_ubicacion','valor')
+
+    def __unicode__(self):
+        return '%s: %s' % ( self.content_type_ubicacion.name, self.objeto.__unicode__() )
     
 
     # Lo ideal es que primero se seleccione el tipo de territorio y luego el objeto.
