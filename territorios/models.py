@@ -342,6 +342,9 @@ class Ubicacion(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % ( self.content_type_ubicacion.name, self.objeto.__unicode__() )
+
+    class Meta:
+        verbose_name_plural= "Ubicaciones"
     
 
     # Lo ideal es que primero se seleccione el tipo de territorio y luego el objeto.

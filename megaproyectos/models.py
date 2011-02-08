@@ -251,6 +251,7 @@ class InstitucionFinanciadora(models.Model):
 
 class ProyectoBase(models.Model):
     """ Información general """
+    area_proyecto = models.CharField(max_length=255, null=True, blank=True)
     area_terrestre = models.CharField(max_length=255, null=True, blank=True)
     area_maritima = models.CharField(max_length=255, null=True, blank=True)
     fecha_iniciacion = models.DateField()
@@ -258,12 +259,25 @@ class ProyectoBase(models.Model):
     """ Empresa propietaria"""
     empresa_nombre = models.CharField(max_length=255, null=True, blank=True, verbose_name='Nombre')
     empresa_representante_legal = models.CharField(max_length=255, null=True, blank=True, verbose_name='Representante legal')
-    empresa_accionistas_nacionales = models.BooleanField(verbose_name='Tiene accionistas nacioinales?')
-    empresa_accionistas_extranjeros = models.BooleanField(verbose_name='Tiene accionistas en el extranjero?')
-    empresa_en_colombia = models.BooleanField(verbose_name='Esta empresa opera en Colombia?')
-    empresa_en_extranjero = models.BooleanField(verbose_name='Esta empresa opera en el Extranjero?')
+    empresa_sede_principal = models.CharField(max_length=255, null=True, blank=True, verbose_name='Sede principal')
+    empresa_accionistas_nacionales = models.BooleanField(verbose_name='Esta empresa tiene accionistas nacionales?')
+    empresa_accionistas_extranjeros = models.BooleanField(verbose_name='Esta empresa tiene accionistas internacionales?')
+    empresa_en_colombia = models.BooleanField(verbose_name='Esta  empresa opera en otros sitios en Colombia?')
+    empresa_en_extranjero = models.BooleanField(verbose_name='Esta empresa opera en  otros sitios en el extranjero?')
     empresa_otras_actividades = models.BooleanField(verbose_name='Esta empresa tiene otras actividades?')
     empresa_otras_actividades_descripcion = models.TextField(null=True, blank=True, help_text='En caso de que tenga otras actividades', verbose_name='Descripción')
+
+    """ Financiacion del proyecto """
+    financia_empresa_nombre = models.CharField(max_length=255, null=True, blank=True, verbose_name='Nombre')
+    financia_empresa_representante_legal = models.CharField(max_length=255, null=True, blank=True, verbose_name='Representante legal')
+    financia_empresa_sede_principal = models.CharField(max_length=255, null=True, blank=True, verbose_name='Sede principal')
+    financia_empresa_accionistas_nacionales = models.BooleanField(verbose_name='Esta empresa tiene accionistas nacionales?')
+    financia_empresa_accionistas_extranjeros = models.BooleanField(verbose_name='Esta empresa tiene accionistas internacionales?')
+    financia_empresa_en_colombia = models.BooleanField(verbose_name='Esta  empresa opera en otros sitios en Colombia?')
+    financia_empresa_en_extranjero = models.BooleanField(verbose_name='Esta empresa opera en  otros sitios en el extranjero?')
+    financia_empresa_otras_actividades = models.BooleanField(verbose_name='Esta empresa tiene otras actividades?')
+    financia_empresa_otras_actividades_descripcion = models.TextField(null=True, blank=True, help_text='En caso de que tenga otras actividades', verbose_name='Descripción')
+    financia_monto_inversion = models.IntegerField(null=True, blank=True, help_text='Monto de inversión')
     
     class Meta:
         abstract = True

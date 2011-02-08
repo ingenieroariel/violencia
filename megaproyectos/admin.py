@@ -106,6 +106,7 @@ class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
+                'area_proyecto',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -115,11 +116,24 @@ class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
                  (
                  'empresa_nombre',
                  'empresa_representante_legal',
+                 'empresa_sede_principal',
                  ('empresa_accionistas_nacionales','empresa_accionistas_extranjeros'),
                  ('empresa_en_colombia','empresa_en_extranjero'),
                  ('empresa_otras_actividades','empresa_otras_actividades_descripcion'),
                  'monto_inversion',
                  'instituciones_financiadoras',
+                 )
+          }),
+        ("Financiacion del proyecto", {
+              'fields':
+                 (
+                 'financia_empresa_nombre',
+                 'financia_empresa_representante_legal',
+                 'financia_empresa_sede_principal',
+                 ('financia_empresa_accionistas_nacionales','financia_empresa_accionistas_extranjeros'),
+                 ('financia_empresa_en_colombia','financia_empresa_en_extranjero'),
+                 ('financia_empresa_otras_actividades','financia_empresa_otras_actividades_descripcion'),
+                 'financia_monto_inversion',
                  )
           }),
       )
@@ -138,6 +152,7 @@ class ProyectoInsdustriaHidrocarburosAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
+                'area_proyecto',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -147,11 +162,24 @@ class ProyectoInsdustriaHidrocarburosAdmin(admin.ModelAdmin):
                  (
                  'empresa_nombre',
                  'empresa_representante_legal',
+                 'empresa_sede_principal',
                  ('empresa_accionistas_nacionales','empresa_accionistas_extranjeros'),
                  ('empresa_en_colombia','empresa_en_extranjero'),
                  ('empresa_otras_actividades','empresa_otras_actividades_descripcion'),
                  'monto_inversion',
                  'instituciones_financiadoras',
+                 )
+          }),
+          ("Financiacion del proyecto", {
+              'fields':
+                 (
+                 'financia_empresa_nombre',
+                 'financia_empresa_representante_legal',
+                 'financia_empresa_sede_principal',
+                 ('financia_empresa_accionistas_nacionales','financia_empresa_accionistas_extranjeros'),
+                 ('financia_empresa_en_colombia','financia_empresa_en_extranjero'),
+                 ('financia_empresa_otras_actividades','financia_empresa_otras_actividades_descripcion'),
+                 'financia_monto_inversion',
                  )
           }),
       )
@@ -170,7 +198,7 @@ class ProyectoMineriaAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
-                ('area_terrestre','area_maritima'),
+                'area_proyecto',
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
         }),
@@ -179,11 +207,24 @@ class ProyectoMineriaAdmin(admin.ModelAdmin):
                  (
                  'empresa_nombre',
                  'empresa_representante_legal',
+                 'empresa_sede_principal',
                  ('empresa_accionistas_nacionales','empresa_accionistas_extranjeros'),
                  ('empresa_en_colombia','empresa_en_extranjero'),
                  ('empresa_otras_actividades','empresa_otras_actividades_descripcion'),
                  'monto_inversion',
                  'instituciones_financiadoras',
+                 )
+          }),
+          ("Financiacion del proyecto", {
+              'fields':
+                 (
+                 'financia_empresa_nombre',
+                 'financia_empresa_representante_legal',
+                 'financia_empresa_sede_principal',
+                 ('financia_empresa_accionistas_nacionales','financia_empresa_accionistas_extranjeros'),
+                 ('financia_empresa_en_colombia','financia_empresa_en_extranjero'),
+                 ('financia_empresa_otras_actividades','financia_empresa_otras_actividades_descripcion'),
+                 'financia_monto_inversion',
                  )
           }),
       )
@@ -202,7 +243,7 @@ class ProyectoAgroindustriaAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
-                ('area_terrestre','area_maritima'),
+                'area_proyecto',
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
         }),
@@ -211,11 +252,24 @@ class ProyectoAgroindustriaAdmin(admin.ModelAdmin):
                  (
                  'empresa_nombre',
                  'empresa_representante_legal',
+                 'empresa_sede_principal',
                  ('empresa_accionistas_nacionales','empresa_accionistas_extranjeros'),
                  ('empresa_en_colombia','empresa_en_extranjero'),
                  ('empresa_otras_actividades','empresa_otras_actividades_descripcion'),
                  'monto_inversion',
                  'instituciones_financiadoras',
+                 )
+          }),
+          ("Financiacion del proyecto", {
+              'fields':
+                 (
+                 'financia_empresa_nombre',
+                 'financia_empresa_representante_legal',
+                 'financia_empresa_sede_principal',
+                 ('financia_empresa_accionistas_nacionales','financia_empresa_accionistas_extranjeros'),
+                 ('financia_empresa_en_colombia','financia_empresa_en_extranjero'),
+                 ('financia_empresa_otras_actividades','financia_empresa_otras_actividades_descripcion'),
+                 'financia_monto_inversion',
                  )
           }),
       )
