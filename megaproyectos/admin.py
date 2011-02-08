@@ -106,8 +106,6 @@ class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -140,8 +138,6 @@ class ProyectoInsdustriaHidrocarburosAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -174,8 +170,6 @@ class ProyectoMineriaAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -208,8 +202,6 @@ class ProyectoAgroindustriaAdmin(admin.ModelAdmin):
           }),
         ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -300,8 +292,6 @@ class ProyectoPescaContinentalAdmin(admin.ModelAdmin):
           }),
           ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -344,8 +334,6 @@ class ProyectoPescaMarinaAdmin(admin.ModelAdmin):
           }),
           ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -387,8 +375,6 @@ class ProyectoProcesamientoPescaAdmin(admin.ModelAdmin):
           }),
           ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -430,8 +416,6 @@ class ProyectoComercializacionPescaAdmin(admin.ModelAdmin):
           }),
           ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )
@@ -473,8 +457,6 @@ class ProyectoPescaIntegradaAdmin(admin.ModelAdmin):
           }),
           ('Información General', {
             'fields':(
-                'municipios',
-                'territorios',
                 ('area_terrestre','area_maritima'),
                 ('fecha_iniciacion','fecha_finalizacion'),
             )

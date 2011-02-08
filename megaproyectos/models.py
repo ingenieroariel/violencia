@@ -20,51 +20,51 @@ class Sector(models.Model):
         return self.get_categoria_display() + " / " + self.nombre
 
 IMPACTOS = (
-    ("","Impacto Ambiental / Suelos"),
-    ("","Impacto Ambiental / Rios"),
-    ("","Impacto Ambiental / Quebradas"),
-    ("","Impacto Ambiental / Cultivos"),
-    ("","Impacto Ambiental / Bosques"),
-    ("","Impacto Ambiental / Manglares"),
-    ("","Impacto Ambiental / Payas"),
-    ("","Impacto Ambiental / Nacimiento de agua"),
-    ("","Impacto Ambiental / Fauna"),
-    ("","Impacto Ambiental / Aire"),
-    ("","Impacto Ambiental / Ruido"),
-    ("","Impacto Ambiental / Otro"),
-    ("","Impactos culturales / Forma de autoridad"),
-    ("","Impactos culturales / Fiestas"),
-    ("","Impactos culturales / Lengua"),
-    ("","Impactos culturales / Comida"),
-    ("","Impactos culturales / Cambios de proyecto de vida"),
-    ("","Impactos culturales / Otro"),
-    ("","Impactos económicos / Ingreso"),
-    ("","Impactos económicos / Relaciones laborales"),
-    ("","Impactos económicos / Sistema productivo"),
-    ("","Impactos económicos / Otro"),
-    ("","Impactos sociales / Salud"),
-    ("","Impactos sociales / Educación"),
-    ("","Impactos sociales / Cambio de roles"),
-    ("","Impactos sociales / Movilidad de la población"),
-    ("","Impactos sociales / Conflictos - Interetnicos"),
-    ("","Impactos sociales / Conflictos - Intraetnicos"),
-    ("","Impactos sociales / Conflictos - Otros actores"),
-    ("","Impactos sociales / Otro"),
-    ("","Impactos en las organizaciones / División"),
-    ("","Impactos en las organizaciones / Cambios de objetivos"),
-    ("","Impactos en las organizaciones / Corrupción"),
-    ("","Impactos en las organizaciones / Perdida de legitimidad"),
-    ("","Impactos en las organizaciones / Otro"),
-    ("","Territorio Colectivo Indígena titulado / Cambio de uso"),
-    ("","Territorio Colectivo Indígena titulado / Formas de despojo"),
-    ("","Territorio Colectivo Indigena no titulado / Cambio de uso"),
-    ("","Territorio Colectivo Indigena no titulado / Formas de despojo"),
-    ("","Territorio Colectivo Comunidades Negras titulado / Cambio de uso"),
-    ("","Territorio Colectivo Comunidades Negras titulado / Formas de despojo"),
-    ("","Territorio Colectivo Comunidades Negras no titulado / Cambio de uso"),
-    ("","Territorio Colectivo Comunidades Negras no titulado / Formas de despojo"),
-    ("","Territorios / Areas protegidas - Parque nacional; Santuario de Fauna y Flora"),
-    ("","Territorios / Otros"),
+    ("ia-suelos","Impacto Ambiental / Suelos"),
+    ("ia-rios","Impacto Ambiental / Rios"),
+    ("ia-quebradas","Impacto Ambiental / Quebradas"),
+    ("ia-cultivos","Impacto Ambiental / Cultivos"),
+    ("ia-bosques","Impacto Ambiental / Bosques"),
+    ("ia-manglares","Impacto Ambiental / Manglares"),
+    ("ia-payas","Impacto Ambiental / Payas"),
+    ("ia-nacimiento-agua","Impacto Ambiental / Nacimiento de agua"),
+    ("ia-fauna","Impacto Ambiental / Fauna"),
+    ("ia-aire","Impacto Ambiental / Aire"),
+    ("ia-ruido","Impacto Ambiental / Ruido"),
+    ("ia-otro","Impacto Ambiental / Otro"),
+    ("ic-autoridad","Impactos culturales / Forma de autoridad"),
+    ("ic-fiestas","Impactos culturales / Fiestas"),
+    ("ic-lenguas","Impactos culturales / Lengua"),
+    ("ic-comida","Impactos culturales / Comida"),
+    ("ic-cambios","Impactos culturales / Cambios de proyecto de vida"),
+    ("ic-otro","Impactos culturales / Otro"),
+    ("ie-ingreso","Impactos económicos / Ingreso"),
+    ("ie-relaciones","Impactos económicos / Relaciones laborales"),
+    ("ie-sistema","Impactos económicos / Sistema productivo"),
+    ("ie-otro","Impactos económicos / Otro"),
+    ("is-socuales","Impactos sociales / Salud"),
+    ("is-edicacion","Impactos sociales / Educación"),
+    ("is-cambio-roles","Impactos sociales / Cambio de roles"),
+    ("is-movilidad","Impactos sociales / Movilidad de la población"),
+    ("is-interecnicos","Impactos sociales / Conflictos - Interetnicos"),
+    ("is-intraecnicos","Impactos sociales / Conflictos - Intraetnicos"),
+    ("is-otros-actores","Impactos sociales / Conflictos - Otros actores"),
+    ("is-otros","Impactos sociales / Otro"),
+    ("io-division","Impactos en las organizaciones / División"),
+    ("io-cambios","Impactos en las organizaciones / Cambios de objetivos"),
+    ("io-corrupcion","Impactos en las organizaciones / Corrupción"),
+    ("io-perdida","Impactos en las organizaciones / Perdida de legitimidad"),
+    ("io-otro","Impactos en las organizaciones / Otro"),
+    ("terr-indigena-titulado-cambio","Territorio Colectivo Indígena titulado / Cambio de uso"),
+    ("terr-indigena-titulado-despojo","Territorio Colectivo Indígena titulado / Formas de despojo"),
+    ("terr-indigena-notitulado-cambio","Territorio Colectivo Indigena no titulado / Cambio de uso"),
+    ("terr-indigena-notitulado-despojo","Territorio Colectivo Indigena no titulado / Formas de despojo"),
+    ("terr-negras-titulado-cambio","Territorio Colectivo Comunidades Negras titulado / Cambio de uso"),
+    ("terr-negras-titulado-despojo","Territorio Colectivo Comunidades Negras titulado / Formas de despojo"),
+    ("terr-negras-notitulado-cambio","Territorio Colectivo Comunidades Negras no titulado / Cambio de uso"),
+    ("terr-negras-notitulado-despojo","Territorio Colectivo Comunidades Negras no titulado / Formas de despojo"),
+    ("terr-areasprotegidas","Territorios / Areas protegidas - Parque nacional; Santuario de Fauna y Flora"),
+    ("terr-otros","Territorios / Otros"),
 )
 CUBRIMIENTO_INSTITUCIONES_FINANCIADORAS = (
     ("nacional","Nacional"),
@@ -218,6 +218,9 @@ class DesarrolloLegislativo(models.Model):
         verbose_name = 'Documento de Desarrollo Legislativo'
         verbose_name_plural = 'Documentos de Desarrollo Legislativo'
 
+    def __unicode__(self):
+        return self.nombre_documento
+
 class PoliticaMegaproyecto(models.Model):
     nombre_documento = models.CharField(max_length=255, blank=True, null=True)
     documento = models.FileField(upload_to='uploads/documentos_megaproyectos', blank=True, null=True)
@@ -232,6 +235,9 @@ class PoliticaMegaproyecto(models.Model):
         verbose_name="Documento de Politicas Publicas"
         verbose_name_plural="Documentos de Politicas Publicas"
 
+    def __unicode__(self):
+        return self.nombre_documento
+
 class InstitucionFinanciadora(models.Model):
     cubrimiento = models.CharField(max_length=255, null=True, blank=True, choices=CUBRIMIENTO_INSTITUCIONES_FINANCIADORAS)
     tipo = models.CharField(max_length=255, null=True, blank=True, choices=TIPO_INSTITUCIONES_FINANCIADORAS)
@@ -245,8 +251,6 @@ class InstitucionFinanciadora(models.Model):
 
 class ProyectoBase(models.Model):
     """ Información general """
-    municipios = models.ManyToManyField(Municipio)
-    territorios = models.ManyToManyField(TerritorioComunidad, null=True, blank=True)
     area_terrestre = models.CharField(max_length=255, null=True, blank=True)
     area_maritima = models.CharField(max_length=255, null=True, blank=True)
     fecha_iniciacion = models.DateField()
