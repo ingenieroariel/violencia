@@ -165,7 +165,9 @@ class ComunidadIndigenaInline(admin.StackedInline):
     extra = 1
 
 class ComunidadIndigenaAdmin(GoogleAdmin):
+    list_display = ('nombre', 'pueblo', 'territorio')
     inlines = [ComunidadIndigenaInline]
+    list_filter = ('territorio',)
 
 admin.site.register(Municipio,MunicipioAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)

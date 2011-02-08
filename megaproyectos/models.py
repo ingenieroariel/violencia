@@ -49,6 +49,7 @@ IMPACTOS = (
     ("is-interecnicos","Impactos sociales / Conflictos - Interetnicos"),
     ("is-intraecnicos","Impactos sociales / Conflictos - Intraetnicos"),
     ("is-otros-actores","Impactos sociales / Conflictos - Otros actores"),
+    ("it-zonas-exc-minerias","Impactos territoriales / Zonas excluibles de minería"),
     ("is-otros","Impactos sociales / Otro"),
     ("io-division","Impactos en las organizaciones / División"),
     ("io-cambios","Impactos en las organizaciones / Cambios de objetivos"),
@@ -485,6 +486,8 @@ class AFPEspecie(models.Model):
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = generic.GenericForeignKey()
 
+
+    nombre = models.CharField(max_length=255, null=True, blank=True)
     volumen = models.CharField(max_length=255, null=True, blank=True)
     peso = models.CharField(max_length=255, null=True, blank=True)
     diametro = models.CharField(max_length=255, null=True, blank=True)
@@ -510,6 +513,7 @@ class AFPInformeSemestral(models.Model):
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = generic.GenericForeignKey()
 
+    semestre = models.CharField(max_length=255, null=True, blank=True)
     informe = models.TextField()
 
     class Meta:
@@ -521,11 +525,13 @@ class AFPESalvoconducto(models.Model):
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = generic.GenericForeignKey()
 
-    movilizacion_origen = models.CharField(max_length=255, null=True, blank=True)
-    movilizacion_destino = models.CharField(max_length=255, null=True, blank=True)
-    renovacion = models.DateField(null = True, blank = True)
-    removilizacion_autorizacion = models.BooleanField(verbose_name='tiene autorización de otra(s) CAR(s)?')
-    cuales = models.TextField(null = True, blank = True, help_text='solo si selecciono la casilla anterior')
+
+    tipo = models.CharField(max_length=255, null=True, blank=True, choices=( ("movilizacion","movilización"),("renovacion","renovación"), ("removilizacion","removilización") ) )
+#    movilizacion_origen = models.CharField(max_length=255, null=True, blank=True)
+#    movilizacion_destino = models.CharField(max_length=255, null=True, blank=True)
+#    renovacion = models.DateField(null = True, blank = True)
+#    removilizacion_autorizacion = models.BooleanField(verbose_name='tiene autorización de otra(s) CAR(s)?')
+#    cuales = models.TextField(null = True, blank = True, help_text='solo si selecciono la casilla anterior')
     fecha_expedicion = models.DateField(null = True, blank = True)
     fecha_vencimiento = models.DateField(null = True, blank = True)
     especie = models.CharField(max_length=255, null=True, blank=True)
@@ -557,6 +563,7 @@ class ProyectoAFP(models.Model):
     tipo = models.CharField(max_length=255, choices=TIPO_AFP, blank=True, null=True)
     tipo_permiso = models.CharField(max_length=255, choices=PERMISOS_AFP, blank=True, null=True)
     numero_permiso = models.CharField(max_length=255, blank=True, null=True)
+    titulo_empresa_forestal_o_sociedad = models.CharField(max_length=255, blank=True, null=True)
     fecha = models.DateField(help_text='fecha en que se dio autorizacion', null = True, blank = True)
     vigencia_desde = models.DateField(null = True, blank = True)
     vigencia_hasta = models.DateField(null = True, blank = True)
@@ -582,6 +589,17 @@ class ProyectoAFP(models.Model):
     otras_actividades = models.BooleanField(verbose_name='La empresa forestal tiene otras actividades?')
     otras_actividades_cuales = models.TextField(verbose_name='Cuales', help_text='solo en caso de haber seleccionado que tiene otras actividades', null = True, blank = True)
 
+    """ Financiacion del proyecto """
+    financia_empresa_nombre = models.CharField(max_length=255, null=True, blank=True, verbose_name='Nombre')
+    financia_empresa_representante_legal = models.CharField(max_length=255, null=True, blank=True, verbose_name='Representante legal')
+    financia_empresa_sede_principal = models.CharField(max_length=255, null=True, blank=True, verbose_name='Sede principal')
+    financia_empresa_accionistas_nacionales = models.BooleanField(verbose_name='Esta empresa tiene accionistas nacionales?')
+    financia_empresa_accionistas_extranjeros = models.BooleanField(verbose_name='Esta empresa tiene accionistas internacionales?')
+    financia_empresa_en_colombia = models.BooleanField(verbose_name='Esta  empresa opera en otros sitios en Colombia?')
+    financia_empresa_en_extranjero = models.BooleanField(verbose_name='Esta empresa opera en  otros sitios en el extranjero?')
+    financia_empresa_otras_actividades = models.BooleanField(verbose_name='Esta empresa tiene otras actividades?')
+    financia_empresa_otras_actividades_descripcion = models.TextField(null=True, blank=True, help_text='En caso de que tenga otras actividades', verbose_name='Descripción')
+    financia_monto_inversion = models.IntegerField(null=True, blank=True, help_text='Monto de inversión')
 
 
     def __unicode__(self):

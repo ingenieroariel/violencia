@@ -300,6 +300,7 @@ class ProyectoAFPAdmin(admin.ModelAdmin):
                  (
                  'tipo',
                  ('tipo_permiso', 'numero_permiso'),
+                 'titulo_empresa_forestal_o_sociedad',
                  'fecha', 
                  ('vigencia_desde', 'vigencia_hasta'),
                  'extension',
@@ -314,6 +315,21 @@ class ProyectoAFPAdmin(admin.ModelAdmin):
                   'instituciones_financiadoras',
                 )
           }),
+
+          ("Financiacion del proyecto", {
+              'fields':
+                 (
+                 'financia_empresa_nombre',
+                 'financia_empresa_representante_legal',
+                 'financia_empresa_sede_principal',
+                 ('financia_empresa_accionistas_nacionales','financia_empresa_accionistas_extranjeros'),
+                 ('financia_empresa_en_colombia','financia_empresa_en_extranjero'),
+                 ('financia_empresa_otras_actividades','financia_empresa_otras_actividades_descripcion'),
+                 'financia_monto_inversion',
+                 )
+          }),
+
+
         ('Usuario', {
              'fields':
                 (
