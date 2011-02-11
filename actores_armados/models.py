@@ -22,8 +22,14 @@ class ActorArmado(models.Model):
     class Meta:
         verbose_name_plural = "Actores armados"
 
+    def __unicode__(self):
+        return self.actor
+
 class AccionActorArmado(models.Model):
     nombre = models.CharField(max_length=255, null=True, blank=True)
     class Meta:
         verbose_name_plural = "Acciones de actor armado"
+
+    def __unicode__(self):
+        return self.nombre
 

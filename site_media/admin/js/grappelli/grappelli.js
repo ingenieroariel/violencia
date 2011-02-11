@@ -64,6 +64,43 @@ var django = {
             });
         }//if
 
+
+        $("select[id*='tipo']").each(function(k,v){
+            //console.log(k)
+            select = $(v);
+            text = null;
+            temp = null;
+            g=null;
+            select.children('option').each(function(k, v){
+                op = $(v);
+                if(op.text().indexOf('/') != -1){
+                    label = op.text().split('/')[0];
+                    text = op.text().split('/')[1];
+
+                    if(temp!=label){
+                        if(g){
+                            g.appendTo(select);
+                        }
+
+                        g = $("<optgroup></optgroup>").attr("label", label);
+                        g.append(op);
+                        //console.log(label);
+                        //console.log(text);
+
+                    }else{
+                        g.append(op);
+                        //console.log(text);
+                    }
+
+                    temp = label;
+
+                    //console.log(label)
+                    //console.log(text);
+                }
+
+            });
+        });
+
     });
 })(django.jQuery);
 

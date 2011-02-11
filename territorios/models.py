@@ -196,6 +196,13 @@ class TerritorioComunidad(Territorio):
             label = "%s (%s): %s" % ('Com. Indigena', titulacion, self.nombre)
         return label
 
+    def municipios_del_territorio(self):
+        nombres = []
+        for m in self.municipios.all():
+            nombre = '%s (%s)' % (m.__unicode__(), m.departamento.__unicode__())
+            nombres.append(nombre)
+        return ', '.join(nombres)
+
 class TerritorioComunidadIndigena(TerritorioComunidad):
    class Meta:
         verbose_name="Territorio Colectivo Indígena"

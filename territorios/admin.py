@@ -130,7 +130,7 @@ class ConflictoInline(generic.GenericStackedInline):
     extra = 1
 
 class TerritorioComunidadAdmin(GoogleAdmin):
-    list_display = ('nombre', 'titulado', 'resolucion_constitucion', 'numero_comunidades')
+    list_display = ('nombre', 'titulado', 'resolucion_constitucion', 'numero_comunidades', 'municipios_del_territorio')
     exclude = ('geom','informacion_adicional')
     fieldsets = (
           (None, {

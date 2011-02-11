@@ -3,7 +3,7 @@ from piston.resource import Resource
 from piston.authentication import HttpBasicAuthentication
 from piston.doc import documentation_view
 
-from violencia.api.handlers import RelatoHandler, FuenteHandler, VictimaHandler, ContentTypeHandler, TerritorioHandler
+from api.handlers import RelatoHandler, FuenteHandler, VictimaHandler, ContentTypeHandler, TerritorioHandler
 
 auth = HttpBasicAuthentication(realm='My sample API')
 
