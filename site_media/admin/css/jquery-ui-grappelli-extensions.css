@@ -505,68 +505,82 @@ button.ui-datepicker-close {
 }
 .ui-tabs .ui-tabs-hide { display: none !important; }
 
-
-
-
-
-
-
-
 /*.group-accordion-container h3 { display: none; }*/
 
 
 
-/*  gAutocomplete
+
+
+/* Menu
+----------------------------------*/
+.ui-menu {
+    list-style:none;
+    padding: 2px;
+    margin: 0;
+    display:block;
+}
+.ui-menu .ui-menu {
+    margin-top: -3px;
+}
+.ui-menu .ui-menu-item {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.ui-menu .ui-menu-item a {
+    text-decoration: none;
+    display: block;
+    padding: 5px 5px 4px;
+}
+.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-active {
+/*    margin: -1px;*/
+    border: 0 !important;
+}
+
+
+/*  Autocomplete
 ------------------------------------------------------------------------------------------------------ */
 
-.ui-gAutocomplete-wrapper {
+.ui-autocomplete {
     position: absolute;
-    z-index: 400;
-}
-ul.ui-gAutocomplete-results {
-    margin-top: 4px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
-    box-shadow: 0 0 3px #444; -moz-box-shadow: 0 0 3px #444; -webkit-box-shadow: 0 0 3px #444;
+    cursor: default;
+/*    max-height: 100px;*/
+/*    overflow-y: auto;*/
+    border-color: #999 #bbb #bbb #999;
+    border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;
     background: #fff;
+    box-shadow: 0 10px 50px #333; -moz-box-shadow: 0 10px 50px #333; -webkit-box-shadow: 0 10px 50px #333;
 }
-/* inline bug fix */
-.group ul.ui-gAutocomplete-results {
-    margin-left:171px;
-    width:745px;
+.ui-autocomplete-loading {
+    background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
 }
-ul.ui-gAutocomplete-results li {
-    padding: 2px 5px;
-    color: #666;
-    cursor: pointer;
+* html .ui-autocomplete {
+    width: 1px;
 }
-/* hover and selected must bear a slight style 
- * difference since they have a slight behevior 
- * difference 
- **/
-ul.ui-gAutocomplete-results li:hover {
-    background: #dfe7e9;
+.ui-autocomplete-category {
+    font-weight: bold;
+    line-height: 1.5;
+    font-style: italic;
+    margin: 0;
+    padding: 5px;
 }
-ul.ui-gAutocomplete-results li.selected {
-    background: #e1f0f5;
-    font-weight:bold;
+.ui-autocomplete .ui-menu-item a {
+    padding: 5px;
+    font-weight: bold;
+    border-top: 1px solid #e0e0e0 !important;
+    border-radius: 2px; -moz-border-radius: 2px; -webkit-border-radius: 2px;
 }
-ul.ui-gAutocomplete-results li:first-child {
-    border-top-left-radius: 4px; -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px;
-    border-top-right-radius: 4px; -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px;
+.ui-autocomplete .ui-menu-item a:hover, .ui-autocomplete .ui-menu-item a:active {
+    color: #fff;
+    border-top: 1px solid transparent !important;
+    background: #444;
 }
-ul.ui-gAutocomplete-results li:last-child {
-    border-bottom-left-radius: 4px; -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px; -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px;
+.ui-autocomplete .ui-menu-item:first-child a {
+    border-top: 0 !important;
 }
-ul.ui-gAutocomplete-results li + li {
-    border-top: 1px solid #eee;
-}
-
-ul.ui-gAutocomplete-results li b {
-    margin: 0 1px;
-    color: #444;
+.ui-autocomplete .ui-menu-item:hover + li a {
+    border-top-color: 0 !important;
 }
 
 

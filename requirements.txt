@@ -4,4 +4,4 @@ django-piston
 gunicorn
 South
 vectorformats
--e svn+http://django-grappelli.googlecode.com/svn/trunk#egg=grappelli
+django-grappelli

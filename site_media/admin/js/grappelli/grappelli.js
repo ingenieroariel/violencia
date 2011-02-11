@@ -7,45 +7,8 @@ var django = {
     "jQuery": jQuery.noConflict(true)
 };
 
-
 (function($) {
     $(document).ready(function($) {
-
-        $("select[id*='tipo']").each(function(k,v){
-            //console.log(k)
-            select = $(v);
-            text = null;
-            temp = null;
-            g=null;
-            select.children('option').each(function(k, v){
-                op = $(v);
-                if(op.text().indexOf('/') != -1){
-                    label = op.text().split('/')[0];
-                    text = op.text().split('/')[1];
-
-                    if(temp!=label){
-                        if(g){
-                            g.appendTo(select);
-                        }
-
-                        g = $("<optgroup></optgroup>").attr("label", label);
-                        g.append(op);
-                        //console.log(label);
-                        //console.log(text);
-
-                    }else{
-                        g.append(op);
-                        //console.log(text);
-                    }
-
-                    temp = label;
-
-                    //console.log(label)
-                    //console.log(text);
-                }
-
-            });
-        });
 
         /*
          * violencia generic lookup para ubicaciones dinamicas
@@ -67,7 +30,7 @@ var django = {
         }
 
         setUbicacionName();
-        
+
         if($("div#territorios-ubicacion-content_type-object_id-group").length > 0){
             //id_territorios-ubicacion-content_type-object_id-0-content_type_ubicacion
             //id_territorios-ubicacion-content_type-object_id-0-seleccionador
@@ -86,9 +49,9 @@ var django = {
                     $.each(data, function(k,v){
                         seleccionador.append($("<option value='"+v.id+"'>"+v.unicode+"</option>"));
                     })
-                    
+
                 });
-                
+
             });
 
             //id_territorios-ubicacion-content_type-object_id-0-seleccionador
@@ -104,7 +67,22 @@ var django = {
     });
 })(django.jQuery);
 
+function showPopup(triggeringLink) {
+    var name = triggeringLink.id.replace(/^add_/, '');
+    name = id_to_windowname(name);
+    href = triggeringLink.href;
+    var win = window.open(href, name, 'height=500,width=1000,resizable=yes,scrollbars=yes');
+    win.focus();
+    return false;
+}
+function getURLParameter(name) {
+    return unescape(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+    );
+}
+
 (function($) {
+    
     // dateformat
     grappelli.getFormat = function(type) {
         if (type == "date") {
