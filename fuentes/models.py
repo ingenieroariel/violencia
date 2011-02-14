@@ -25,8 +25,8 @@ FRECUENCIA_CHOICES=(
 class FuenteDato(TimeStampedModel):
     nombre_documento = models.CharField(max_length=255)
     autor = models.ForeignKey(AutorDato)
-    fecha = models.DateField(null = True, blank = True, help_text="Fecha en que la fuente creó la información, si solamente se tiene el año, poner un dia y mes cualquiera y seleccionar debajo frecuencia de actualizacion anual")
-    ano = models.PositiveIntegerField(null = True, blank = True, help_text='Si solo tiene el año')
+    fecha = models.DateField(null = True, blank = True, help_text="Fecha en que la fuente creó la información")
+    ano = models.PositiveIntegerField(null = True, blank = True, help_text='Si solo tiene el año', verbose_name='Año')
     frecuencia_actualizacion = models.CharField(max_length=255, choices=FRECUENCIA_CHOICES, default='anual')
     fecha_ingreso = models.DateField(help_text="Fecha en que se cargó la información en el sistema, por ejemplo: hoy")
     usuario = models.ForeignKey(User)
