@@ -178,6 +178,16 @@ class ComunidadIndigenaAdmin(GoogleAdmin):
     list_display = ('nombre', 'pueblo', 'territorio')
     inlines = [ComunidadIndigenaInline]
     list_filter = ('territorio',)
+    fieldsets = (
+          (None, {
+              'fields':
+                 (
+                 'nombre',
+                 ('fecha_creacion', 'fecha_creacion_ano',),
+                 ('fecha_disolucion', 'fecha_disolucion_ano',),
+                 'territorio')
+          }),
+      )
 
 admin.site.register(Municipio,MunicipioAdmin)
 admin.site.register(Departamento, DepartamentoAdmin)
