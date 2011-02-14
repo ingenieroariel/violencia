@@ -15,34 +15,34 @@ class IndicadorBasico(models.Model):
 
     ingresos_publicos_per_capita = models.IntegerField(null=True, blank=True)
     fuente_ingreso_per_capita = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="per")
-    indice_desarrollo_humano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
+    indice_desarrollo_humano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
     fuente_indice_desarrollo_humano = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="desa")
-    necesidades_basicas_insatisfechas_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    necesidades_basicas_insatisfechas_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    necesidades_basicas_insatisfechas_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
+    necesidades_basicas_insatisfechas_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    necesidades_basicas_insatisfechas_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    necesidades_basicas_insatisfechas_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
     fuente_necesidades_basicas_insatisfechas = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="insat")
-    indice_condiciones_de_vida= models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
+    indice_condiciones_de_vida= models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
     fuente_indice_condiciones_de_vida = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="condic")
     
     """ servicios publicos """
-    cobertura_acueducto_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    cobertura_acueducto_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo municipios
-    cobertura_acueducto_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo municipios
+    cobertura_acueducto_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    cobertura_acueducto_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo municipios
+    cobertura_acueducto_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo municipios
     
-    cobertura_alcantarillado_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    cobertura_alcantarillado_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo municipios
-    cobertura_alcantarillado_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo municipios
+    cobertura_alcantarillado_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    cobertura_alcantarillado_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo municipios
+    cobertura_alcantarillado_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo municipios
     
-    cobertura_energia_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo municipios
-    cobertura_energia_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo municipios
-    cobertura_energia_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo municipios
+    cobertura_energia_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo municipios
+    cobertura_energia_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo municipios
+    cobertura_energia_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo municipios
     
     fuente_servicios_publicos = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="servicios_publicos")
     
     """ esperanza de vida """
-    esperanza_vida_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo dptos
-    esperanza_vida_mujeres = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo dptos
-    esperanza_vida_hombres = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True) #solo dptos
+    esperanza_vida_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo dptos
+    esperanza_vida_mujeres = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo dptos
+    esperanza_vida_hombres = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True) #solo dptos
     fuente_esperanza_vida = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bb")
     
     mortalidad_total = models.FloatField(help_text="en % (Porcentaje)", null=True, blank=True) #solo dptos
@@ -52,15 +52,15 @@ class IndicadorBasico(models.Model):
     fuente_mortalidad = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbb")
 
     morbilidad_descripcion = models.TextField(null=True, blank=True, verbose_name="Descripcion morbilidad")
-    morbilidad_porcentaje = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Porcentaje de morbilidad")
+    morbilidad_porcentaje = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Porcentaje de morbilidad")
     morbimortalidad_descripcion = models.TextField(null=True, blank=True, verbose_name="Descripcion morbi-mortalidad")
-    morbimortalidad_porcentaje = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Porcentaje de morbi-motalidad")
+    morbimortalidad_porcentaje = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Porcentaje de morbi-motalidad")
     
     fuente_morbilidad = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbbb")
 
-    alfabetizacion_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Tasa de alfabetizacion total") 
-    alfabetizacion_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Tasa de alfabetizacion urbana") 
-    alfabetizacion_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Tasa de alfabetizacion rural")
+    alfabetizacion_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Tasa de alfabetizacion total")
+    alfabetizacion_urbano = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Tasa de alfabetizacion urbana")
+    alfabetizacion_rural = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Tasa de alfabetizacion rural")
     
     fuente_alfabetizacion = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="bbbbb")
     
@@ -76,18 +76,18 @@ class Educacion(models.Model):
 
     content_object = generic.GenericForeignKey()
 
-    nivel_educativo_preescolar = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Preescolar") 
-    nivel_educativo_primaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Basica primaria") 
-    nivel_educativo_secundaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Basica secundaria")
+    nivel_educativo_preescolar = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Preescolar")
+    nivel_educativo_primaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Basica primaria")
+    nivel_educativo_secundaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Basica secundaria")
     
-    nivel_educativo_mediatec = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Media Vocacional - tecnica")
-    nivel_educativo_normalista = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Media Vocacional - Normalista")
-    nivel_educativo_media_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Total Media Vocacional")
+    nivel_educativo_mediatec = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Media Vocacional - tecnica")
+    nivel_educativo_normalista = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Media Vocacional - Normalista")
+    nivel_educativo_media_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Total Media Vocacional")
     
-    nivel_educativo_sup_tecnica = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Superior tecnica")
-    nivel_educativo_sup_tecnologica  = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Superior tecnologica")
-    nivel_educativo_sup_profesional = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Superior profesional")
-    nivel_educativo_sup_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Superior total")
+    nivel_educativo_sup_tecnica = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Superior tecnica")
+    nivel_educativo_sup_tecnologica  = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Superior tecnologica")
+    nivel_educativo_sup_profesional = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Superior profesional")
+    nivel_educativo_sup_total = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Superior total")
     
     instituciones_total = models.IntegerField(null=True, blank=True, help_text="numero total de instituciones educativas") #todo: hacerlo como propiedad count InstitucionEducativa
     
@@ -114,28 +114,28 @@ class Educacion(models.Model):
     fuente_maestros = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_maestros")
 
     """poblacion estudiantil"""
-    cobertura_preescolar = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    cobertura_primaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Cobertura básica primaria")
-    cobertura_secundaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Cobertura básica secundaria")
-    cobertura_mediavocacional = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    total_poblacion_estudiantil = models.DecimalField(help_text="en % (Porcentage)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Cobertura total de poblacion estudiantil")
+    cobertura_preescolar = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    cobertura_primaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Cobertura básica primaria")
+    cobertura_secundaria = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Cobertura básica secundaria")
+    cobertura_mediavocacional = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    total_poblacion_estudiantil = models.DecimalField(help_text="en % (Porcentage)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Cobertura total de poblacion estudiantil")
 
 
     fuente_poblacion_estudiantil = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_pobestudiantil")
 
-    cobertura_preescolar_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    cobertura_primaria_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Cobertura básica primaria desplazados")
-    cobertura_secundaria_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Cobertura básica secundaria desplazados")
-    cobertura_mediavocacional_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    total_poblacion_estudiantil_desplazada = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Cobertura total de poblacion estudiantil deplazada")
+    cobertura_preescolar_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    cobertura_primaria_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Cobertura básica primaria desplazados")
+    cobertura_secundaria_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Cobertura básica secundaria desplazados")
+    cobertura_mediavocacional_desplazados = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    total_poblacion_estudiantil_desplazada = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Cobertura total de poblacion estudiantil deplazada")
 
 
     fuente_poblacion_estudiantil_desplazados = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_pobestudiantildes")
 
-    desercion = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    promocion = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    repitencia = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    analfabetismo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
+    desercion = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    promocion = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    repitencia = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    analfabetismo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
 
     fuente_poblacion_estudiantil_otros = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fuente_pobestudiantiliotro")
     
@@ -166,7 +166,7 @@ class InstitucionEducativa(models.Model):
     tiene_pec = models.BooleanField(help_text="tiene Proyecto Educativo Comunitario")
     educa_adultos = models.BooleanField(verbose_name="Educacion para adultos", help_text="Seleccione si la institucion educa adultos")
     #depende de Educacion de personas adultas:
-    adultos = models.DecimalField(help_text="porcentaje de adultos entre los alumnos de la institucion", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Educacion de personas adultas")
+    adultos = models.DecimalField(help_text="porcentaje de adultos entre los alumnos de la institucion", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Educacion de personas adultas")
     
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="instituciones")
     
@@ -187,29 +187,29 @@ class SistemaSalud(models.Model):
     content_object = generic.GenericForeignKey()
     
     """ Régimen subsidiado carnetizado """
-    reg_sub_carnetizado_total_porcentaje = models.DecimalField(help_text="% de la poblacion total del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion total")
-    reg_sub_carnetizado_indigena_porcentaje = models.DecimalField(help_text="% de indigenas del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion indigena")
+    reg_sub_carnetizado_total_porcentaje = models.DecimalField(help_text="% de la poblacion total del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion total")
+    reg_sub_carnetizado_indigena_porcentaje = models.DecimalField(help_text="% de indigenas del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion indigena")
     reg_sub_carnetizado_indigena_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
-    reg_sub_carnetizado_afro_porcentaje = models.DecimalField(help_text="% de afros del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion afro")
+    reg_sub_carnetizado_afro_porcentaje = models.DecimalField(help_text="% de afros del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion afro")
     reg_sub_carnetizado_afro_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
-    reg_sub_carnetizado_otra_porcentaje = models.DecimalField(help_text="% de otros del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Otra poblacion")
+    reg_sub_carnetizado_otra_porcentaje = models.DecimalField(help_text="% de otros del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Otra poblacion")
     reg_sub_carnetizado_otra_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
     """ Régimen subsidiado vinculado """
-    reg_sub_vinculado_total_porcentaje = models.DecimalField(help_text="% de la poblacion total del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion total")
-    reg_sub_vinculado_indigena_porcentaje = models.DecimalField(help_text="% de indigenas del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion indigena")
+    reg_sub_vinculado_total_porcentaje = models.DecimalField(help_text="% de la poblacion total del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion total")
+    reg_sub_vinculado_indigena_porcentaje = models.DecimalField(help_text="% de indigenas del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion indigena")
     reg_sub_vinculado_indigena_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
-    reg_sub_vinculado_afro_porcentaje = models.DecimalField(help_text="% de afros del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion afro")
+    reg_sub_vinculado_afro_porcentaje = models.DecimalField(help_text="% de afros del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion afro")
     reg_sub_vinculado_afro_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
-    reg_sub_vinculado_otra_porcentaje = models.DecimalField(help_text="% de otros del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Otra poblacion")
+    reg_sub_vinculado_otra_porcentaje = models.DecimalField(help_text="% de otros del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Otra poblacion")
     reg_sub_vinculado_otra_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
     """ Régimen contributivo """
 
-    reg_contributivo_total_porcentaje = models.DecimalField(help_text="% de la poblacion total del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion total")
-    reg_contributivo_indigena_porcentaje = models.DecimalField(help_text="% de indigenas del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion indigena")
+    reg_contributivo_total_porcentaje = models.DecimalField(help_text="% de la poblacion total del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion total")
+    reg_contributivo_indigena_porcentaje = models.DecimalField(help_text="% de indigenas del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion indigena")
     reg_contributivo_indigena_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
-    reg_contributivo_afro_porcentaje = models.DecimalField(help_text="% de afros del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Poblacion afro")
+    reg_contributivo_afro_porcentaje = models.DecimalField(help_text="% de afros del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Poblacion afro")
     reg_contributivo_afro_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
-    reg_contributivo_otra_porcentaje = models.DecimalField(help_text="% de otros del municipio", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Otra poblacion")
+    reg_contributivo_otra_porcentaje = models.DecimalField(help_text="% de otros del municipio", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Otra poblacion")
     reg_contributivo_otra_empresas = models.TextField(null=True, blank=True, verbose_name="Nombre de empresas prestadoras", help_text="separadas por coma")
     
     fuente_regimenes = models.ForeignKey(FuenteDato, null=True, blank=True, related_name="fregs")
@@ -288,40 +288,40 @@ class DerechoPrimeraInfancia(models.Model):
     content_object = generic.GenericForeignKey("tipo_de_territorio", "codigo")
     
     """proteccion"""
-    registro_civil = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Total de registros civiles")
-    registro_civil_indigena = models.DecimalField(help_text="porcentaje de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Registros civiles de Indigenas")
-    registro_civil_afro = models.DecimalField(help_text="porcentaje de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Registros civiles de Afros")
-    registro_civil_otros = models.DecimalField(help_text="porcentaje de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Registros civiles de Otros")
+    registro_civil = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Total de registros civiles")
+    registro_civil_indigena = models.DecimalField(help_text="porcentaje de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Indigenas")
+    registro_civil_afro = models.DecimalField(help_text="porcentaje de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Afros")
+    registro_civil_otros = models.DecimalField(help_text="porcentaje de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Otros")
     fuente_registro_civil = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuente_registro_civil')
     
     """ salud """
-    vacunacion_cobertura_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    vacunacion_cobertura_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    vacunacion_cobertura_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
+    vacunacion_cobertura_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    vacunacion_cobertura_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    vacunacion_cobertura_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
     vacunacion_covertura_total = models.IntegerField(verbose_name='total', null=True, blank=True)
     fuente_vacunacion = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuente_vacunacion')
     
     """ Programa Crecimiento y Desarrollo """
-    pcd_cobertura_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    pcd_cobertura_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    pcd_cobertura_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
+    pcd_cobertura_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    pcd_cobertura_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    pcd_cobertura_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
     pcd_cobertura_total = models.IntegerField(verbose_name='total', null=True, blank=True)
     fuente_crecimiento_y_desarrollo = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuentes_coberturas')
 
     """ Afiliacion a salud """
-    reg_sub_carnetizado_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado indigena")
-    reg_sub_carnetizado_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado afro")
-    reg_sub_carnetizado_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado otros")
+    reg_sub_carnetizado_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado indigena")
+    reg_sub_carnetizado_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado afro")
+    reg_sub_carnetizado_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado otros")
     reg_sub_carnetizado_total = models.IntegerField(verbose_name='total', null=True, blank=True)
 
-    reg_contrib_vinculado_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen contributivo vinculado indigena")
-    reg_contrib_vinculado_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen contributivo vinculado afro")
-    reg_contrib_vinculado_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen contributivo vinculado otros")
+    reg_contrib_vinculado_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado indigena")
+    reg_contrib_vinculado_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado afro")
+    reg_contrib_vinculado_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado otros")
     reg_contrib_vinculado_total = models.IntegerField(verbose_name='total', null=True, blank=True)
 
-    reg_contributivo_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen contributivo  indigena")
-    reg_contributivo_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen contributivo afro")
-    reg_contributivo_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Regimen contributivo otros")
+    reg_contributivo_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo  indigena")
+    reg_contributivo_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo afro")
+    reg_contributivo_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo otros")
     reg_contributivo_total = models.IntegerField(verbose_name='total', null=True, blank=True)
     fuente_afiliacion_salud = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuentes_regimen')
 
@@ -353,14 +353,14 @@ class DerechoAlTrabajo(models.Model):
 
     content_object = generic.GenericForeignKey("tipo_de_territorio", "codigo")
     
-    desempleo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    trabajo_informal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    trabajo_formal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True, verbose_name="Trabajo formal (Empleo)")
+    desempleo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    trabajo_informal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    trabajo_formal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Trabajo formal (Empleo)")
 
-    empleo_formal_publico = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    empleo_formal_privado = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    empleo_formal_por_contrado_fijo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
-    empleo_formal_por_contrado_temporal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=1, null=True, blank=True)
+    empleo_formal_publico = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    empleo_formal_privado = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    empleo_formal_por_contrado_fijo = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
+    empleo_formal_por_contrado_temporal = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
     
     fuente= models.ForeignKey(FuenteDato, null=True, blank=True)
     
