@@ -262,6 +262,9 @@ class PromotoresSalud(models.Model):
     class Meta:
         verbose_name_plural = "promotores de salud"
         verbose_name = "promotores de salud - entidad contratante"
+
+    def __unicode__(self):
+        return '%s (contrato: %s)' % (self.nombre, self.tipo_contrato)
         
 class InstalacionesSalud(models.Model):
     sistema_salud = models.ForeignKey(SistemaSalud, related_name="instalaciones_salud")
@@ -274,6 +277,9 @@ class InstalacionesSalud(models.Model):
     
     class Meta:
         verbose_name_plural = "instalaciones de salud"
+
+    def __unicode__(self):
+        return '%s: %s' % (self.tipo, self.nombre)
         
 class DerechoPrimeraInfancia(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_3")
