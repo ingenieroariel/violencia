@@ -159,6 +159,16 @@ class ComunidadNegraInline(admin.StackedInline):
 
 class ComunidadNegraAdmin(GoogleAdmin):
     inlines = [ComunidadNegraInline]
+    fieldsets = (
+          (None, {
+              'fields':
+                 (
+                 'nombre',
+                 ('fecha_creacion', 'fecha_creacion_ano',),
+                 ('fecha_disolucion', 'fecha_disolucion_ano',),
+                 'territorio')
+          }),
+      )
 
 class ComunidadIndigenaInline(admin.StackedInline):
     model = PoblacionComunidadIndigena

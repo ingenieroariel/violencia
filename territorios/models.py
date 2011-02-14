@@ -226,7 +226,9 @@ class TerritorioComunidadNegra(TerritorioComunidad):
 class Comunidad(models.Model):
     nombre = models.CharField(max_length=100)
     fecha_creacion = models.DateField(null=True, blank=True)
+    fecha_creacion_ano = models.PositiveIntegerField(null = True, blank = True, help_text='Si solo tiene año', verbose_name='año')
     fecha_disolucion = models.DateField(null=True, blank=True)
+    fecha_disolucion_ano = models.PositiveIntegerField(null = True, blank = True, help_text='Si solo tiene año', verbose_name='año')
 
     def __unicode__(self):
         return "Comunidad: "+ self.nombre
