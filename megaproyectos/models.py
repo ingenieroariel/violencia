@@ -390,10 +390,10 @@ class ImplementacionSeguimiento(models.Model):
     class Meta:
         verbose_name_plural = 'Implementaciones y Seguimientos'
 
-class Ubicacion(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_ubicacion")
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
+#class Ubicacion(models.Model):
+#    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_ubicacion")
+#    object_id = models.PositiveIntegerField(blank=True, null=True)
+#    content_object = generic.GenericForeignKey()
 
 
 """ OBRAS DE INFRAESTRUCTURA """
