@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato, AutorDato
 from django.template.defaultfilters import yesno
-from violencia.territorios.utils import gen_rangos_cantidad
+from territorios.utils import gen_rangos_cantidad
 from utils import get_content_types_ids
 
 """

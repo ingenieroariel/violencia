@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from violencia.cooperacion.models import Cooperacion
+from cooperacion.models import Cooperacion
 from megaproyectos.models import Afectacion
 from cooperacion.models import *
 from django.contrib.gis import admin
