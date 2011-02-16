@@ -288,41 +288,41 @@ class DerechoPrimeraInfancia(models.Model):
     content_object = generic.GenericForeignKey("tipo_de_territorio", "codigo")
     
     """proteccion"""
-    registro_civil = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Total de registros civiles")
-    registro_civil_indigena = models.DecimalField(help_text="porcentaje de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Indigenas")
-    registro_civil_afro = models.DecimalField(help_text="porcentaje de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Afros")
-    registro_civil_otros = models.DecimalField(help_text="porcentaje de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Otros")
+    registro_civil = models.DecimalField(help_text="% de población del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Total de registros civiles")
+    registro_civil_indigena = models.DecimalField(help_text="% de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Indigenas")
+    registro_civil_afro = models.DecimalField(help_text="% de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Afros")
+    registro_civil_otros = models.DecimalField(help_text="% de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Registros civiles de Otros")
     fuente_registro_civil = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuente_registro_civil')
     
     """ salud """
-    vacunacion_cobertura_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
-    vacunacion_cobertura_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
-    vacunacion_cobertura_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
-    vacunacion_covertura_total = models.IntegerField(verbose_name='total', null=True, blank=True)
+    vacunacion_cobertura_indigena = models.DecimalField(help_text="% de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True)
+    vacunacion_cobertura_afro = models.DecimalField(help_text="% de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True)
+    vacunacion_cobertura_otros = models.DecimalField(help_text="% de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True)
+    vacunacion_covertura_total = models.DecimalField(verbose_name='total', help_text='% de población del municipio en edad de primera infancia', max_digits=4, decimal_places=2, null=True, blank=True)
     fuente_vacunacion = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuente_vacunacion')
     
     """ Programa Crecimiento y Desarrollo """
-    pcd_cobertura_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
-    pcd_cobertura_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
-    pcd_cobertura_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True)
-    pcd_cobertura_total = models.IntegerField(verbose_name='total', null=True, blank=True)
+    pcd_cobertura_indigena = models.DecimalField(help_text="% de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True)
+    pcd_cobertura_afro = models.DecimalField(help_text="% de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True)
+    pcd_cobertura_otros = models.DecimalField(help_text="% de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True)
+    pcd_cobertura_total = models.DecimalField(verbose_name='total', help_text='% de población del municipio en edad de primera infancia', max_digits=4, decimal_places=2, null=True, blank=True)
     fuente_crecimiento_y_desarrollo = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuentes_coberturas')
 
     """ Afiliacion a salud """
-    reg_sub_carnetizado_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado indigena")
-    reg_sub_carnetizado_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado afro")
-    reg_sub_carnetizado_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado otros")
-    reg_sub_carnetizado_total = models.IntegerField(verbose_name='total', null=True, blank=True)
+    reg_sub_carnetizado_indigena = models.DecimalField(help_text="% de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado indigena")
+    reg_sub_carnetizado_afro = models.DecimalField(help_text="% de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado afro")
+    reg_sub_carnetizado_otros = models.DecimalField(help_text="% de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen subsidiado carnetizado otros")
+    reg_sub_carnetizado_total = models.DecimalField(verbose_name='total', help_text='% de población del municipio en edad de primera infancia', max_digits=4, decimal_places=2, null=True, blank=True)
 
-    reg_contrib_vinculado_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado indigena")
-    reg_contrib_vinculado_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado afro")
-    reg_contrib_vinculado_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado otros")
-    reg_contrib_vinculado_total = models.IntegerField(verbose_name='total', null=True, blank=True)
+    reg_contrib_vinculado_indigena = models.DecimalField(help_text="% de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado indigena")
+    reg_contrib_vinculado_afro = models.DecimalField(help_text="% de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado afro")
+    reg_contrib_vinculado_otros = models.DecimalField(help_text="% de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo vinculado otros")
+    reg_contrib_vinculado_total = models.DecimalField(verbose_name='total', help_text='% de población del municipio en edad de primera infancia', max_digits=4, decimal_places=2, null=True, blank=True)
 
-    reg_contributivo_indigena = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo  indigena")
-    reg_contributivo_afro = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo afro")
-    reg_contributivo_otros = models.DecimalField(help_text="en % (Porcentaje)", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo otros")
-    reg_contributivo_total = models.IntegerField(verbose_name='total', null=True, blank=True)
+    reg_contributivo_indigena = models.DecimalField(help_text="% de indigenas del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo  indigena")
+    reg_contributivo_afro = models.DecimalField(help_text="% de afros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo afro")
+    reg_contributivo_otros = models.DecimalField(help_text="% de otros del municipio en edad de primera infancia", max_digits=4, decimal_places=2, null=True, blank=True, verbose_name="Regimen contributivo otros")
+    reg_contributivo_total = models.DecimalField(verbose_name='total', help_text='% de población del municipio en edad de primera infancia', max_digits=4, decimal_places=2, null=True, blank=True)
     fuente_afiliacion_salud = models.ForeignKey(FuenteDato, null=True, blank=True, related_name='fuentes_regimen')
 
     
