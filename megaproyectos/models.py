@@ -182,6 +182,7 @@ TIPOS_AGROINDUSTRIA = (
     ("ali-otros","Otros usos / Otros")
 )
 
+
 class Afectacion(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_afectacion")
     object_id = models.PositiveIntegerField(blank=True, null=True)
@@ -403,7 +404,7 @@ class ProyectoObraInfraestructura(Proyecto):
     nombre = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
-        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+        return "%s" % self.nombre
 
     class Meta:
         verbose_name_plural = 'Proyectos de Obras de Infraestructura'
@@ -724,4 +725,5 @@ class RequisitoLegalAgroindustria(RequisitoLegalBase):
 
     class Meta:
         verbose_name_plural = 'Requicitos legales de Agroindustrias'
+
 

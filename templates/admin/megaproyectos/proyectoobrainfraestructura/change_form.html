@@ -1,0 +1,16 @@
+{% extends "admin/change_form.html" %}
+
+{% block object-tools %}
+
+{% if change %}{% if not is_popup %}
+      <ul class="tools">
+
+         <li><a onclick="return showPopup(this);" href="/admin/estados_ejecucion/estadoejecucioninfraestructura/?proyecto={{ object_id }}">Estados de ejecucion</a></li>
+
+        <li><a href="history/" class="historylink">History</a></li>
+
+      </ul>
+{% endif %}{% endif %}
+
+{% endblock %}
+ 

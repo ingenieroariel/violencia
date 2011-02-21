@@ -95,7 +95,7 @@ class DesarrolloLegislativoAdmin(admin.ModelAdmin):
 """ OBRAS DE INFRAESTRUCTURA """
 
 class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
-    inlines = [EstadoEjecucionInfraestructuraInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
+    inlines = [RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
