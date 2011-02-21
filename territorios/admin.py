@@ -185,7 +185,7 @@ class ComunidadIndigenaAdmin(GoogleAdmin):
                  'nombre',
                  ('fecha_creacion', 'fecha_creacion_ano',),
                  ('fecha_disolucion', 'fecha_disolucion_ano',),
-                 'territorio')
+                 'territorio', 'pueblo')
           }),
       )
 
