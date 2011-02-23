@@ -4,26 +4,26 @@
 
 <script type="text/javascript">
 
-(function($) {
-
-    function show_groups(val){
-           $("div.group").hide();
-           if(val=="desarrollo-del-proyecto"){
-               $("div[id*='estadoejecucioncesion'], div[id*='suspension'], div[id*='subcontratista'], div[id*='revocatoria']").show();
-           }else if(val.indexOf("concesion") != -1){
-                $("div[id*='concesion']").show()
-           }
-    }
-
-    $(document).ready(function($) {
-        show_groups($("select#id_fase_tipo").val());
-        $("select#id_fase_tipo").change(function(){
-           show_groups($(this).val());
-        });
-    });
-
-
-})(django.jQuery);
+//(function($) {
+//
+//    function show_groups(val){
+//           $("div.group").hide();
+//           if(val=="desarrollo-del-proyecto"){
+//               $("div[id*='estadoejecucioncesion'], div[id*='suspension'], div[id*='subcontratista'], div[id*='revocatoria']").show();
+//           }else if(val.indexOf("concesion") != -1){
+//                $("div[id*='concesion']").show()
+//           }
+//    }
+//
+//    $(document).ready(function($) {
+//        show_groups($("select#id_fase_tipo").val());
+//        $("select#id_fase_tipo").change(function(){
+//           show_groups($(this).val());
+//        });
+//    });
+//
+//
+//})(django.jQuery);
 
 </script>
 {% endblock %}

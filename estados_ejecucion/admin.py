@@ -20,15 +20,26 @@ class EstadoEjecucionRevocatoriaInline(generic.GenericStackedInline):
 class SubcontratistaInline(generic.GenericStackedInline):
     model = Subcontratista
     extra = 1
-class ConcesionInline(generic.GenericStackedInline):
-    model = Concesion
+class ConcesionInfraestructuraInline(generic.GenericStackedInline):
+    model = ConcesionInfraestructura
+    extra = 1
+class LicenciaAmbientalInline(generic.GenericStackedInline):
+    model = LicenciaAmbiental
+    extra = 1
+
+
+class ConcesionHidrocarburosInline(generic.GenericStackedInline):
+    model = ConcesionHidrocarburo
+    extra = 1
+class EstadoEjecucionExplotacionInline(generic.GenericStackedInline):
+    model = EstadoEjecucionExplotacion
     extra = 1
 
 
 
 class EstadoEjecucionInfraestructuraAdmin(admin.ModelAdmin):
     list_display = ('proyecto', 'fase_tipo', 'fecha_iniciacion', 'fecha_terminacion')
-    inlines = [SubcontratistaInline, ConcesionInline, EstadoEjecucionCesionInline, EstadoEjecucionSuspensionInline, EstadoEjecucionRevocatoriaInline]
+    inlines = [SubcontratistaInline, ConcesionInfraestructuraInline, EstadoEjecucionCesionInline, EstadoEjecucionSuspensionInline, EstadoEjecucionRevocatoriaInline, LicenciaAmbientalInline]
     fieldsets = (
         (None, {
               'fields':
@@ -46,4 +57,25 @@ class EstadoEjecucionInfraestructuraAdmin(admin.ModelAdmin):
           }),
     )
 
+
+class EstadoEjecucionHidrocarburoAdmin(admin.ModelAdmin):
+    list_display = ('proyecto', 'fase_tipo', 'fecha_iniciacion', 'fecha_terminacion')
+    inlines = [ConcesionHidrocarburosInline, EstadoEjecucionExplotacionInline, SubcontratistaInline, EstadoEjecucionCesionInline, EstadoEjecucionSuspensionInline, EstadoEjecucionRevocatoriaInline, LicenciaAmbientalInline]
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'proyecto',
+                 'fase_tipo'
+                 )
+          }),
+          (None, {
+              'fields':
+                 (
+                 ('fecha_iniciacion','fecha_terminacion'),
+                 )
+          }),
+    )
+
 admin.site.register(EstadoEjecucionInfraestructura, EstadoEjecucionInfraestructuraAdmin)
+admin.site.register(EstadoEjecucionHidrocarburo, EstadoEjecucionHidrocarburoAdmin)
