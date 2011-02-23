@@ -454,7 +454,7 @@ class ProyectoMineria(Proyecto):
         verbose_name_plural = 'Proyectos de Minerias'
 
     def __unicode__(self):
-        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+        return "%s (%s)" % (self.nombre, self.tipo)
 
 class EstadoEjecucionMineria(EstadoEjecucion):
     proyecto = models.ForeignKey(ProyectoMineria)

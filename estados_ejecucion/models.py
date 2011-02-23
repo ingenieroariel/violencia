@@ -150,3 +150,36 @@ class EstadoEjecucionExplotacion(models.Model):
     class Meta:
         verbose_name_plural = 'Explotaciones'
         verbose_name = 'Explotacion'
+
+# MINERIA
+TIPOS_ESTADOS_EJECUCION_MINERIA = (
+    ("Prospeccion","Prospección"),
+    ("consesion-(zona-minera)-convocatoria","Concesión (en zona minera de grupos étnicos) / Convocatoria pública"),
+    ("consesion-(zona-minera)-hallazgo","Concesión (en zona minera de grupos étnicos) / Hallazgo minero"),
+    ("consesion-(zona-minera)-adjudicacion","Concesión (en zona minera de grupos étnicos) / Adjudicación"),
+    ("consesion-(concesion-o-titulo-minera)-convocatoria","Concesión (Concesión minera o Titulo minero) / Convocatoria pública"),
+    ("consesion-(concesion-o-titulo-minera)-hallazgo","Concesión (Concesión minera o Titulo minero) / Hallazgo minero"),
+    ("consesion-(concesion-o-titulo-minera)-adjudicacion","Concesión (Concesión minera o Titulo minero) / Adjudicación"),
+    ("exploracion-con-vias","Exploración / con vías"),
+    ("exploracion-sin-vias","Exploración / sin vías"),
+    ("explotacion","Explotación"),
+    ("x","x / y"),
+)
+
+class EstadoEjecucionMineria(models.Model):
+    proyecto = models.ForeignKey(ProyectoMineria, related_name="estados_ejecucion_proyecto_mine")
+    fase_tipo = models.CharField(max_length=255, null=True, blank=True, choices=TIPOS_ESTADOS_EJECUCION_MINERIA)
+
+    fecha_iniciacion = models.DateField(null=True, blank=True)
+    fecha_terminacion = models.DateField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Estados de ejecucion de mineria'
+        verbose_name = 'Estado de ejecucion de mineria'
+
+    def __unicode__(self):
+        return '%s : %s'  % (self.proyecto, self.fase_tipo)
+
+class ConcesionMineria(ConcesionBase):
+    tiene_asociacion = models.BooleanField(verbose_name='Tiene contrato de asociación?')
+    descripcion = models.TextField(null = True, blank = True, help_text='Descripcion del contrato de asociacion')
