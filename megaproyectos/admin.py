@@ -141,7 +141,7 @@ class ProyectoObraInfraestructuraAdmin(admin.ModelAdmin):
 """ INDUSTRIAS DE HIDROCARBUROS """
 
 class ProyectoInsdustriaHidrocarburosAdmin(admin.ModelAdmin):
-    inlines = [EstadoEjecucionHidrocarburosInline, RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
+    inlines = [RequisitoLegalInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':

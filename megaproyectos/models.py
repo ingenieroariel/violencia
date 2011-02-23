@@ -425,7 +425,7 @@ class ProyectoInsdustriaHidrocarburos(Proyecto):
         verbose_name_plural = 'Proyectos de Industria de Hidrocarburos'
 
     def __unicode__(self):
-        return "%s (Megaproyecto: %s)" % (self.nombre, self.megaproyecto.nombre_documento)
+        return "%s (%s)" % (self.nombre, self.tipo)
 
 class EstadoEjecucionHidrocarburos(EstadoEjecucion):
     proyecto = models.ForeignKey(ProyectoInsdustriaHidrocarburos)
