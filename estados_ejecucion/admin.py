@@ -39,6 +39,16 @@ class ConcesionMineriaInline(generic.GenericStackedInline):
     model = ConcesionMineria
     extra = 1
 
+class MedidaInline(generic.GenericStackedInline):
+    model = Medida
+    extra = 1
+class ResultadoInline(generic.GenericStackedInline):
+    model = Resultado
+    extra = 1
+class DestinoInline(generic.GenericStackedInline):
+    model = Destino
+    extra = 1
+
 class EstadoEjecucionInfraestructuraAdmin(admin.ModelAdmin):
     list_display = ('proyecto', 'fase_tipo', 'fecha_iniciacion', 'fecha_terminacion')
     inlines = [SubcontratistaInline, ConcesionInfraestructuraInline, EstadoEjecucionCesionInline, EstadoEjecucionSuspensionInline, EstadoEjecucionRevocatoriaInline, LicenciaAmbientalInline]
@@ -98,6 +108,26 @@ class EstadoEjecucionMineriaAdmin(admin.ModelAdmin):
           }),
     )
 
+class EstadoEjecucionAgroindustriaAdmin(admin.ModelAdmin):
+    list_display = ('proyecto', 'fase_tipo', 'fecha_iniciacion', 'fecha_terminacion')
+    inlines = [MedidaInline, ResultadoInline, DestinoInline]
+    fieldsets = (
+        (None, {
+              'fields':
+                 (
+                 'proyecto',
+                 'fase_tipo'
+                 )
+          }),
+          (None, {
+              'fields':
+                 (
+                 ('fecha_iniciacion','fecha_terminacion'),
+                 )
+          }),
+    )
+
 admin.site.register(EstadoEjecucionInfraestructura, EstadoEjecucionInfraestructuraAdmin)
 admin.site.register(EstadoEjecucionHidrocarburo, EstadoEjecucionHidrocarburoAdmin)
 admin.site.register(EstadoEjecucionMineria, EstadoEjecucionMineriaAdmin)
+admin.site.register(EstadoEjecucionAgroindustria, EstadoEjecucionAgroindustriaAdmin)

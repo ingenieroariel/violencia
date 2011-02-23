@@ -183,3 +183,48 @@ class EstadoEjecucionMineria(models.Model):
 class ConcesionMineria(ConcesionBase):
     tiene_asociacion = models.BooleanField(verbose_name='Tiene contrato de asociación?')
     descripcion = models.TextField(null = True, blank = True, help_text='Descripcion del contrato de asociacion')
+
+# AGROINDUSTRIA
+TIPOS_ESTADOS_EJECUCION_MINERIA = (
+    ("praparacion-del-terreno","Preparación del terreno"),
+    ("cultivo","Cultivo"),
+    ("produccion","Producción"),
+    ("transformacion","Transformación"),
+    ("comercializacion","Comercialización"),
+    ("x","x / y"),
+)
+
+class EstadoEjecucionAgroindustria(models.Model):
+    proyecto = models.ForeignKey(ProyectoAgroindustria, related_name="estados_ejecucion_proyecto_agro")
+    fase_tipo = models.CharField(max_length=255, null=True, blank=True, choices=TIPOS_ESTADOS_EJECUCION_MINERIA)
+
+    fecha_iniciacion = models.DateField(null=True, blank=True)
+    fecha_terminacion = models.DateField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Estados de ejecucion de agroindustria'
+        verbose_name = 'Estado de ejecucion de agroindustria'
+
+    def __unicode__(self):
+        return '%s : %s'  % (self.proyecto, self.fase_tipo)
+
+class Medida(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_medida")
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = generic.GenericForeignKey()
+
+    descripcion = models.TextField(null = True, blank = True)
+
+class Resultado(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_res")
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = generic.GenericForeignKey()
+
+    descripcion = models.TextField(null = True, blank = True)
+
+class Destino(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_destino")
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = generic.GenericForeignKey()
+
+    descripcion = models.TextField(null = True, blank = True)

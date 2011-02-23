@@ -232,7 +232,7 @@ class ProyectoMineriaAdmin(admin.ModelAdmin):
 
 """ AGROINDUSTRIA """
 class ProyectoAgroindustriaAdmin(admin.ModelAdmin):
-    inlines = [EstadoEjecucionAgroindustriaInline, RequisitoLegalAgroindustriaInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
+    inlines = [RequisitoLegalAgroindustriaInline, VinculacionPoblacionAdmin, ImplementacionSeguimientoInline, UbicacionInline]
     fieldsets = (
         (None, {
               'fields':
