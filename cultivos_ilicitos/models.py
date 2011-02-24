@@ -8,18 +8,6 @@ from django.db import models
 
 
 """ CULTIVOS PARA USO ILÍCITO """
-CULTIVOS_PROMOTRES_ILICITOS = (
-    ("guerrilla","Guerrilla"),
-    ("paramilitares","Paramilitares"),
-    ("otros","Otros"),
-)
-
-CULTIVOS_TIPO_PARTICIPACION = (
-    ("cultivadores","Cultivadores"),
-    ("raspachines","Raspachines"),
-    ("procesadores","Procesadores"),
-)
-
 CULTIVOS_TIPO_ERRADICACION = (
     ("aerea","Aspersión aerea"),
     ("manual","Manual"),
@@ -40,27 +28,58 @@ CULTIVOS_TIPOS_INVERSION = (
     ("","Proyectos productivos"),
 )
 
+TIPOS_CULTIVOS_ILICITOS = (
+    ("marihuana", "Marihuana"),
+    ("coca", "Coca"),
+    ("amapola", "Amapola"),
+)
+
+class Promotores(models.Model):
+    nombre = models.CharField(max_length=255)
+    fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.nombre
+
+class TipoParticipacion(models.Model):
+    funcion = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name_plural = "Tipos de participacion de la comunidad"
+        verbose_name = "Tipo de participacion de la comunidad"
+
 class CultivosIlicitos(models.Model):
-    municipio = models.ForeignKey(Municipio, null=True, blank=True)
+    municipio = models.ForeignKey(Municipio, null = True, blank = True)
+    tipo = models.CharField(max_length=255, choices=TIPOS_CULTIVOS_ILICITOS, default='marihuana')
     area = models.FloatField(help_text="en hectareas", blank=True, null=True)
-    promotores = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_PROMOTRES_ILICITOS)
+    promotores = models.ManyToManyField(Promotores)
     """ PARTICIPACION """
     participacion_comunidad = models.BooleanField(help_text='Seleccione si tiene participacion de la comunidad')
-    participacion_comunidad_tipo = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_TIPO_PARTICIPACION)
+    comunidad_tipo = models.ManyToManyField(TipoParticipacion, related_name='participaciones', null = True, blank = True, verbose_name='como participa la comunidad?')
     participacion_otros = models.BooleanField(help_text='Seleccione si tiene participacion de otros')
-    participacion_otros_tipo = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_TIPO_PARTICIPACION)
+    participacion_otros_cuales = models.CharField(max_length=255, null=True, blank=True, verbose_name='Cuales')
+    otros_tipo = models.ManyToManyField(TipoParticipacion, related_name='participaciones_otros', null = True, blank = True, verbose_name='como participan los otros?')
 
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Cultivos ilicitos'
 
+    def __unicode__(self):
+        return '%s - %s' % (self.tipo, self.municipio)
+
+    def get_promotores(self):
+        promotores = self.promotores.all()
+        return promotores
+
 class ErradicacionCultivosIlicitos(models.Model):
     cultivos_ilicitos = models.ForeignKey(CultivosIlicitos, related_name='erradicaciones')
 
     erradicacion_tipo = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_TIPO_ERRADICACION)
     territorios = models.ManyToManyField(TerritorioComunidad)
-    referencia_cartografica = models.FileField(null=True, blank=True, upload_to='uploads/cultivos_ilicitos/referencias_cartograficas')
     area = models.CharField(max_length=200, null=True, blank=True)
 
     afectacion = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_AFECTACION_TERRITORIOS)
@@ -89,5 +108,7 @@ class InversionSocialCultivosIlicitos(models.Model):
     tipo = models.CharField(max_length=200, null=True, blank=True, choices=CULTIVOS_TIPOS_INVERSION)
     catidad_familias = models.PositiveIntegerField(null=True, blank=True)
     monto_por_municipio = models.PositiveIntegerField(null=True, blank=True, help_text='millones de pesos')
+
+    cobertura = models.IntegerField(help_text='cantidad de familias', null = True, blank = True)
 
     fuente = models.ForeignKey(FuenteDato, null=True, blank=True)
