@@ -4,26 +4,64 @@
 
 <script type="text/javascript">
 
-//(function($) {
-//
-//    function show_groups(val){
-//           $("div.group").hide();
-//           if(val=="desarrollo-del-proyecto"){
-//               $("div[id*='estadoejecucioncesion'], div[id*='suspension'], div[id*='subcontratista'], div[id*='revocatoria']").show();
-//           }else if(val.indexOf("concesion") != -1){
-//                $("div[id*='concesion']").show()
-//           }
-//    }
-//
-//    $(document).ready(function($) {
+(function($) {
+
+    function show_groups(val){
+           $("div.group").hide();
+           if(val=="desarrollo-del-proyecto"){
+               $("div[id*='estadoejecucioncesion'], div[id*='suspension'], div[id*='subcontratista'], div[id*='revocatoria']").show();
+           }else if(val.indexOf("concesion") != -1){
+                $("div[id*='concesion']").show()
+           }
+    }
+
+    function show_afectacion(val, id){
+
+        console.log(id);
+        
+        if(id==null){
+            $("div.row.cells-1.ambientales, div.row.cells-1.culturales, div.row.cells-1.economicos, div.row.cells-1.sociales, div.row.cells-1.organizaciones").hide();
+        }else{
+            div_hide = "div#estados_ejecucion-afectacion-content_type-object_id" + id;
+            console.log(div_hide);
+            $(div_hide + " div.row.cells-1.ambientales").hide();
+            $(div_hide + " div.row.cells-1.culturales").hide();
+            $(div_hide + " div.row.cells-1.economicos").hide();
+            $(div_hide + " div.row.cells-1.sociales").hide();
+            $(div_hide + " div.row.cells-1.organizaciones").hide();
+        }
+        
+        if(val){
+            div = "div#estados_ejecucion-afectacion-content_type-object_id" + id;
+            $(div + " div.row.cells-1." + val).show();
+        }
+    }
+
+    $(document).ready(function($) {
+        show_afectacion(false, null);
+
+        $("select[id$='-tipo_afectacion']").each(function(k,v){
+            select = $(v);
+            id = select.attr("id").split("-")[4];
+            show_afectacion(select.val(), id);
+        })
+
+        $("select[id$='-tipo_afectacion']").change(function(){
+            id = $(this).attr("id").split("-")[4];
+            show_afectacion($(this).val(), id);
+        });
+
 //        show_groups($("select#id_fase_tipo").val());
 //        $("select#id_fase_tipo").change(function(){
 //           show_groups($(this).val());
 //        });
-//    });
-//
-//
-//})(django.jQuery);
+
+    });
+
+
+
+
+})(django.jQuery);
 
 </script>
 {% endblock %}

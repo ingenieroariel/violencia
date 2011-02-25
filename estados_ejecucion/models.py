@@ -6,6 +6,142 @@ from django.contrib.contenttypes import generic
 from fuentes.models import FuenteDato
 
 #STACKED INLINES GENERICAS
+
+OPCIONES_ESTADOS_EJECUCION = (
+    ("Cesion-completa","Cesión completa"),
+    ("Cesion-parcial","Cesión parcial"),
+    ("Suspension","Suspensión"),
+    ("Revocatoria","Revocatoria"),
+    ("Perdida-de-vigencia-de-la-Licencia-Ambiental","Perdida de vigencia de la Licencia Ambiental"),
+    ("Integracion-de-dos-Licencias-Ambientales","Integración de dos Licencias Ambientales"),
+)
+
+IMPACTOS = (
+    ("ambientales","Impacto Ambiental"),
+    ("culturales","Impactos culturales"),
+    ("economicos","Impactos económicos"),
+    ("sociales","Impactos sociales"),
+    ("organizaciones","Impactos en las organizaciones"),
+)
+
+IMPACTOS2 = (
+    ("ia-suelos","Suelos"),
+    ("ia-rios","Rios"),
+    ("ia-quebradas","Quebradas"),
+    ("ia-cultivos","Cultivos"),
+    ("ia-bosques","Bosques"),
+    ("ia-manglares","Manglares"),
+    ("ia-payas","Payas"),
+    ("ia-nacimiento-agua","Nacimiento de agua"),
+    ("ia-fauna","Fauna"),
+    ("ia-aire","Aire"),
+    ("ia-ruido","Ruido"),
+    ("ia-otro","Otro"),
+    ("ic-autoridad","Forma de autoridad"),
+    ("ic-fiestas","Fiestas"),
+    ("ic-lenguas","Lengua"),
+    ("ic-comida","Comida"),
+    ("ic-cambios","Cambios de proyecto de vida"),
+    ("ic-otro","Otro"),
+    ("ie-ingreso","Ingreso"),
+    ("ie-relaciones","Relaciones laborales"),
+    ("ie-sistema","Sistema productivo"),
+    ("ie-otro","Otro"),
+    ("is-socuales","Salud"),
+    ("is-edicacion","Educación"),
+    ("is-cambio-roles","Cambio de roles"),
+    ("is-movilidad","Movilidad de la población"),
+    ("is-interecnicos","Conflictos - Interetnicos"),
+    ("is-intraecnicos","Conflictos - Intraetnicos"),
+    ("is-otros-actores","Conflictos - Otros actores"),
+    ("is-otros","Otro"),
+    ("io-division","División"),
+    ("io-cambios","Cambios de objetivos"),
+    ("io-corrupcion","Corrupción"),
+    ("io-perdida","Perdida de legitimidad"),
+    ("io-otro","Otro"),
+)
+
+ACCIONES_SEGUIMIENTO_CONTROL = (
+    ("corporacion-regional", "Acciones de Seguimiento y Control de la Corporación Regional"),
+    ("ministerio-medio-ambiente", "Acciones de Seguimiento y Control del Ministerio del Medio Ambiente"),
+)
+
+class OpcionesEstadoEjecucion(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_opciones-ej")
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = generic.GenericForeignKey()
+
+    tipo = models.CharField(max_length=255, null = True, blank = True, choices=OPCIONES_ESTADOS_EJECUCION, default='Cesion-completa')
+
+    nuevo_titular = models.CharField(max_length=255, null=True, blank=True, help_text='en Cesión')
+    porque = models.CharField(max_length=255, null=True, blank=True, help_text='en Suspensión, Revocatoria')
+    cuales = models.CharField(max_length=255, null=True, blank=True, help_text='en Integración de 2 Licencias Ambientales')
+
+    class Meta:
+        verbose_name_plural = 'Opciones'
+        verbose_name = 'Opcion'
+
+    def __unicode__(self):
+        return self.get_tipo_display()
+
+class ImpactoBase(models.Model):
+    nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return self.nombre
+
+class ImpactoAmbiental(ImpactoBase):
+    pass
+class ImpactoCultural(ImpactoBase):
+    pass
+class ImpactoEconomico(ImpactoBase):
+    pass
+class ImpactoSocial(ImpactoBase):
+    pass
+class ImpactoOrganizaciones(ImpactoBase):
+    pass
+
+
+class Afectacion(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_opciones-ej")
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = generic.GenericForeignKey()
+
+    tipo_afectacion = models.CharField(max_length=255, null=True, blank=True, choices=IMPACTOS)
+    ambientales = models.ManyToManyField(ImpactoAmbiental, null = True, blank = True, related_name='afectaciones_ambientales')
+    culturales = models.ManyToManyField(ImpactoCultural, null = True, blank = True, related_name='afectaciones_culturales')
+    economicos = models.ManyToManyField(ImpactoEconomico, null = True, blank = True, related_name='afectaciones_economicos')
+    sociales = models.ManyToManyField(ImpactoSocial, null = True, blank = True, related_name='afectaciones_sociales')
+    organizaciones = models.ManyToManyField(ImpactoOrganizaciones, null = True, blank = True, related_name='afectaciones_organizaciones')
+
+    descripcion = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Afectaciones'
+        verbose_name = 'Afectacion'
+
+    def __unicode__(self):
+        return self.get_tipo_afectacion_display()
+
+class Accion(models.Model):
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_opciones-ej")
+    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_object = generic.GenericForeignKey()
+
+    accion = models.CharField(max_length=255, null=True, blank=True, choices=ACCIONES_SEGUIMIENTO_CONTROL)
+    descripcion = models.TextField(null = True, blank = True, verbose_name='Descripción de las acciones de seguimiento y control')
+
+    class Meta:
+        verbose_name_plural = 'Acciones de Seguimiento y Control'
+        verbose_name = 'Accion'
+
+    def __unicode__(self):
+        return ': ' + self.get_accion_display()
+
 class ConcesionBase(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_subcntrtas")
     object_id = models.PositiveIntegerField(blank=True, null=True)
@@ -42,40 +178,6 @@ class EstadoEjecucionInfraestructura(models.Model):
     def __unicode__(self):
         return '%s : %s'  % (self.proyecto, self.fase_tipo)
 
-class EstadoEjecucionCesion(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_cesion")
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
-
-    tipo = models.CharField(max_length=255, null=True, blank=True, choices=( ("completa","Completa"),("parcial","Parcial") ))
-    nuevo_titular = models.CharField(max_length=255, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = 'Cesiones'
-        verbose_name = 'Cesion'
-
-class EstadoEjecucionSuspension(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_cesion")
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
-
-    por_que = models.TextField(help_text='describa el porque de la suspension', null = True, blank = True)
-
-    class Meta:
-        verbose_name_plural = 'Suspensiones'
-        verbose_name = 'Suspension'
-
-class EstadoEjecucionRevocatoria(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_revocatoria")
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
-
-    por_que = models.TextField(help_text='describa el porque de la revocatoria', null = True, blank = True)
-
-    class Meta:
-        verbose_name_plural = 'Revocatorias'
-        verbose_name = 'Revocatoria'
-
 class Subcontratista(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_subcntrtas")
     object_id = models.PositiveIntegerField(blank=True, null=True)
@@ -86,19 +188,6 @@ class Subcontratista(models.Model):
 
 class ConcesionInfraestructura(ConcesionBase):
     pass
-
-class LicenciaAmbiental(models.Model):
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="content_type_subcntrtas")
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    content_object = generic.GenericForeignKey()
-
-    perdida = models.TextField(null = True, blank = True, verbose_name='Perdida de vigencia')
-    integracion = models.BooleanField(verbose_name='Integra dos Licencias Ambientales?')
-    cuales = models.TextField(null = True, blank = True)
-
-    class Meta:
-        verbose_name_plural = 'Licencias Ambientales'
-        verbose_name = 'Licencia Ambiental'
 
 #HIDROCARBUROS
 TIPOS_ESTADOS_EJECUCION_HIDROCARBUROS = (
